@@ -1,0 +1,58 @@
+{
+  "version": "2026.09.01",
+  "source": "ShieldEX bundled baseline",
+  "notes": [
+    "This is the seed set merged into malware_signatures on first run. It is intentionally tiny.",
+    "The EICAR entry is the real, industry-standard antivirus test file hash. It is completely",
+    "harmless: the 68-byte ASCII string is not malicious code, it exists so scanners can be",
+    "verified. Create it with: printf '%s' \"<the eicar string>\" > eicar.com",
+    "The DEMO-SEED entries are NOT real malware intelligence. Each hash is the SHA-256 of the",
+    "plain ASCII string in its test_payload field, so you can generate a matching file and watch",
+    "the full detection -> classify -> quarantine -> timeline flow end to end. Real signature",
+    "intelligence is expected to arrive through core/antivirus/updater.py from updater.feed_url."
+  ],
+  "signatures": [
+    {
+      "hash": "275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f",
+      "md5": "44d88612fea8a8f36de82e1278abb02f",
+      "name": "EICAR-Test-File (harmless scanner test)",
+      "severity": "High",
+      "source": "EICAR"
+    },
+    {
+      "hash": "fc0b00af601988f3ca81934a4cf9b0762fbc9c6665a3fe0d71899222a7f67c1a",
+      "name": "ShieldEX.Demo.Dropper01",
+      "severity": "Critical",
+      "source": "DEMO-SEED",
+      "test_payload": "SHIELDEX-DEMO-SAMPLE-01"
+    },
+    {
+      "hash": "87ff4976fd8c4d73c2599585e57f2c42c315fdc6ce311c4634471fcd1d0a0412",
+      "name": "ShieldEX.Demo.Ransom02",
+      "severity": "Critical",
+      "source": "DEMO-SEED",
+      "test_payload": "SHIELDEX-DEMO-SAMPLE-02"
+    },
+    {
+      "hash": "666e7c67aa41585251c0c993ffbda0daf57b5c7bb54acc6ca87de644bb970728",
+      "name": "ShieldEX.Demo.Trojan03",
+      "severity": "High",
+      "source": "DEMO-SEED",
+      "test_payload": "SHIELDEX-DEMO-SAMPLE-03"
+    },
+    {
+      "hash": "accb43d1adec7970c02e7a891b3715cd68f8ba2f95edcfb00c4d4f79f2878f56",
+      "name": "ShieldEX.Demo.Keylogger04",
+      "severity": "High",
+      "source": "DEMO-SEED",
+      "test_payload": "SHIELDEX-DEMO-SAMPLE-04"
+    },
+    {
+      "hash": "8ebd9f054319083c9f89443618cfd1af969b05ae97f978a859fb2ae00da74dab",
+      "name": "ShieldEX.Demo.Adware05",
+      "severity": "Medium",
+      "source": "DEMO-SEED",
+      "test_payload": "SHIELDEX-DEMO-SAMPLE-05"
+    }
+  ]
+}

@@ -1,0 +1,177 @@
+{
+  "app": {
+    "name": "ShieldEX",
+    "version": "0.1.0",
+    "require_admin": true,
+    "theme": "dark",
+    "accent_color": "#2f6fb0",
+    "start_view": "dashboard",
+    "window": {
+      "width": 1320,
+      "height": 840,
+      "min_width": 1080,
+      "min_height": 680
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "file": "logs/shieldex.log",
+    "max_bytes": 2097152,
+    "backup_count": 5,
+    "console": true
+  },
+  "database": {
+    "path": "shieldex.db",
+    "busy_timeout_ms": 10000
+  },
+  "antivirus": {
+    "quick_scan_paths": [
+      "%TEMP%",
+      "%APPDATA%",
+      "%LOCALAPPDATA%",
+      "%DOWNLOADS%",
+      "%STARTUP%",
+      "%BROWSER_CACHE%"
+    ],
+    "protected_paths": [
+      "%STARTUP%",
+      "%SYSTEM32%",
+      "%APPDATA%"
+    ],
+    "excluded_paths": [
+      "%QUARANTINE%"
+    ],
+    "max_file_size_mb": 512,
+    "hash_chunk_size": 65536,
+    "follow_symlinks": false,
+    "auto_quarantine_on_signature_match": true,
+    "heuristics": {
+      "enabled": true,
+      "double_extension": {
+        "enabled": true,
+        "severity": "Medium",
+        "inner_extensions": [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".jpg", ".jpeg", ".png", ".gif", ".txt", ".zip", ".rar", ".mp3", ".mp4"],
+        "outer_extensions": [".exe", ".scr", ".bat", ".cmd", ".com", ".pif", ".vbs", ".vbe", ".js", ".jse", ".jar", ".ps1", ".msi", ".lnk", ".hta"]
+      },
+      "script_in_user_dirs": {
+        "enabled": true,
+        "severity": "Medium",
+        "extensions": [".bat", ".cmd", ".ps1", ".vbs", ".vbe", ".js", ".jse", ".wsf", ".hta"]
+      },
+      "no_extension_in_system_dir": {
+        "enabled": true,
+        "severity": "Low"
+      },
+      "large_file_in_startup": {
+        "enabled": true,
+        "severity": "Medium",
+        "threshold_mb": 50
+      },
+      "recently_modified_in_protected_dir": {
+        "enabled": true,
+        "severity": "Low",
+        "window_hours": 24
+      },
+      "entropy": {
+        "enabled": true,
+        "severity": "Medium",
+        "threshold": 7.2,
+        "sample_bytes": 262144,
+        "min_file_size_kb": 16
+      },
+      "escalate_to_medium_after_flags": 2
+    },
+    "realtime_monitor": {
+      "enabled": false,
+      "watched_paths": [
+        "%TEMP%",
+        "%APPDATA%",
+        "%DOWNLOADS%",
+        "%STARTUP%"
+      ],
+      "recursive": true,
+      "debounce_seconds": 1.5,
+      "ignore_patterns": ["*.tmp", "*.part", "*.crdownload", "~$*", "*.quar"]
+    },
+    "quarantine": {
+      "path": ".quarantine",
+      "extension": ".quar",
+      "confirm_before_delete": true
+    }
+  },
+  "updater": {
+    "enabled": true,
+    "check_on_startup": true,
+    "feed_url": "https://example.invalid/shieldex/signatures.json",
+    "timeout_seconds": 15,
+    "check_interval_hours": 24,
+    "verify_tls": true
+  },
+  "firewall": {
+    "enforce_rules": false,
+    "backend": "auto",
+    "profiles": {
+      "domain": true,
+      "private": true,
+      "public": true
+    },
+    "connection_monitor": {
+      "enabled": true,
+      "poll_interval_seconds": 2,
+      "log_allowed_connections": false,
+      "resolve_country": false,
+      "geolocation_url": "http://ip-api.com/json/{ip}?fields=countryCode,country"
+    },
+    "packet_inspector": {
+      "enabled": false,
+      "interface": null,
+      "bpf_filter": "ip"
+    },
+    "ids": {
+      "enabled": true,
+      "auto_block_source": false,
+      "port_scan": {
+        "enabled": true,
+        "distinct_ports": 15,
+        "window_seconds": 10,
+        "severity": "High"
+      },
+      "syn_flood": {
+        "enabled": true,
+        "syn_packets": 200,
+        "window_seconds": 5,
+        "severity": "High"
+      },
+      "auth_failures": {
+        "enabled": true,
+        "watch_ports": [22, 3389],
+        "attempts": 5,
+        "window_seconds": 60,
+        "severity": "High"
+      },
+      "icmp_flood": {
+        "enabled": true,
+        "packets": 100,
+        "window_seconds": 5,
+        "severity": "Medium"
+      }
+    },
+    "blocklist_feeds": {
+      "enabled": false,
+      "urls": []
+    },
+    "reconnect_alert_threshold": 3
+  },
+  "notifications": {
+    "enabled": true,
+    "app_name": "ShieldEX",
+    "timeout_seconds": 8,
+    "min_severity": "Medium",
+    "first_time_app_prompt": true
+  },
+  "ui": {
+    "timeline_page_size": 200,
+    "recent_activity_count": 10,
+    "dashboard_refresh_seconds": 5
+  }
+}

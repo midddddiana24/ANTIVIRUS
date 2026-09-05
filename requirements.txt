@@ -1,0 +1,15 @@
+# ShieldEX runtime dependencies
+#
+# Foundation layer (this build) only needs customtkinter.
+# The rest are pinned now so the environment is ready as the engines land.
+
+customtkinter>=5.2.2      # GUI framework
+watchdog>=4.0.0           # real-time file monitoring (antivirus)
+psutil>=5.9.8             # live process + connection monitoring (firewall)
+plyer>=2.1.0              # cross-platform desktop notifications
+schedule>=1.2.1           # periodic signature-DB update checks
+requests>=2.31.0          # signature feed download + IP geolocation
+scapy>=2.5.0              # packet capture + IDS-lite (firewall)
+
+# Development / tests
+pytest>=8.0.0

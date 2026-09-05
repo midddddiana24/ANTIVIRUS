@@ -1,0 +1,53 @@
+2026-09-04 11:45:56 | INFO     | shieldex                     | ==============================================================================
+2026-09-04 11:45:56 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-04 11:45:58 | INFO     | shieldex                     | Elevated instance launched; this instance will exit
+2026-09-04 11:45:58 | INFO     | shieldex                     | ==============================================================================
+2026-09-04 11:45:58 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-04 11:45:58 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-04 11:45:58 | INFO     | core.database                | Merged 6 new signature(s) from 6 candidate(s)
+2026-09-04 11:45:58 | INFO     | shieldex                     | Signature database version set to 2026.09.01
+2026-09-04 11:45:58 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-04 11:45:58 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Elevated: firewall enforcement available
+2026-09-04 11:45:58 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_DB_UPDATED — Merged 6 bundled signature(s); 6 total
+2026-09-04 11:45:58 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-04 11:45:59 | INFO     | gui.app                      | GUI ready (elevated=True)
+2026-09-04 11:47:51 | INFO     | gui.app                      | Shutting down GUI
+2026-09-04 11:47:51 | INFO     | core.timeline                | [SYSTEM] APP_STOPPED — ShieldEX closed normally
+2026-09-04 11:47:51 | INFO     | shieldex                     | ShieldEX shutdown complete
+2026-09-04 14:24:47 | INFO     | shieldex                     | ==============================================================================
+2026-09-04 14:24:47 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-04 14:24:49 | INFO     | shieldex                     | Elevated instance launched; this instance will exit
+2026-09-04 14:24:50 | INFO     | shieldex                     | ==============================================================================
+2026-09-04 14:24:50 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-04 14:24:50 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-04 14:24:50 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-04 14:24:50 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-04 14:24:50 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Elevated: firewall enforcement available
+2026-09-04 14:24:50 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-04 14:24:51 | INFO     | gui.app                      | GUI ready (elevated=True)
+2026-09-04 14:25:40 | INFO     | gui.app                      | Shutting down GUI
+2026-09-04 14:25:40 | INFO     | core.timeline                | [SYSTEM] APP_STOPPED — ShieldEX closed normally
+2026-09-04 14:25:40 | INFO     | shieldex                     | ShieldEX shutdown complete
+2026-09-04 14:35:15 | INFO     | shieldex                     | ==============================================================================
+2026-09-04 14:35:15 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-04 14:35:17 | INFO     | shieldex                     | Elevated instance launched; this instance will exit
+2026-09-04 14:35:18 | INFO     | shieldex                     | ==============================================================================
+2026-09-04 14:35:21 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-04 14:35:21 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-04 14:35:21 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-04 14:35:21 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-04 14:35:21 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Elevated: firewall enforcement available
+2026-09-04 14:35:21 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-04 14:35:22 | INFO     | gui.app                      | GUI ready (elevated=True)
+2026-09-04 14:35:29 | INFO     | gui.app                      | Shutting down GUI
+2026-09-04 14:35:29 | INFO     | core.timeline                | [SYSTEM] APP_STOPPED — ShieldEX closed normally
+2026-09-04 14:35:29 | INFO     | shieldex                     | ShieldEX shutdown complete
+2026-09-05 20:48:57 | INFO     | shieldex                     | ==============================================================================
+2026-09-05 20:48:57 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-05 20:48:57 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-05 20:48:57 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-05 20:48:57 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-05 20:48:57 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Limited mode: no administrator privileges, firewall enforcement unavailable
+2026-09-05 20:48:57 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-05 20:48:57 | INFO     | shieldex                     | --no-gui specified; initialisation complete, exiting
+2026-09-05 20:48:57 | INFO     | shieldex                     | ShieldEX shutdown complete
