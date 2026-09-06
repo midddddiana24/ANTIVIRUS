@@ -68,12 +68,21 @@ class TimelineView(BaseView):
     subtitle = "Every antivirus and firewall event in one chronological incident log"
 
     def build(self) -> None:
-        self._page_size = max(20, int(self.cfg.get("ui.timeline_page_size", 200)))
+        # CHANGED: 100, not 200. Each row is a canvas-backed customtkinter frame with
+        # ~7 children; 200 of them take seconds to build and re-layout, which froze the
+        # UI on every refresh tick while this view was visible. 100 keeps roughly two
+        # screens of scroll context at a quarter of the construction cost.
+        self._page_size = max(20, min(100, int(self.cfg.get("ui.timeline_page_size", 100))))
         self._offset = 0
         self._has_next = False
         self._rows: list[ctk.CTkFrame] = []
         self._expanded_id: int | None = None
         self._events: list[dict[str, Any]] = []
+        #: Identity of what is currently on screen, so refresh() can skip rebuilding
+        #: an identical page (see refresh).
+        self._rendered_signature: tuple[Any, ...] | None = None
+        #: Debounce timer id for live-event-driven refreshes; None when idle.
+        self._live_refresh_after: str | None = None
         #: Last date text this view wrote or acted on, so ``<FocusOut>`` can tell a real
         #: edit from merely tabbing out of an untouched box.
         self._last_date_text: tuple[str, str] = ("", "")
@@ -362,7 +371,15 @@ class TimelineView(BaseView):
         self.refresh()
 
     def refresh(self) -> None:
-        """Run the current query and redraw the table."""
+        """Run the current query and redraw the table — skipping the redraw when the
+        page is unchanged.
+
+        This view re-renders on the shell's 5-second polling tick and on every live
+        event batch. Rebuilding 200 canvas-backed rows (≈1,400 widget constructions)
+        freezes the UI for around a second each time, which made the whole app feel
+        laggy whenever the timeline was visible — so identical data now short-circuits
+        the redraw entirely.
+        """
         filters = self._current_filters()
         try:
             # One extra row tells us whether an "Older" page exists without a COUNT query.
@@ -376,8 +393,20 @@ class TimelineView(BaseView):
 
         self._has_next = len(fetched) > self._page_size
         self._events = fetched[: self._page_size]
-        self._render_rows()
 
+        signature = (self._offset, self._expanded_id, tuple(
+            int(event.get("id") or 0) for event in self._events
+        ))
+        if signature == self._rendered_signature:
+            self._update_pager()  # counts can change even when ids did not
+            return
+        self._rendered_signature = signature
+
+        self._render_rows()
+        self._update_pager()
+
+    def _update_pager(self) -> None:
+        """Refresh the 'Showing events X–Y' line and the pager button states."""
         first = self._offset + 1 if self._events else 0
         last = self._offset + len(self._events)
         self._page_label.configure(
@@ -603,10 +632,31 @@ class TimelineView(BaseView):
         self.refresh()
 
     def on_timeline_events(self, events: list[dict[str, Any]]) -> None:
-        """New engine events arrived while this view is visible."""
-        if self._offset == 0:
-            self.refresh()
-        else:
+        """New engine events arrived while this view is visible.
+
+        During a scan the event pump delivers batches several times a second, and each
+        one used to trigger a full page rebuild. The refresh is now debounced to one
+        per second at most — coalescing a burst into a single redraw — and the change
+        check inside :meth:`refresh` skips it entirely when the page is identical.
+        """
+        if self._offset != 0:
             self.app.set_status_message(
                 f"{len(events)} new event(s) logged — go to the first page to see them"
             )
+            return
+        if self._live_refresh_after is None:
+            self._live_refresh_after = self.after(1000, self._run_live_refresh)
+
+    def _run_live_refresh(self) -> None:
+        """Timer body for the live-event debounce."""
+        self._live_refresh_after = None
+        self.refresh()
+
+    def on_hide(self) -> None:
+        """Cancel any pending live refresh; the shell re-arms it on the next show."""
+        if self._live_refresh_after is not None:
+            try:
+                self.after_cancel(self._live_refresh_after)
+            except Exception:  # the timer may already have fired
+                pass
+            self._live_refresh_after = None

@@ -200,3 +200,1149 @@ ImportError: cannot import name 'NotificationEngine' from 'core.notifications' (
 2026-09-06 09:29:03 | INFO     | core.timeline                | [ANTIVIRUS] MONITOR_STOPPED — Real-time protection stopped
 2026-09-06 09:29:03 | INFO     | core.engines                 | Engine stopped: realtime_monitor
 2026-09-06 09:29:03 | INFO     | shieldex                     | ShieldEX shutdown complete
+2026-09-06 09:40:20 | INFO     | shieldex                     | ==============================================================================
+2026-09-06 09:40:20 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-06 09:40:23 | INFO     | shieldex                     | Elevated instance launched; this instance will exit
+2026-09-06 09:40:24 | INFO     | shieldex                     | ==============================================================================
+2026-09-06 09:40:24 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-06 09:40:24 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-06 09:40:24 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-06 09:40:24 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-06 09:40:24 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Elevated: firewall enforcement available
+2026-09-06 09:40:24 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-06 09:40:27 | INFO     | gui.app                      | GUI ready (elevated=True)
+2026-09-06 09:40:27 | INFO     | gui.app                      | Engine registered: quarantine (QuarantineManager)
+2026-09-06 09:40:27 | INFO     | gui.app                      | Engine registered: scanner (Scanner)
+2026-09-06 09:40:27 | INFO     | gui.app                      | Engine registered: realtime_monitor (RealTimeMonitor)
+2026-09-06 09:40:27 | INFO     | gui.app                      | Engine registered: updater (SignatureUpdater)
+2026-09-06 09:40:27 | INFO     | gui.app                      | Engine registered: blocklist (IPBlocklist)
+2026-09-06 09:40:27 | INFO     | gui.app                      | Engine registered: firewall (RuleEngine)
+2026-09-06 09:40:27 | INFO     | gui.app                      | Engine registered: ids (IDSDetector)
+2026-09-06 09:40:27 | INFO     | gui.app                      | Engine registered: connection_monitor (ConnectionMonitor)
+2026-09-06 09:40:27 | INFO     | gui.app                      | Engine registered: packet_inspector (PacketInspector)
+2026-09-06 09:40:27 | INFO     | gui.app                      | Engine registered: notifications (Notifier)
+2026-09-06 09:40:41 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_STARTED — Quick scan started on C:\Users\rober\AppData\Local\Temp, C:\Users\rober\AppData\Roaming, C:\Users\rober\AppData\Local, C:\Users\rober\Downloads, C:\Users\rober\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup, C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp, C:\Users\rober\AppData\Local\Google\Chrome\User Data\Default\Cache, C:\Users\rober\AppData\Local\Microsoft\Edge\User Data\Default\Cache, C:\Users\rober\AppData\Local\BraveSoftware\Brave-Browser\User Data\Default\Cache
+2026-09-06 09:40:50 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: 01897f45-1a65-4a6d-a47a-cd8c74f7817c.tmp.js
+2026-09-06 09:40:50 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 190cf5dd73bea8622f1a71a4dab5bd3d5fe9e8072b653eae0f16b7949ebf66aa
+2026-09-06 09:40:50 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:40:50 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:40:50 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:50 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:50 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:40:50 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:40:50 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\01897f45-1a65-4a6d-a47a-cd8c74f7817c.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:40:50 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: 0b8f9ee6-0840-482b-befe-aa91322a6157.tmp.js
+2026-09-06 09:40:50 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 8c401c61f83a1649d561853b9dd08c5cee087088031a65317ff4629f0db725b2
+2026-09-06 09:40:50 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:40:50 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:40:50 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:50 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:50 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:40:50 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:40:50 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\0b8f9ee6-0840-482b-befe-aa91322a6157.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:40:51 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: 37092314-e6a5-4863-88bb-01f7ea4c530a.tmp.js
+2026-09-06 09:40:51 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: d24e1eca3f8c3d53495cbb8677f3e07c48bbcdebea6ec201d4d65c04b58d4a2b
+2026-09-06 09:40:51 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:40:51 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:40:51 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:51 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:51 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:40:51 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:40:51 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\37092314-e6a5-4863-88bb-01f7ea4c530a.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:40:53 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: 4a25c4a7-3583-4abd-89b7-5aa1ab1213a2.tmp.js
+2026-09-06 09:40:53 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 49d373744dde772aa5efe59f681c7ab46bb9065d8ac2c35982c2240dacc60a9c
+2026-09-06 09:40:53 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:40:53 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:40:53 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:53 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:53 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:40:53 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:40:53 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\4a25c4a7-3583-4abd-89b7-5aa1ab1213a2.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:40:54 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: 55593591-53ed-42d0-aca6-434bdbba2dce.tmp.js
+2026-09-06 09:40:54 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: d24e1eca3f8c3d53495cbb8677f3e07c48bbcdebea6ec201d4d65c04b58d4a2b
+2026-09-06 09:40:54 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:40:54 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:40:54 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:54 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:54 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:40:54 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:40:54 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\55593591-53ed-42d0-aca6-434bdbba2dce.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:40:54 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: 5bb863c9-884a-4f01-b50a-bd14964543d8.tmp.js
+2026-09-06 09:40:54 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: a85d5425b975d0f2ce050befa4194efc6a9a9d3f34e1a350b5fd8017a33de689
+2026-09-06 09:40:54 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:40:54 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:40:54 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:54 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:54 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:40:54 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:40:54 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\5bb863c9-884a-4f01-b50a-bd14964543d8.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:40:55 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: 66e344fd-0def-4701-b1d6-25025c04742d.tmp.js
+2026-09-06 09:40:55 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: a85d5425b975d0f2ce050befa4194efc6a9a9d3f34e1a350b5fd8017a33de689
+2026-09-06 09:40:55 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:40:55 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:40:55 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:55 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:55 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:40:55 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:40:55 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\66e344fd-0def-4701-b1d6-25025c04742d.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:40:56 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: 7c5ff5d2-98d5-4c97-aadf-861fc4ecd57c.tmp.js
+2026-09-06 09:40:56 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 482baf4f1849e0c8c51aad9f3fe9965063e16d24c76afeb17dfa6e6773476672
+2026-09-06 09:40:56 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:40:56 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:40:56 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:56 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:56 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:40:56 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:40:56 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\7c5ff5d2-98d5-4c97-aadf-861fc4ecd57c.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:40:57 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: 870df0c1-baf3-43f9-a4d1-44f39e096096.tmp.js
+2026-09-06 09:40:57 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 4df7c81b62129e8f1294fd2ae74e986c51513458581299964dc4d6493a3a22c0
+2026-09-06 09:40:57 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:40:57 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:40:57 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:57 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:57 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:40:57 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:40:57 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\870df0c1-baf3-43f9-a4d1-44f39e096096.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:40:57 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: 8ae99bcb-b64d-4bf9-9faa-5a7e1d7ee325.tmp.js
+2026-09-06 09:40:57 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: d24e1eca3f8c3d53495cbb8677f3e07c48bbcdebea6ec201d4d65c04b58d4a2b
+2026-09-06 09:40:57 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:40:57 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:40:57 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:57 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:57 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:40:57 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:40:57 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\8ae99bcb-b64d-4bf9-9faa-5a7e1d7ee325.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:40:58 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: 927e51c2-085a-4eb8-bd66-1f1b07d8caff.tmp.js
+2026-09-06 09:40:58 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: d2f0b538be4284c87c10db92f4279d1ac31d578e2bd017a55817f059b3390f51
+2026-09-06 09:40:58 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:40:58 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:40:58 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:58 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:58 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:40:58 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:40:58 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\927e51c2-085a-4eb8-bd66-1f1b07d8caff.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:40:58 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: a13f717a-a405-433a-9bf7-21449890d9e9.tmp.js
+2026-09-06 09:40:58 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: a85d5425b975d0f2ce050befa4194efc6a9a9d3f34e1a350b5fd8017a33de689
+2026-09-06 09:40:58 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:40:58 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:40:58 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:58 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:58 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:40:58 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:40:58 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\a13f717a-a405-433a-9bf7-21449890d9e9.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:40:59 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: afb86e4c-9c78-4038-b13b-b7a48eadeb45.tmp.js
+2026-09-06 09:40:59 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: aa7c3436e123a479bd5eb805380f331609078ef3afb6127159b5b7bdf0dd05c9
+2026-09-06 09:40:59 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:40:59 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:40:59 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:59 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:40:59 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:40:59 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:40:59 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\afb86e4c-9c78-4038-b13b-b7a48eadeb45.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:01 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: ba802946-38f1-4429-a304-4a4806250521.tmp.js
+2026-09-06 09:41:01 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: d2f0b538be4284c87c10db92f4279d1ac31d578e2bd017a55817f059b3390f51
+2026-09-06 09:41:01 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:01 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:01 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:01 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:01 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:01 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:01 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\ba802946-38f1-4429-a304-4a4806250521.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:01 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: d22a1763-f227-4d1d-9b9a-83e3c98ec14c.tmp.js
+2026-09-06 09:41:01 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: d24e1eca3f8c3d53495cbb8677f3e07c48bbcdebea6ec201d4d65c04b58d4a2b
+2026-09-06 09:41:01 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:01 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:01 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:01 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:01 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:01 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:01 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\d22a1763-f227-4d1d-9b9a-83e3c98ec14c.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:02 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: dd66c9b7-d1fa-4dba-ac21-960f36ba3506.tmp.js
+2026-09-06 09:41:02 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 482baf4f1849e0c8c51aad9f3fe9965063e16d24c76afeb17dfa6e6773476672
+2026-09-06 09:41:02 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:02 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:02 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:02 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:02 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:02 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:02 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\dd66c9b7-d1fa-4dba-ac21-960f36ba3506.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:02 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: e2671cfa-2aec-435d-b2ed-632d494e9778.tmp.js
+2026-09-06 09:41:02 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 46b41f9357a7e6a284f355aca24ced546eb6c0f638a255eba0b9f5f224f3d258
+2026-09-06 09:41:02 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:02 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:02 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:02 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:02 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:02 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:02 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\e2671cfa-2aec-435d-b2ed-632d494e9778.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:03 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: eb311090-4643-4a63-bdba-c01f5cc6a005.tmp.js
+2026-09-06 09:41:03 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: d24e1eca3f8c3d53495cbb8677f3e07c48bbcdebea6ec201d4d65c04b58d4a2b
+2026-09-06 09:41:03 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:03 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:03 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:03 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:03 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:03 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:03 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\eb311090-4643-4a63-bdba-c01f5cc6a005.tmp.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:07 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 500 file(s), 0 threat(s) so far
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: __PSScriptPolicyTest_ichmklwv.ksj.ps1
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 96ad1146eb96877eab5942ae0736b82d8b5e2039a80d3d6932665c1a4c87dcf7
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:10 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:10 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:10 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\__PSScriptPolicyTest_ichmklwv.ksj.ps1 (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: diagnostics.js
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: a6a870395b414bf3f0e3ed3538c3acf64d88d3d5334493ea80a10a999fbee978
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:10 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:10 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:10 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmp06aDQr\diagnostics.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: kernel.js
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: ac778cafb43db2a82b8274374a2fd2d9baf749ebf5fc7f05e31740ce7d369e64
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:10 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:10 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:10 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:10 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmp06aDQr\kernel.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: meriyah.umd.min.js
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: a79eda51f672d64f7eed105601151943e655267912dc7bb6d740e327b6ce437b
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmp06aDQr\meriyah.umd.min.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: privileged-node-repl-config.js
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 310eee58771bc12e5cb99f010a5cdded4776a16ef5937cec6ec4867c0992e184
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmp06aDQr\privileged-node-repl-config.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: privileged-node-repl.js
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: ca71289f5aa4f50a983fb219cb0d2861ab79755b220ba08a97e8b50ecd22f6e4
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmp06aDQr\privileged-node-repl.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: tracing.js
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: ce01de34f07ec8a9788a931e7a6860cec35f661a007b17aa0f4cc9b646d15215
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmp06aDQr\tracing.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: trusted-process-facade.js
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 3f12eab7e5ba12701c39127d07c222e540bc8d556b7864993129cdc4e809daa3
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmp06aDQr\trusted-process-facade.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: diagnostics.js
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: a6a870395b414bf3f0e3ed3538c3acf64d88d3d5334493ea80a10a999fbee978
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmp1W8iZ9\diagnostics.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: kernel.js
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: ac778cafb43db2a82b8274374a2fd2d9baf749ebf5fc7f05e31740ce7d369e64
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmp1W8iZ9\kernel.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: meriyah.umd.min.js
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: a79eda51f672d64f7eed105601151943e655267912dc7bb6d740e327b6ce437b
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmp1W8iZ9\meriyah.umd.min.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: privileged-node-repl-config.js
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 310eee58771bc12e5cb99f010a5cdded4776a16ef5937cec6ec4867c0992e184
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmp1W8iZ9\privileged-node-repl-config.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: privileged-node-repl.js
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: ca71289f5aa4f50a983fb219cb0d2861ab79755b220ba08a97e8b50ecd22f6e4
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmp1W8iZ9\privileged-node-repl.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: tracing.js
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: ce01de34f07ec8a9788a931e7a6860cec35f661a007b17aa0f4cc9b646d15215
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:11 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmp1W8iZ9\tracing.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: trusted-process-facade.js
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 3f12eab7e5ba12701c39127d07c222e540bc8d556b7864993129cdc4e809daa3
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:11 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmp1W8iZ9\trusted-process-facade.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: diagnostics.js
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 710362fe80dd9cd597690d20d6e0f32545fc72307ff0c28f7d410fe64742a464
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpLrRefp\diagnostics.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: kernel.js
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: a022fe27d9f4e7f782d09f07ca96d8415950865c17ff1a5d19ba3493728173af
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpLrRefp\kernel.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: meriyah.umd.min.js
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 97d3c4e192c24ee88f1a2ab2d0fa6b9da44d777305618eb80f08317e6b46e8b7
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpLrRefp\meriyah.umd.min.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: privileged-node-repl-config.js
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 44819284aa933b06002c01a3abd447a348346a4ad22ba5ebc62e4ee316a03f5e
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpLrRefp\privileged-node-repl-config.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: privileged-node-repl.js
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 5b734d635f505e7d54e90b86f4bf6fa102fcbb39ecb32fe6d9a8769b316a8130
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpLrRefp\privileged-node-repl.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: realmChecks.js
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 92592b5f8f0bba4b21970bf8f04fcaab4a0abe73a1606a066153648a6672cc2b
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpLrRefp\realmChecks.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: tracing.js
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 5b207bfd20c096272a0c1954e9e5781dd89335ff889cb3088eda9ba0e50e8c5a
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpLrRefp\tracing.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: trusted-worker.js
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 9f936ad8addf558d3de3f415917680ae703bf51b4d63f62d718413a3acb4edb7
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpLrRefp\trusted-worker.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: worker-runtime.js
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: db024be1dfbaf40c080f9661a131520b0dc257b5ba1ab6e66874349f250b9e43
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpLrRefp\worker-runtime.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: diagnostics.js
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: a6a870395b414bf3f0e3ed3538c3acf64d88d3d5334493ea80a10a999fbee978
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:12 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:12 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpsmVYI9\diagnostics.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: kernel.js
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: ac778cafb43db2a82b8274374a2fd2d9baf749ebf5fc7f05e31740ce7d369e64
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpsmVYI9\kernel.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: meriyah.umd.min.js
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: a79eda51f672d64f7eed105601151943e655267912dc7bb6d740e327b6ce437b
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpsmVYI9\meriyah.umd.min.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: privileged-node-repl-config.js
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 310eee58771bc12e5cb99f010a5cdded4776a16ef5937cec6ec4867c0992e184
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpsmVYI9\privileged-node-repl-config.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: privileged-node-repl.js
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: ca71289f5aa4f50a983fb219cb0d2861ab79755b220ba08a97e8b50ecd22f6e4
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpsmVYI9\privileged-node-repl.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: tracing.js
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: ce01de34f07ec8a9788a931e7a6860cec35f661a007b17aa0f4cc9b646d15215
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpsmVYI9\tracing.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: trusted-process-facade.js
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 3f12eab7e5ba12701c39127d07c222e540bc8d556b7864993129cdc4e809daa3
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\.tmpsmVYI9\trusted-process-facade.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: Microsoft.VisualStudio.Setup.ToastNotification.exe
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 716896999fcc21a37078f5ef3a839afccdd4703eb98e0078468c2b9605874012
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\11o2mf1m.kaz\Microsoft.VisualStudio.Setup.ToastNotification.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_installer.exe
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 044e6725fb6090ca599e29ce5703784522311d983fe6ad90be5ccbe8bb8def7e
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:13 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:13 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\11o2mf1m.kaz\vs_installer.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:14 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_installershell.exe
+2026-09-06 09:41:14 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 4fa3b9824ec92b61078949545678f757461da32726f89d0239cf2f47f227787e
+2026-09-06 09:41:14 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:14 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:14 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:14 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:14 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:14 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:14 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\11o2mf1m.kaz\vs_installershell.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:14 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_layout.exe
+2026-09-06 09:41:14 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: e3d802b2c38517a3a5eed683e33dee572b54e0d8817c2cf87e08f9b497eb1db2
+2026-09-06 09:41:14 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:14 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:14 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:14 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:14 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:14 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:14 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\11o2mf1m.kaz\vs_layout.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:16 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: Microsoft.VisualStudio.Setup.TestPowerShell.ps1
+2026-09-06 09:41:16 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 59e5b1a4fb992ab2f2ce792cf19f2956a002f6e712251241329a97d9cdf59e56
+2026-09-06 09:41:16 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:16 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:16 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:16 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:16 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:16 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:16 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\11o2mf1m.kaz\PrecheckTools\Microsoft.VisualStudio.Setup.TestPowerShell.ps1 (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:16 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: BackgroundDownload.exe
+2026-09-06 09:41:16 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 3dae5cda2c9adfab2cee69f7a29eb4326b619cf862058ef4ed62ef971ff94683
+2026-09-06 09:41:16 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:16 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:16 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:16 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:16 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:16 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:16 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\11o2mf1m.kaz\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:20 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 1000 file(s), 0 threat(s) so far
+2026-09-06 09:41:22 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: MessagePack.Annotations.dll
+2026-09-06 09:41:22 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 5063da3fe976251e76e9d6ce509967b8e9199b911e1e08ae72eb89b93b29e49b
+2026-09-06 09:41:22 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:22 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:22 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:22 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:22 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:22 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:22 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\11o2mf1m.kaz\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VsixInstaller\MessagePack.Annotations.dll (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:29 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 1500 file(s), 0 threat(s) so far
+2026-09-06 09:41:30 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: Microsoft.VisualStudio.Setup.ToastNotification.exe
+2026-09-06 09:41:30 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 716896999fcc21a37078f5ef3a839afccdd4703eb98e0078468c2b9605874012
+2026-09-06 09:41:30 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:30 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:30 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:30 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:30 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:30 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:30 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\21jjb0fq.i1m\Microsoft.VisualStudio.Setup.ToastNotification.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_installer.exe
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 044e6725fb6090ca599e29ce5703784522311d983fe6ad90be5ccbe8bb8def7e
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:31 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:31 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:31 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\21jjb0fq.i1m\vs_installer.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_installershell.exe
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 4fa3b9824ec92b61078949545678f757461da32726f89d0239cf2f47f227787e
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:31 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:31 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:31 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\21jjb0fq.i1m\vs_installershell.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_layout.exe
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: e3d802b2c38517a3a5eed683e33dee572b54e0d8817c2cf87e08f9b497eb1db2
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:31 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:31 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:31 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:31 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\21jjb0fq.i1m\vs_layout.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:33 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: Microsoft.VisualStudio.Setup.TestPowerShell.ps1
+2026-09-06 09:41:33 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 59e5b1a4fb992ab2f2ce792cf19f2956a002f6e712251241329a97d9cdf59e56
+2026-09-06 09:41:33 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:33 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:33 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:33 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:33 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:33 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:33 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\21jjb0fq.i1m\PrecheckTools\Microsoft.VisualStudio.Setup.TestPowerShell.ps1 (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:33 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: BackgroundDownload.exe
+2026-09-06 09:41:33 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 3dae5cda2c9adfab2cee69f7a29eb4326b619cf862058ef4ed62ef971ff94683
+2026-09-06 09:41:33 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:33 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:33 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:33 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:33 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:33 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:33 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\21jjb0fq.i1m\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:39 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: MessagePack.Annotations.dll
+2026-09-06 09:41:39 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 5063da3fe976251e76e9d6ce509967b8e9199b911e1e08ae72eb89b93b29e49b
+2026-09-06 09:41:39 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:39 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:39 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:39 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:39 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:39 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:39 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\21jjb0fq.i1m\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VsixInstaller\MessagePack.Annotations.dll (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:39 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 2000 file(s), 0 threat(s) so far
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: Microsoft.VisualStudio.Setup.ToastNotification.exe
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 98e83793731afdc7a66384428b0646fd33f4bf054fd37d456b206269a1c42543
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:47 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:47 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:47 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\2prek0j3.bku\Microsoft.VisualStudio.Setup.ToastNotification.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_installer.exe
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 69da2d43062f0726708668e40367cbde65ce569c9f6100578b54718e04875f7a
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:47 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:47 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:47 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\2prek0j3.bku\vs_installer.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_installershell.exe
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 473fd8b60efc1ba635d38c013a2524437ca9d6ae52fc119598c666ba427a3cc2
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:47 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:47 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:47 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\2prek0j3.bku\vs_installershell.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_layout.exe
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: ec35f830a1e66b76cd678173e8c1b7f103cc34bb07b237eafab01b166ca5517f
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:47 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:47 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:47 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\2prek0j3.bku\vs_layout.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:47 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 2500 file(s), 0 threat(s) so far
+2026-09-06 09:41:49 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: Microsoft.VisualStudio.Setup.TestPowerShell.ps1
+2026-09-06 09:41:49 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: a08d06d9d7524c48b3c96f9bebf80c406c6341beadf0388e86337757eb9cbd57
+2026-09-06 09:41:49 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:49 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:49 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:49 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:41:49 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:49 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:49 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\2prek0j3.bku\PrecheckTools\Microsoft.VisualStudio.Setup.TestPowerShell.ps1 (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:41:49 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: BackgroundDownload.exe
+2026-09-06 09:41:49 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 29942c162f330e2d719520f5ecf308b4f41b7ff56372a79752b17e5d8fee6ec5
+2026-09-06 09:41:49 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:49 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:49 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:49 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:49 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:49 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:49 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\2prek0j3.bku\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:50 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: MessagePack.Annotations.dll
+2026-09-06 09:41:50 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 7e556e4e694bef4cd76d97df37d66f11334c372b21a74b2b787fdbbb38b1effb
+2026-09-06 09:41:50 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:50 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:50 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:50 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:50 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:50 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:50 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\2prek0j3.bku\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\MessagePack.Annotations.dll (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:55 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: MessagePack.Annotations.dll
+2026-09-06 09:41:55 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: de2da876dae64228b34b859b99a534e2b3b0872503dcc1da021341c881c4e538
+2026-09-06 09:41:55 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:41:55 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:41:55 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:41:55 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:41:55 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:41:55 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:41:55 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\2prek0j3.bku\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VsixInstaller\MessagePack.Annotations.dll (Suspicious (high_entropy), Medium)
+2026-09-06 09:41:59 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 3000 file(s), 0 threat(s) so far
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: Microsoft.VisualStudio.Setup.ToastNotification.exe
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 716896999fcc21a37078f5ef3a839afccdd4703eb98e0078468c2b9605874012
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:42:07 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:07 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:07 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\lpg2pclp.nyv\Microsoft.VisualStudio.Setup.ToastNotification.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_installer.exe
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 044e6725fb6090ca599e29ce5703784522311d983fe6ad90be5ccbe8bb8def7e
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:42:07 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:07 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:07 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\lpg2pclp.nyv\vs_installer.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_installershell.exe
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 4fa3b9824ec92b61078949545678f757461da32726f89d0239cf2f47f227787e
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:42:07 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:07 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:07 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\lpg2pclp.nyv\vs_installershell.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_layout.exe
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: e3d802b2c38517a3a5eed683e33dee572b54e0d8817c2cf87e08f9b497eb1db2
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:42:07 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:42:07 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:07 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:07 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\lpg2pclp.nyv\vs_layout.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:42:08 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 3500 file(s), 0 threat(s) so far
+2026-09-06 09:42:09 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: Microsoft.VisualStudio.Setup.TestPowerShell.ps1
+2026-09-06 09:42:09 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 59e5b1a4fb992ab2f2ce792cf19f2956a002f6e712251241329a97d9cdf59e56
+2026-09-06 09:42:09 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:09 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:09 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:09 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:09 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:09 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:09 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\lpg2pclp.nyv\PrecheckTools\Microsoft.VisualStudio.Setup.TestPowerShell.ps1 (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:42:10 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: BackgroundDownload.exe
+2026-09-06 09:42:10 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 3dae5cda2c9adfab2cee69f7a29eb4326b619cf862058ef4ed62ef971ff94683
+2026-09-06 09:42:10 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:10 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:10 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:42:10 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:42:10 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:10 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:10 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\lpg2pclp.nyv\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:42:15 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: MessagePack.Annotations.dll
+2026-09-06 09:42:15 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 5063da3fe976251e76e9d6ce509967b8e9199b911e1e08ae72eb89b93b29e49b
+2026-09-06 09:42:15 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:15 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:15 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:42:15 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:42:15 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:15 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:15 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\lpg2pclp.nyv\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VsixInstaller\MessagePack.Annotations.dll (Suspicious (high_entropy), Medium)
+2026-09-06 09:42:19 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 4000 file(s), 0 threat(s) so far
+2026-09-06 09:42:25 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 4500 file(s), 0 threat(s) so far
+2026-09-06 09:42:32 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 5000 file(s), 0 threat(s) so far
+2026-09-06 09:42:40 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 5500 file(s), 0 threat(s) so far
+2026-09-06 09:42:49 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 6000 file(s), 0 threat(s) so far
+2026-09-06 09:42:51 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: about-inline.js
+2026-09-06 09:42:51 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: a0774886ee774b4412080135edd77e0cc4e8408342f1ba37708bec3dc11ba4cf
+2026-09-06 09:42:51 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:51 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:51 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:51 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:51 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:51 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:51 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\opencode\about-inline.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:42:52 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: care-guides-inline.js
+2026-09-06 09:42:52 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 8c7e23ffd288275fcf40afc6ca7662843e3d3e2103ec13bfa52c4092f2b7a7dc
+2026-09-06 09:42:52 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:52 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:52 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:52 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:52 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:52 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:52 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\opencode\care-guides-inline.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:42:52 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: contact-inline.js
+2026-09-06 09:42:52 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: a0895622c2d73f425b97e20ac5be927af58d23cdae6243d6d05646d1bdef15f2
+2026-09-06 09:42:52 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:52 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:52 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:52 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:52 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:52 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:52 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\opencode\contact-inline.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:42:53 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: gallery-inline.js
+2026-09-06 09:42:53 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 118276e6961b599b9ea92234f8ffdbf37dcb7cf5a6514f04a0cba2fc1be65e28
+2026-09-06 09:42:53 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:53 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:53 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:53 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:53 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:53 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:53 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\opencode\gallery-inline.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:42:53 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: index-inline.js
+2026-09-06 09:42:53 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 326bd2e467e4754b0d259eb8d3f1030834c361f4ae1cd32ed1ba63f1da8909f6
+2026-09-06 09:42:53 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:53 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:53 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:53 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:53 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:53 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:53 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\opencode\index-inline.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: permits-inline.js
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: c54e00be262c40bc624460b47790f611f6729d6ef3443e177504b5ac742055a5
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:54 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:54 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:54 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\opencode\permits-inline.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: shop-inline.js
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 9363d8bd746ad983836587633032d52a17adba6b5ba023ad1b42749aa7e65784
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:54 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:54 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:54 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\opencode\shop-inline.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: species-inline.js
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: ac9f7b8316dd29af3fc0f57861eff7d8a5ebdc5be156cf4de5ae262f914b2b7e
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:54 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:42:54 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:54 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:54 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\opencode\species-inline.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:42:55 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: invoice.pdf.exe
+2026-09-06 09:42:55 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 014b8ce9fed0aaf124de966f635da95bf7025bee91d1a1c12d6ff5854eba3307
+2026-09-06 09:42:55 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:55 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:55 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: double_extension
+2026-09-06 09:42:55 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: double_extension
+2026-09-06 09:42:55 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:55 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:55 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\opencode\sx-pytest\test_double_extension_is_flagg0\invoice.pdf.exe (Suspicious (double_extension), Medium)
+2026-09-06 09:42:55 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: packed.exe
+2026-09-06 09:42:55 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 59f410ae5e17962412e2aed4f815918f634932f2abf084f00bb638c4db017850
+2026-09-06 09:42:55 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:55 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:42:55 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:42:55 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:42:55 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:42:55 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:42:55 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\opencode\sx-pytest\test_entropy_heuristic_only_fi0\packed.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:42:56 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: dropper.bin
+2026-09-06 09:42:56 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: fc0b00af601988f3ca81934a4cf9b0762fbc9c6665a3fe0d71899222a7f67c1a
+2026-09-06 09:42:56 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:42:56 | WARNING  | core.timeline                | [ANTIVIRUS] MATCH_FOUND — Known malware: "ShieldEX.Demo.Dropper01"
+2026-09-06 09:42:56 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Threat detected: Known malware: "ShieldEX.Demo.Dropper01"
+2026-09-06 09:42:56 | WARNING  | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: CRITICAL
+2026-09-06 09:42:56 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: CRITICAL
+2026-09-06 09:42:56 | WARNING  | core.timeline                | [ANTIVIRUS] QUARANTINE_ACTION — File moved to .quarantine/
+2026-09-06 09:42:56 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Threat quarantined: File moved to .quarantine/
+2026-09-06 09:42:56 | INFO     | core.antivirus.quarantine    | Quarantined C:\Users\rober\AppData\Local\Temp\opencode\sx-pytest\test_quarantine_restore_round_0\dropper.bin → 20260906_094256_0fe96cf6.quar (ShieldEX.Demo.Dropper01)
+2026-09-06 09:42:56 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\opencode\sx-pytest\test_quarantine_restore_round_0\dropper.bin (ShieldEX.Demo.Dropper01, Critical)
+2026-09-06 09:42:56 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 6500 file(s), 0 threat(s) so far
+2026-09-06 09:43:03 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 7000 file(s), 0 threat(s) so far
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: probe.txt
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: fc0b00af601988f3ca81934a4cf9b0762fbc9c6665a3fe0d71899222a7f67c1a
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:09 | WARNING  | core.timeline                | [ANTIVIRUS] MATCH_FOUND — Known malware: "ShieldEX.Demo.Dropper01"
+2026-09-06 09:43:09 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Threat detected: Known malware: "ShieldEX.Demo.Dropper01"
+2026-09-06 09:43:09 | WARNING  | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: CRITICAL
+2026-09-06 09:43:09 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: CRITICAL
+2026-09-06 09:43:09 | WARNING  | core.timeline                | [ANTIVIRUS] QUARANTINE_ACTION — File moved to .quarantine/
+2026-09-06 09:43:09 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Threat quarantined: File moved to .quarantine/
+2026-09-06 09:43:09 | INFO     | core.antivirus.quarantine    | Quarantined C:\Users\rober\AppData\Local\Temp\tmpigeyb9np\probe.txt → 20260906_094309_d3f9dbaa.quar (ShieldEX.Demo.Dropper01)
+2026-09-06 09:43:09 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\tmpigeyb9np\probe.txt (ShieldEX.Demo.Dropper01, Critical)
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: Microsoft.VisualStudio.Setup.ToastNotification.exe
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 716896999fcc21a37078f5ef3a839afccdd4703eb98e0078468c2b9605874012
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:43:09 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:43:09 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:43:09 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\tx0urnfe.wbk\Microsoft.VisualStudio.Setup.ToastNotification.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_installer.exe
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 044e6725fb6090ca599e29ce5703784522311d983fe6ad90be5ccbe8bb8def7e
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:43:09 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:43:09 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:43:09 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\tx0urnfe.wbk\vs_installer.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_installershell.exe
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 4fa3b9824ec92b61078949545678f757461da32726f89d0239cf2f47f227787e
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:43:09 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:43:09 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:43:09 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:43:09 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\tx0urnfe.wbk\vs_installershell.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:43:10 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_layout.exe
+2026-09-06 09:43:10 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: e3d802b2c38517a3a5eed683e33dee572b54e0d8817c2cf87e08f9b497eb1db2
+2026-09-06 09:43:10 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:10 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:43:10 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:43:10 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:43:10 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:43:10 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:43:10 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\tx0urnfe.wbk\vs_layout.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:43:11 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 7500 file(s), 0 threat(s) so far
+2026-09-06 09:43:11 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: Microsoft.VisualStudio.Setup.TestPowerShell.ps1
+2026-09-06 09:43:11 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 59e5b1a4fb992ab2f2ce792cf19f2956a002f6e712251241329a97d9cdf59e56
+2026-09-06 09:43:11 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:11 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:43:11 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:43:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:43:11 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:43:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:43:11 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\tx0urnfe.wbk\PrecheckTools\Microsoft.VisualStudio.Setup.TestPowerShell.ps1 (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:43:11 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: BackgroundDownload.exe
+2026-09-06 09:43:11 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 3dae5cda2c9adfab2cee69f7a29eb4326b619cf862058ef4ed62ef971ff94683
+2026-09-06 09:43:11 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:11 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:43:11 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:43:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:43:11 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:43:11 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:43:11 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\tx0urnfe.wbk\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:43:16 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: MessagePack.Annotations.dll
+2026-09-06 09:43:16 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 5063da3fe976251e76e9d6ce509967b8e9199b911e1e08ae72eb89b93b29e49b
+2026-09-06 09:43:16 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:16 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:43:16 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:43:16 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:43:16 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:43:16 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:43:16 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\tx0urnfe.wbk\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VsixInstaller\MessagePack.Annotations.dll (Suspicious (high_entropy), Medium)
+2026-09-06 09:43:20 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 8000 file(s), 0 threat(s) so far
+2026-09-06 09:43:25 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: Microsoft.VisualStudio.Setup.ToastNotification.exe
+2026-09-06 09:43:25 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 716896999fcc21a37078f5ef3a839afccdd4703eb98e0078468c2b9605874012
+2026-09-06 09:43:25 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:25 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:43:25 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:43:25 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:43:25 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:43:25 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:43:25 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\xgjv5qkq.4zm\Microsoft.VisualStudio.Setup.ToastNotification.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_installer.exe
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 044e6725fb6090ca599e29ce5703784522311d983fe6ad90be5ccbe8bb8def7e
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:43:26 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:43:26 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:43:26 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\xgjv5qkq.4zm\vs_installer.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_installershell.exe
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 4fa3b9824ec92b61078949545678f757461da32726f89d0239cf2f47f227787e
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:43:26 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:43:26 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:43:26 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\xgjv5qkq.4zm\vs_installershell.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: vs_layout.exe
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: e3d802b2c38517a3a5eed683e33dee572b54e0d8817c2cf87e08f9b497eb1db2
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:43:26 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:43:26 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:43:26 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:43:26 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\xgjv5qkq.4zm\vs_layout.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:43:32 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: Microsoft.VisualStudio.Setup.TestPowerShell.ps1
+2026-09-06 09:43:32 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 59e5b1a4fb992ab2f2ce792cf19f2956a002f6e712251241329a97d9cdf59e56
+2026-09-06 09:43:32 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:32 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:43:32 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:43:32 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:43:32 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:43:32 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:43:32 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\xgjv5qkq.4zm\PrecheckTools\Microsoft.VisualStudio.Setup.TestPowerShell.ps1 (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:43:32 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: BackgroundDownload.exe
+2026-09-06 09:43:32 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 3dae5cda2c9adfab2cee69f7a29eb4326b619cf862058ef4ed62ef971ff94683
+2026-09-06 09:43:32 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:32 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:43:32 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:43:32 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:43:32 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:43:32 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:43:32 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\xgjv5qkq.4zm\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\BackgroundDownload.exe (Suspicious (high_entropy), Medium)
+2026-09-06 09:43:36 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 8500 file(s), 0 threat(s) so far
+2026-09-06 09:43:39 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: MessagePack.Annotations.dll
+2026-09-06 09:43:39 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 5063da3fe976251e76e9d6ce509967b8e9199b911e1e08ae72eb89b93b29e49b
+2026-09-06 09:43:39 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:39 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:43:39 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: high_entropy
+2026-09-06 09:43:39 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: high_entropy
+2026-09-06 09:43:39 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:43:39 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:43:39 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\xgjv5qkq.4zm\resources\app\ServiceHub\Services\Microsoft.VisualStudio.Setup.Service\VsixInstaller\MessagePack.Annotations.dll (Suspicious (high_entropy), Medium)
+2026-09-06 09:43:53 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 9000 file(s), 0 threat(s) so far
+2026-09-06 09:43:55 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: agy-node.cmd
+2026-09-06 09:43:55 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: fcf5a3568e161054398fef59338e58793556834b7a07bc9b7e16fcc3a927717c
+2026-09-06 09:43:55 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:43:55 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:43:55 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:43:55 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:43:55 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:43:55 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:43:55 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Roaming\Antigravity\bin\agy-node.cmd (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:43:59 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 9500 file(s), 0 threat(s) so far
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: KHLj.js
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 9c9777ebd92149cc870d9d9ef4ff75a7ee1c4c6c9f3cb7f78a4f656cec34d256
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:02 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:44:02 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:44:02 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Roaming\Antigravity\User\History\-2a6a8dea\KHLj.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: gcau.js
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 26c7221ba81fabf3a152da3d1f7f6d4e2e764619bb54d1171d7b11d27fd4f7b6
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:02 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:44:02 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:44:02 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Roaming\Antigravity\User\History\-2c750e13\gcau.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: Mt1s.js
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: bf28024429fee961c3851285bdc4bdfdbda80576d37a7aec0061defb4cab59b2
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:02 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:44:02 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:44:02 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Roaming\Antigravity\User\History\-2c750e13\Mt1s.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: yFH6.js
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 081f3f4e3db8ced1bfdb216eb014f5deb0f751ba4acad2de4181a6fe15ab7815
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:02 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:02 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:44:02 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:44:02 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Roaming\Antigravity\User\History\-2c750e13\yFH6.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: Fq3R.js
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 52fe5a6219253eeeb06669efdfe54c3a42702504fad7a6b27d17ca6e681e4eb8
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:04 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:44:04 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:44:04 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Roaming\Antigravity\User\History\230d3480\Fq3R.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: Vmcb.js
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: eb3d7c40e0789cb9e94300152051324223449992571b9639cb2fa0f92366f429
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:04 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:44:04 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:44:04 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Roaming\Antigravity\User\History\230d3480\Vmcb.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: 55ds.js
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 95e49591aa4ccb2b47122d14b66ce6cb21fada0790a03dbca779a687e2060fec
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:04 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:44:04 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:44:04 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Roaming\Antigravity\User\History\9980df5\55ds.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: 5ikP.js
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:04 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:44:04 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:44:04 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Roaming\Antigravity\User\History\9980df5\5ikP.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: JDh9.js
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 95e49591aa4ccb2b47122d14b66ce6cb21fada0790a03dbca779a687e2060fec
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:04 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:44:04 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:44:04 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Roaming\Antigravity\User\History\9980df5\JDh9.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: sgkf.js
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 09:44:04 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:04 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Heuristic triggered: script_in_user_dir
+2026-09-06 09:44:05 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 09:44:05 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Security event: Severity: MEDIUM
+2026-09-06 09:44:05 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Roaming\Antigravity\User\History\9980df5\sgkf.js (Suspicious (script_in_user_dir), Medium)
+2026-09-06 09:44:06 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 10000 file(s), 0 threat(s) so far
+2026-09-06 09:44:14 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 10500 file(s), 0 threat(s) so far
+2026-09-06 09:44:24 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 11000 file(s), 0 threat(s) so far
+2026-09-06 09:44:33 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 11500 file(s), 0 threat(s) so far
+2026-09-06 09:44:41 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_COMPLETED — Quick scan cancelled: 11731 file(s), 115 threat(s) in 239.4s
+2026-09-06 10:58:46 | INFO     | shieldex                     | ==============================================================================
+2026-09-06 10:58:46 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-06 10:58:46 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-06 10:58:46 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-06 10:58:46 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-06 10:58:46 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Limited mode: no administrator privileges, firewall enforcement unavailable
+2026-09-06 10:58:46 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-06 10:58:46 | INFO     | shieldex                     | --no-gui specified; initialisation complete, exiting
+2026-09-06 10:58:46 | INFO     | shieldex                     | ShieldEX shutdown complete
+2026-09-06 10:59:35 | INFO     | shieldex                     | ==============================================================================
+2026-09-06 10:59:35 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-06 10:59:37 | INFO     | shieldex                     | Elevated instance launched; this instance will exit
+2026-09-06 10:59:38 | INFO     | shieldex                     | ==============================================================================
+2026-09-06 10:59:38 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-06 10:59:38 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-06 10:59:38 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-06 10:59:38 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-06 10:59:38 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Elevated: firewall enforcement available
+2026-09-06 10:59:38 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-06 10:59:41 | INFO     | gui.app                      | GUI ready (elevated=True)
+2026-09-06 10:59:41 | INFO     | gui.app                      | Engine registered: quarantine (QuarantineManager)
+2026-09-06 10:59:41 | INFO     | gui.app                      | Engine registered: scanner (Scanner)
+2026-09-06 10:59:41 | INFO     | gui.app                      | Engine registered: realtime_monitor (RealTimeMonitor)
+2026-09-06 10:59:41 | INFO     | gui.app                      | Engine registered: updater (SignatureUpdater)
+2026-09-06 10:59:41 | INFO     | gui.app                      | Engine registered: blocklist (IPBlocklist)
+2026-09-06 10:59:41 | INFO     | gui.app                      | Engine registered: firewall (RuleEngine)
+2026-09-06 10:59:41 | INFO     | gui.app                      | Engine registered: ids (IDSDetector)
+2026-09-06 10:59:41 | INFO     | gui.app                      | Engine registered: connection_monitor (ConnectionMonitor)
+2026-09-06 10:59:41 | INFO     | gui.app                      | Engine registered: packet_inspector (PacketInspector)
+2026-09-06 10:59:41 | INFO     | gui.app                      | Engine registered: notifications (Notifier)
+2026-09-06 10:59:47 | INFO     | core.timeline                | [SYSTEM] SIGNATURE_DB_UPDATED — Signature update check failed: HTTPSConnectionPool(host='example.invalid', port=443): Max retries exceeded with url: /shieldex/signatures.json (Caused by NameResolutionError("HTTPSConnection(host='example.invalid', port=443): Failed to resolve 'example.invalid' ([Errno 11001] getaddrinfo failed)"))
+2026-09-06 11:01:43 | INFO     | gui.app                      | Shutting down GUI
+2026-09-06 11:01:43 | INFO     | core.timeline                | [ANTIVIRUS] MONITOR_STOPPED — Real-time protection stopped
+2026-09-06 11:01:43 | INFO     | gui.app                      | Engine stopped: realtime_monitor
+2026-09-06 11:01:43 | INFO     | gui.app                      | Engine stopped: updater
+2026-09-06 11:01:43 | INFO     | gui.app                      | Engine stopped: firewall
+2026-09-06 11:01:43 | INFO     | gui.app                      | Engine stopped: ids
+2026-09-06 11:01:43 | INFO     | gui.app                      | Engine stopped: connection_monitor
+2026-09-06 11:01:43 | INFO     | gui.app                      | Engine stopped: packet_inspector
+2026-09-06 11:01:43 | INFO     | gui.app                      | Engine stopped: notifications
+2026-09-06 11:01:52 | INFO     | shieldex                     | ==============================================================================
+2026-09-06 11:01:52 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-06 11:01:53 | INFO     | shieldex                     | Elevated instance launched; this instance will exit
+2026-09-06 11:01:54 | INFO     | shieldex                     | ==============================================================================
+2026-09-06 11:01:54 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-06 11:01:54 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-06 11:01:54 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-06 11:01:54 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-06 11:01:54 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Elevated: firewall enforcement available
+2026-09-06 11:01:54 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-06 11:01:56 | INFO     | gui.app                      | GUI ready (elevated=True)
+2026-09-06 11:01:56 | INFO     | gui.app                      | Engine registered: quarantine (QuarantineManager)
+2026-09-06 11:01:56 | INFO     | gui.app                      | Engine registered: scanner (Scanner)
+2026-09-06 11:01:56 | INFO     | gui.app                      | Engine registered: realtime_monitor (RealTimeMonitor)
+2026-09-06 11:01:56 | INFO     | gui.app                      | Engine registered: updater (SignatureUpdater)
+2026-09-06 11:01:56 | INFO     | gui.app                      | Engine registered: blocklist (IPBlocklist)
+2026-09-06 11:01:56 | INFO     | gui.app                      | Engine registered: firewall (RuleEngine)
+2026-09-06 11:01:56 | INFO     | gui.app                      | Engine registered: ids (IDSDetector)
+2026-09-06 11:01:56 | INFO     | gui.app                      | Engine registered: connection_monitor (ConnectionMonitor)
+2026-09-06 11:01:56 | INFO     | gui.app                      | Engine registered: packet_inspector (PacketInspector)
+2026-09-06 11:01:56 | INFO     | gui.app                      | Engine registered: notifications (Notifier)

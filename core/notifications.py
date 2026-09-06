@@ -41,7 +41,10 @@ class Notifier:
         self.timeline = timeline
 
         self._enabled = bool(config.get("notifications.enabled", True))
-        self._min_severity = str(config.get("notifications.min_severity", Severity.MEDIUM))
+        # High floor, not Medium: heuristic verdicts cap at Medium and are advisory —
+        # toasting on every one trains the user to dismiss them, which is worse than
+        # silence when a real Critical arrives.
+        self._min_severity = str(config.get("notifications.min_severity", Severity.HIGH))
         self._app_name = str(config.get("notifications.app_name", "ShieldEX"))
         self._timeout = int(config.get("notifications.timeout_seconds", 8))
         self._lock = threading.Lock()
@@ -69,11 +72,33 @@ class Notifier:
         severity = str(event.get("severity", Severity.INFO))
         if not Severity.at_least(severity, self._min_severity):
             return
+        if not self._is_verdict(event):
+            # Only verdicts notify, not intermediate narrative steps. A single detection
+            # writes several Medium rows (HEURISTIC_FLAG, THREAT_CLASSIFIED, …), and
+            # toasting on each turned one file into three popups.
+            return
 
         title, message = self._compose(event)
         if message is None:
             return
         self._send(title, message)
+
+    @staticmethod
+    def _is_verdict(event: dict[str, Any]) -> bool:
+        """True when the event concludes something, rather than narrating a step."""
+        event_type = str(event.get("event_type", ""))
+        return event_type in (
+            EventType.MATCH_FOUND,
+            EventType.QUARANTINE_ACTION,
+            EventType.QUARANTINE_RESTORED,
+            EventType.THREAT_REMOVED,
+            EventType.IDS_PORT_SCAN,
+            EventType.IDS_SYN_FLOOD,
+            EventType.IDS_AUTH_FAILURES,
+            EventType.IDS_ICMP_FLOOD,
+            EventType.ENGINE_ERROR,
+            EventType.SCAN_FAILED,
+        ) or event_type.startswith(EventType.IDS_PREFIX)
 
     def _compose(self, event: dict[str, Any]) -> tuple[str, str | None]:
         """Human-readable (title, message) for one timeline event."""

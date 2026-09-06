@@ -23,7 +23,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from core.antivirus.hashing import sha256_file
-from core.antivirus.heuristics import Finding, HeuristicEngine
+from core.antivirus.heuristics import Finding, HeuristicEngine, score_to_severity
 from core.antivirus.quarantine import QuarantineError, QuarantineManager
 from core.config import Config
 from core.database import Database
@@ -103,6 +103,11 @@ class Scanner:
         self.timeline = timeline
         self.quarantine = quarantine
         self.heuristics = HeuristicEngine(config)
+        #: Hashes already *reported* in the current scan. Installers and dev tools leave
+        #: many byte-identical copies around (the same vs_installer.exe in five temp
+        #: folders); each is counted as scanned, but a detection is reported once and the
+        #: duplicates are folded into a single "also seen at N other locations" note.
+        self._reported_hashes: dict[str, list[str]] = {}
 
     # ================================================================== public API
     def run(
@@ -119,6 +124,7 @@ class Scanner:
         file only, no scan_history row; used by the real-time monitor).
         """
         started = time.monotonic()
+        self._reported_hashes = {}
         scan_id = -1
         result = ScanResult(scan_id=-1, scan_type=scan_type, target=str(target or ""))
         try:
@@ -314,6 +320,28 @@ class Scanner:
 
         if signature is None and not findings:
             return  # clean file: no timeline entry by design
+        if signature is None and self.heuristics.total_score(findings) < 20:
+            # Below LOW is "noteworthy at most": a single weak indicator (a .js in
+            # %TEMP%, entropy in a signed installer) is not a detection. Logging these
+            # as threats turned a 11k-file quick scan into 115 false positives.
+            return
+
+        prior_locations = self._reported_hashes.get(file_hash)
+        if prior_locations is not None:
+            prior_locations.append(str(path))
+            if signature is None:
+                # Byte-identical heuristic duplicate: count it, never re-narrate it.
+                # A five-copy installer would otherwise produce five full detection
+                # stories and five verdict popups.
+                return
+            # A signature match is different: every byte-identical copy is live malware
+            # on disk, so quarantine this one too — but without the narrative repeat.
+            detection = self._classify(path, file_hash, signature, findings)
+            if bool(self.cfg.get("antivirus.auto_quarantine_on_signature_match", True)):
+                self._auto_quarantine(detection, scan_id)
+            result.detections.append(detection)
+            return
+        self._reported_hashes[file_hash] = [str(path)]
 
         self._log_narrative(path, file_hash, signature, findings, origin)
         detection = self._classify(path, file_hash, signature, findings)
@@ -357,7 +385,12 @@ class Scanner:
         signature: dict[str, Any] | None,
         findings: list[Finding],
     ) -> Detection:
-        """Decide threat name and severity from the evidence collected."""
+        """Decide threat name and severity from the evidence collected.
+
+        Heuristic verdicts come from the summed rule weights (see the scoring table in
+        :mod:`core.antivirus.heuristics`), never from any single rule: two weak leads
+        can be a pattern, one weak lead is background noise.
+        """
         if signature is not None:
             return Detection(
                 path=str(path),
@@ -367,14 +400,12 @@ class Scanner:
                 sha256=file_hash,
             )
 
-        worst = max(
-            (finding.severity for finding in findings),
-            key=lambda level: Severity.rank(level),
-        )
+        score = self.heuristics.total_score(findings)
+        severity = score_to_severity(score)
         return Detection(
             path=str(path),
-            threat_name=f"Suspicious ({', '.join(finding.rule for finding in findings)})",
-            severity=worst,
+            threat_name=f"Suspicious ({', '.join(finding.rule for finding in findings)}) — score {score}",
+            severity=severity,
             kind="heuristic",
             sha256=file_hash,
             heuristic_rules=[finding.rule for finding in findings],

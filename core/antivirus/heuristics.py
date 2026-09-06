@@ -4,9 +4,26 @@ Each rule takes a file and its stat info and returns a :class:`Finding` when it 
 Rules are driven entirely by ``antivirus.heuristics`` in config.json, so they can be
 tuned or switched off without touching code.
 
-Heuristics deliberately *over*-report — that is what a heuristic is for. A flag is a
-lead, not a verdict: the scanner counts flags per file and escalates severity when
-several fire together (``escalate_to_medium_after_flags``).
+**Scoring model.** A single heuristic is a *lead*, not a verdict: "a .js file lives in
+%TEMP%" describes half the dev ecosystem and must never be a Medium threat on its own.
+Findings therefore carry **weights** (``score`` in config) and one file gets exactly one
+verdict derived from the *sum* of the weights of everything that fired:
+
+========  ========  ==================================================
+Score     Verdict   Meaning
+========  ========  ==================================================
+0–19      CLEAN    nothing (or nothing worth mentioning) fired
+20–39     LOW      mildly unusual — worth a log line, not attention
+40–69     MEDIUM   a real pattern; warrants user-visible reporting
+70–99     HIGH     strongly malicious behaviour
+100+      (n/a)    signature territory — handled before heuristics
+========  ========  ==================================================
+
+Rule weights ship deliberately *low* so one indicator alone stays CLEAN/LOW and only
+combinations escalate (e.g. script_in_user_dir 5 + double_extension 40 + high_entropy
+10 = 55 → Medium). This replaces the earlier design where any single rule could report
+Medium on its own, which flagged every Node helper script in %TEMP% and every packed
+installer as "threats".
 """
 
 from __future__ import annotations
@@ -23,7 +40,26 @@ from core.timeline import Severity
 
 logger = logging.getLogger(__name__)
 
-__all__ = ["Finding", "HeuristicEngine"]
+__all__ = ["Finding", "HeuristicEngine", "score_to_severity", "SCORE_THRESHOLDS"]
+
+#: (minimum score, severity) pairs, ascending. The first threshold the sum *reaches*
+#: becomes the file's verdict. Mirrors the ShieldEX detection-design table.
+SCORE_THRESHOLDS: tuple[tuple[int, str], ...] = (
+    (40, Severity.MEDIUM),
+    (70, Severity.HIGH),
+)
+
+
+def score_to_severity(score: int) -> str:
+    """Map a summed rule score onto a severity verdict (below 40 → below Medium).
+
+    Checked from the top down: the *highest* band the sum reaches is the verdict, so
+    a score of 75 is High, not the Medium it would first match at 40.
+    """
+    for threshold, severity in reversed(SCORE_THRESHOLDS):
+        if score >= threshold:
+            return severity
+    return Severity.LOW if score >= 20 else Severity.INFO
 
 
 @dataclass
@@ -32,9 +68,14 @@ class Finding:
 
     rule: str
     detail: str
-    severity: str = Severity.LOW
+    score: int = 5
     #: Free-form context for the timeline detail panel.
     extra: dict[str, Any] = field(default_factory=dict)
+
+    @property
+    def severity(self) -> str:
+        """Convenience view of this single indicator's weight, for the timeline chip."""
+        return score_to_severity(self.score)
 
 
 def _ext(path: Path) -> str:
@@ -62,7 +103,11 @@ class HeuristicEngine:
 
     # ------------------------------------------------------------------ public API
     def examine(self, path: Path, stat: os.stat_result | None = None) -> list[Finding]:
-        """Run every enabled heuristic against ``path``. Never raises."""
+        """Run every enabled heuristic against ``path``. Never raises.
+
+        Returns the individual findings — the *verdict* is the caller's, derived from
+        :meth:`total_score` (or simply by summing the findings' scores).
+        """
         findings: list[Finding] = []
         if not bool(self.cfg.get("antivirus.heuristics.enabled", True)):
             return findings
@@ -85,9 +130,22 @@ class HeuristicEngine:
             except Exception as exc:  # a broken rule must never abort a scan
                 logger.error("Heuristic rule %s failed on %s: %s", rule.__name__, path, exc)
 
-        return self._escalate(path, findings)
+        return findings
+
+    @staticmethod
+    def total_score(findings: list[Finding]) -> int:
+        """The one number a file's verdict comes from."""
+        return sum(finding.score for finding in findings)
 
     # ------------------------------------------------------------------ rules
+    def _rule_score(self, rule_key: str, default: int) -> int:
+        """A rule's configured weight, clamped to 0–100."""
+        try:
+            score = int(self.cfg.get(f"antivirus.heuristics.{rule_key}.score", default))
+        except (TypeError, ValueError):
+            return default
+        return max(0, min(100, score))
+
     def _double_extension(self, path: Path, stat: os.stat_result) -> list[Finding]:
         """``invoice.pdf.exe`` — a document extension hiding an executable one."""
         if not bool(self.cfg.get("antivirus.heuristics.double_extension.enabled", True)):
@@ -108,18 +166,21 @@ class HeuristicEngine:
         inner = "." + stem.rsplit(".", 1)[-1]
         if inner.lower() not in inner_list:
             return []
-        severity = str(self.cfg.get("antivirus.heuristics.double_extension.severity", Severity.MEDIUM))
         return [
             Finding(
                 rule="double_extension",
                 detail=f"Double extension: {path.name} poses as a {inner} document",
-                severity=Severity.normalize(severity, Severity.MEDIUM),
+                score=self._rule_score("double_extension", 40),
                 extra={"outer": outer, "inner": inner},
             )
         ]
 
     def _script_in_user_dirs(self, path: Path, stat: os.stat_result) -> list[Finding]:
-        """Script files loose in user-writable locations are a classic persistence drop."""
+        """Script files loose in user-writable locations.
+
+        Worth 5 points on its own — the classic persistence *lead*, but half of %TEMP%'s
+        population on a developer machine, so never a verdict by itself.
+        """
         if not bool(self.cfg.get("antivirus.heuristics.script_in_user_dirs.enabled", True)):
             return []
         watched = self.cfg.resolve_paths(
@@ -133,12 +194,11 @@ class HeuristicEngine:
         ]
         if _ext(path) not in extensions:
             return []
-        severity = str(self.cfg.get("antivirus.heuristics.script_in_user_dirs.severity", Severity.MEDIUM))
         return [
             Finding(
                 rule="script_in_user_dir",
                 detail=f"Script file ({_ext(path)}) in a user-writable location",
-                severity=Severity.normalize(severity, Severity.MEDIUM),
+                score=self._rule_score("script_in_user_dirs", 5),
             )
         ]
 
@@ -157,12 +217,11 @@ class HeuristicEngine:
                     return []
         except OSError:
             return []
-        severity = str(self.cfg.get("antivirus.heuristics.no_extension_in_system_dir.severity", Severity.LOW))
         return [
             Finding(
                 rule="no_extension_in_system_dir",
                 detail="Extension-less executable in a protected system directory",
-                severity=Severity.normalize(severity, Severity.LOW),
+                score=self._rule_score("no_extension_in_system_dir", 20),
             )
         ]
 
@@ -176,12 +235,11 @@ class HeuristicEngine:
         threshold_mb = float(self.cfg.get("antivirus.heuristics.large_file_in_startup.threshold_mb", 50))
         if stat.st_size < threshold_mb * 1024 * 1024:
             return []
-        severity = str(self.cfg.get("antivirus.heuristics.large_file_in_startup.severity", Severity.MEDIUM))
         return [
             Finding(
                 rule="large_file_in_startup",
                 detail=f"Large file ({stat.st_size / (1024 * 1024):.0f} MB) in a startup folder",
-                severity=Severity.normalize(severity, Severity.MEDIUM),
+                score=self._rule_score("large_file_in_startup", 35),
             )
         ]
 
@@ -205,14 +263,11 @@ class HeuristicEngine:
         age = max(0.0, time.time() - stat.st_mtime)
         if age > window_hours * 3600:
             return []
-        severity = str(
-            self.cfg.get("antivirus.heuristics.recently_modified_in_protected_dir.severity", Severity.LOW)
-        )
         return [
             Finding(
                 rule="recently_modified_in_protected_dir",
                 detail=f"Modified {age / 3600:.1f}h ago in a protected directory",
-                severity=Severity.normalize(severity, Severity.LOW),
+                score=self._rule_score("recently_modified_in_protected_dir", 10),
             )
         ]
 
@@ -221,7 +276,9 @@ class HeuristicEngine:
 
         Only applies to executable/script-suffixed files (see :data:`_EXECUTABLE_SUFFIXES`):
         archives, images and installers are legitimately high-entropy, so without that
-        gate every downloaded .zip in %DOWNLOADS% would be flagged.
+        gate every downloaded .zip in %DOWNLOADS% would be flagged. Even then it is only
+        worth 10 points — most signed installers compress their payload, so entropy
+        alone must not condemn them.
         """
         if not bool(self.cfg.get("antivirus.heuristics.entropy.enabled", True)):
             return []
@@ -240,38 +297,14 @@ class HeuristicEngine:
         threshold = float(self.cfg.get("antivirus.heuristics.entropy.threshold", 7.2))
         if stats["entropy"] < threshold:
             return []
-        severity = str(self.cfg.get("antivirus.heuristics.entropy.severity", Severity.MEDIUM))
         return [
             Finding(
                 rule="high_entropy",
                 detail=f"High entropy {stats['entropy']:.2f} bits/byte — packed or encrypted content",
-                severity=Severity.normalize(severity, Severity.MEDIUM),
+                score=self._rule_score("entropy", 10),
                 extra=stats,
             )
         ]
-
-    # ------------------------------------------------------------------ escalation
-    def _escalate(self, path: Path, findings: list[Finding]) -> list[Finding]:
-        """Several Low flags on one file add up to real suspicion.
-
-        A single Low heuristic is noise (a script in %TEMP% might be a setup helper);
-        three of them on the same file is a pattern worth Medium attention.
-        """
-        threshold = int(self.cfg.get("antivirus.heuristics.escalate_to_medium_after_flags", 2))
-        if threshold <= 0 or len(findings) < threshold:
-            return findings
-        # Only escalate when nothing already reached Medium — never downgrade an existing
-        # finding, or a double_extension High would be softened by company.
-        if any(Severity.at_least(finding.severity, Severity.MEDIUM) for finding in findings):
-            return findings
-        findings.append(
-            Finding(
-                rule="multi_flag_escalation",
-                detail=f"{len(findings)} heuristic flags fired together on {path.name}",
-                severity=Severity.MEDIUM,
-            )
-        )
-        return findings
 
     # ------------------------------------------------------------------ helpers
     @staticmethod

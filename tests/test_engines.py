@@ -201,6 +201,106 @@ def test_ordinary_document_is_not_flagged(config, tmp_path):
 
 
 # ======================================================================
+# Scoring model: one weak indicator is never a threat
+# ======================================================================
+def test_single_weak_indicator_stays_below_detection(config, tmp_path):
+    """Regression: a lone .js in %TEMP% scored Medium and flooded scans with false
+    positives (115 "threats" in an 11k-file quick scan). It must stay a 5-point lead.
+    """
+    from core.antivirus.heuristics import HeuristicEngine
+
+    engine = HeuristicEngine(config)
+    config.set("antivirus.realtime_monitor.watched_paths", [str(tmp_path)])
+
+    script = tmp_path / "kernel.js"
+    script.write_bytes(b"console.log('totally normal dev tool');")
+    findings = engine.examine(script)
+
+    assert [f.rule for f in findings] == ["script_in_user_dir"]
+    assert engine.total_score(findings) < 20  # below LOW: not a detection
+
+
+def test_packed_installer_entropy_alone_stays_below_detection(config, tmp_path):
+    """Regression: a signed installer's compressed payload tripped high_entropy at
+    Medium, flagging every vs_installer.exe temp copy. Entropy alone is 10 points."""
+    from core.antivirus.heuristics import HeuristicEngine
+
+    engine = HeuristicEngine(config)
+    config.set("antivirus.realtime_monitor.watched_paths", [str(tmp_path)])
+
+    installer = tmp_path / "setup.exe"
+    installer.write_bytes(b"MZ" + bytes(range(256)) * 512)
+    findings = engine.examine(installer)
+
+    # entropy may fire, but the sum must stay below the detection floor: real signed
+    # installers are packed and must not be reported as threats.
+    assert engine.total_score(findings) < 20
+
+
+def test_combined_indicators_escalate_to_medium(config, tmp_path):
+    """double_extension (40) alone reaches Medium — the disguise is itself the pattern."""
+    from core.antivirus.heuristics import HeuristicEngine, score_to_severity
+
+    engine = HeuristicEngine(config)
+    config.set("antivirus.realtime_monitor.watched_paths", [str(tmp_path)])
+
+    disguised = tmp_path / "invoice.pdf.exe"
+    disguised.write_bytes(b"MZ" + b"\x00" * 62)
+    findings = engine.examine(disguised)
+
+    assert "double_extension" in [f.rule for f in findings]
+    assert score_to_severity(engine.total_score(findings)) == "Medium"
+
+
+def test_score_to_severity_thresholds():
+    """The published scoring bands: 0-19 clean, 20-39 Low, 40-69 Medium, 70+ High."""
+    from core.antivirus.heuristics import score_to_severity
+
+    assert score_to_severity(0) == "Info"
+    assert score_to_severity(19) == "Info"
+    assert score_to_severity(20) == "Low"
+    assert score_to_severity(39) == "Low"
+    assert score_to_severity(40) == "Medium"
+    assert score_to_severity(69) == "Medium"
+    assert score_to_severity(70) == "High"
+    assert score_to_severity(95) == "High"
+
+
+def test_scan_reports_identical_copies_once(scanner, db, tmp_path, config):
+    """Byte-identical heuristic hits fold into one report; the count stays honest.
+
+    Regression: the same packed installer in five temp folders produced five separate
+    Medium detections from one underlying object.
+    """
+    payload = b"MZ" + bytes(range(256)) * 512
+    config.set("antivirus.realtime_monitor.watched_paths", [str(tmp_path)])
+    config.set("antivirus.heuristics.entropy.score", 40)  # force it to Medium on its own
+    for name in ("a", "b", "c"):
+        (tmp_path / f"{name}_setup.exe").write_bytes(payload)
+
+    result = scanner.run("custom", tmp_path)
+
+    heuristic_hits = [d for d in result.detections if d.kind == "heuristic"]
+    assert len(heuristic_hits) == 1  # one story for three byte-identical files
+    assert all(d.path != heuristic_hits[0].path or d is heuristic_hits[0] for d in result.detections)
+
+
+def test_scan_quarantines_every_identical_signature_copy(scanner, db, tmp_path):
+    """Signature-matched duplicates are the exception: every copy is live malware and
+    gets quarantined, even though the narrative is deduplicated."""
+    for name in ("one", "two", "three"):
+        (tmp_path / f"{name}.bin").write_bytes(DEMO_PAYLOAD)
+
+    result = scanner.run("custom", tmp_path)
+
+    assert result.threats_found == 3
+    assert all(d.quarantined for d in result.detections)
+    assert db.quarantine_count("QUARANTINED") == 3
+    for name in ("one", "two", "three"):
+        assert not (tmp_path / f"{name}.bin").exists()
+
+
+# ======================================================================
 # Quarantine: restore and delete round trip
 # ======================================================================
 def test_quarantine_restore_round_trip(scanner, db, timeline, tmp_path):

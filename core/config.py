@@ -82,7 +82,7 @@ DEFAULT_CONFIG: dict[str, Any] = {
             "enabled": True,
             "double_extension": {
                 "enabled": True,
-                "severity": "Medium",
+                "score": 40,
                 "inner_extensions": [
                     ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".jpg", ".jpeg",
                     ".png", ".gif", ".txt", ".zip", ".rar", ".mp3", ".mp4",
@@ -94,26 +94,25 @@ DEFAULT_CONFIG: dict[str, Any] = {
             },
             "script_in_user_dirs": {
                 "enabled": True,
-                "severity": "Medium",
+                "score": 5,
                 "extensions": [
                     ".bat", ".cmd", ".ps1", ".vbs", ".vbe", ".js", ".jse", ".wsf", ".hta",
                 ],
             },
-            "no_extension_in_system_dir": {"enabled": True, "severity": "Low"},
-            "large_file_in_startup": {"enabled": True, "severity": "Medium", "threshold_mb": 50},
+            "no_extension_in_system_dir": {"enabled": True, "score": 20},
+            "large_file_in_startup": {"enabled": True, "score": 35, "threshold_mb": 50},
             "recently_modified_in_protected_dir": {
                 "enabled": True,
-                "severity": "Low",
+                "score": 10,
                 "window_hours": 24,
             },
             "entropy": {
                 "enabled": True,
-                "severity": "Medium",
+                "score": 10,
                 "threshold": 7.2,
                 "sample_bytes": 262_144,
                 "min_file_size_kb": 16,
             },
-            "escalate_to_medium_after_flags": 2,
         },
         "realtime_monitor": {
             "enabled": False,
