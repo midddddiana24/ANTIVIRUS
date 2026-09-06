@@ -1,28 +1,13 @@
-"""Engine bootstrap — constructs and wires every ShieldEX engine, once per process.
+"""Engine factory — constructs and wires every long-running ShieldEX engine.
 
-The GUI shell drives long-running engines through its registry
-(:meth:`gui.app.ShieldEXApp.register_engine`), and views reach them with
-:meth:`gui.app.ShieldEXApp.get_engine`. Nothing constructed them, though: main.py
-opened the database and handed it straight to the shell, so the registry stayed
-empty — every toggle fell back to "state saved (engine not loaded yet)" and no scan
-or firewall engine ever ran.
+Centralised so ``main.py`` stays a thin entry point and the GUI's engine registry gets
+one consistent set of objects: the scanner needs the quarantine manager, the IDS needs
+the blocklist, the connection monitor needs the rule engine *and* the IDS, and the
+notifier needs the timeline. Building them in one place is the only way that dependency
+graph stays visible.
 
-This module owns the construction order, which is fixed by the engines' own
-dependencies:
-
-1. quarantine (needs scanner? no — scanner needs quarantine);
-2. scanner (needs quarantine);
-3. real-time monitor (needs scanner + quarantine);
-4. IP blocklist;
-5. rule engine (needs blocklist);
-6. IDS detector (needs blocklist, optionally the rule engine);
-7. connection monitor (needs rule engine + IDS);
-8. packet inspector (optional, needs IDS);
-9. signature updater.
-
-Everything is built defensively: an engine whose import fails (scapy without Npcap,
-watchdog missing) is skipped rather than fatal, and :class:`EngineRegistry` exposes
-``None`` for it so the views can show an honest "unavailable" state.
+Every engine class import is guarded: the app must start and keep its working engines
+even when an optional dependency (watchdog, scapy, plyer, psutil) is missing.
 """
 
 from __future__ import annotations
@@ -36,139 +21,139 @@ from core.timeline import TimelineLogger
 
 logger = logging.getLogger(__name__)
 
-__all__ = ["EngineRegistry", "build_engines"]
+__all__ = ["EngineBundle"]
 
 
-class EngineRegistry:
-    """Named home for every long-running engine the shell and the views can reach."""
+class EngineBundle:
+    """Owns the engine instances and their startup/shutdown order."""
 
-    def __init__(self) -> None:
+    def __init__(self, config: Config, db: Database, timeline: TimelineLogger) -> None:
+        self.cfg = config
+        self.db = db
+        self.timeline = timeline
         self._engines: dict[str, Any] = {}
+        self._build()
 
-    def register(self, name: str, engine: Any) -> None:
-        """Store an engine under ``name``; the shell's toggles look these up."""
-        self._engines[name] = engine
-        logger.info("Engine registered: %s (%s)", name, type(engine).__name__)
+    # ------------------------------------------------------------------ construction
+    def _build(self) -> None:
+        """Construct every engine, degrading individually when dependencies are missing."""
+        quarantine = self._try(
+            "quarantine",
+            "core.antivirus.quarantine", "QuarantineManager",
+            dict(config=self.cfg, db=self.db, timeline=self.timeline),
+        )
+
+        scanner = None
+        if quarantine is not None:
+            scanner = self._try(
+                "scanner",
+                "core.antivirus.scanner", "Scanner",
+                dict(config=self.cfg, db=self.db, timeline=self.timeline, quarantine=quarantine),
+            )
+            if scanner is not None:
+                self._try(
+                    "realtime_monitor",
+                    "core.antivirus.monitor", "RealTimeMonitor",
+                    dict(
+                        config=self.cfg, db=self.db, timeline=self.timeline,
+                        scanner=scanner, quarantine=quarantine,
+                    ),
+                )
+
+        self._try(
+            "updater",
+            "core.antivirus.updater", "SignatureUpdater",
+            dict(config=self.cfg, db=self.db, timeline=self.timeline),
+        )
+
+        blocklist = self._try(
+            "blocklist",
+            "core.firewall.ip_blocklist", "IPBlocklist",
+            dict(config=self.cfg, db=self.db, timeline=self.timeline),
+        )
+
+        if blocklist is not None:
+            rule_engine = self._try(
+                "firewall",
+                "core.firewall.rule_engine", "RuleEngine",
+                dict(config=self.cfg, db=self.db, timeline=self.timeline, blocklist=blocklist),
+            )
+            ids = self._try(
+                "ids",
+                "core.firewall.ids", "IDSDetector",
+                dict(
+                    config=self.cfg, db=self.db, timeline=self.timeline,
+                    blocklist=blocklist, rule_engine=rule_engine,
+                ),
+            )
+            if rule_engine is not None and ids is not None:
+                self._try(
+                    "connection_monitor",
+                    "core.firewall.connection_monitor", "ConnectionMonitor",
+                    dict(
+                        config=self.cfg, db=self.db, timeline=self.timeline,
+                        rule_engine=rule_engine, ids=ids,
+                    ),
+                )
+            if ids is not None:
+                self._try(
+                    "packet_inspector",
+                    "core.firewall.packet_inspector", "PacketInspector",
+                    dict(config=self.cfg, db=self.db, timeline=self.timeline, ids=ids),
+                )
+
+        notifier = self._try(
+            "notifications",
+            "core.notifications", "Notifier",
+            dict(config=self.cfg, db=self.db, timeline=self.timeline),
+        )
+        if notifier is not None:
+            try:
+                notifier.attach()
+            except Exception as exc:
+                logger.error("Could not attach the notifier: %s", exc)
+
+    def _try(self, name: str, module_path: str, class_name: str, kwargs: dict[str, Any]) -> Any | None:
+        """Import and build one engine; log and skip it when anything fails."""
+        try:
+            import importlib
+
+            module = importlib.import_module(module_path)
+            engine_class = getattr(module, class_name)
+            engine = engine_class(**kwargs)
+            self._engines[name] = engine
+            logger.debug("Engine built: %s (%s)", name, class_name)
+            return engine
+        except Exception as exc:
+            logger.warning("Engine %s unavailable: %s", name, exc, exc_info=True)
+            return None
+
+    # ------------------------------------------------------------------ registry interface
+    def names(self) -> list[str]:
+        """Engine names in registration order (stable for tests and startup logs)."""
+        return list(self._engines.keys())
 
     def get(self, name: str) -> Any | None:
-        """Return the engine, or ``None`` when it could not be built."""
         return self._engines.get(name)
 
-    def names(self) -> list[str]:
-        return sorted(self._engines)
+    def __contains__(self, name: str) -> bool:
+        return name in self._engines
 
+    # ------------------------------------------------------------------ lifecycle
     def stop_all(self) -> None:
-        """Stop every engine that has a ``stop()``; never raises."""
-        for name, engine in self._engines.items():
+        """Stop every engine, in reverse registration order."""
+        for name in reversed(self.names()):
+            engine = self._engines.get(name)
             stop = getattr(engine, "stop", None)
-            if callable(stop):
-                try:
-                    stop()
-                    logger.info("Engine stopped: %s", name)
-                except Exception as exc:
-                    logger.error("Engine %s failed to stop: %s", name, exc, exc_info=True)
+            if not callable(stop):
+                continue
+            try:
+                stop()
+                logger.info("Engine stopped: %s", name)
+            except Exception as exc:
+                logger.error("Engine %s failed to stop: %s", name, exc, exc_info=True)
 
 
-def build_engines(config: Config, db: Database, timeline: TimelineLogger) -> EngineRegistry:
-    """Construct and register every engine the configuration allows.
-
-    Individual engine failures are logged and skipped, because a machine without
-    Npcap must still get the antivirus side of the suite. Returns the filled registry;
-    the caller hands it to the shell, which re-registers each engine under the same
-    names (registry and shell share the naming contract documented on
-    :meth:`gui.app.ShieldEXApp.register_engine`).
-    """
-    registry = EngineRegistry()
-
-    # ---- antivirus ------------------------------------------------------------
-    try:
-        from core.antivirus.quarantine import QuarantineManager
-
-        registry.register("quarantine", QuarantineManager(config, db, timeline))
-    except Exception as exc:
-        logger.error("Quarantine engine unavailable: %s", exc, exc_info=True)
-
-    try:
-        from core.antivirus.scanner import Scanner
-
-        quarantine = registry.get("quarantine")
-        if quarantine is not None:
-            registry.register("scanner", Scanner(config, db, timeline, quarantine))
-    except Exception as exc:
-        logger.error("Scanner engine unavailable: %s", exc, exc_info=True)
-
-    try:
-        from core.antivirus.monitor import RealTimeMonitor
-
-        scanner = registry.get("scanner")
-        quarantine = registry.get("quarantine")
-        if scanner is not None and quarantine is not None:
-            registry.register("realtime_monitor", RealTimeMonitor(config, db, timeline, scanner, quarantine))
-    except Exception as exc:
-        logger.error("Real-time monitor engine unavailable: %s", exc, exc_info=True)
-
-    try:
-        from core.antivirus.updater import SignatureUpdater
-
-        registry.register("updater", SignatureUpdater(config, db, timeline))
-    except Exception as exc:
-        logger.error("Signature updater unavailable: %s", exc, exc_info=True)
-
-    # ---- firewall ---------------------------------------------------------------
-    try:
-        from core.firewall.ip_blocklist import IPBlocklist
-
-        registry.register("blocklist", IPBlocklist(config, db, timeline))
-    except Exception as exc:
-        logger.error("IP blocklist unavailable: %s", exc, exc_info=True)
-
-    try:
-        from core.firewall.rule_engine import RuleEngine
-
-        blocklist = registry.get("blocklist")
-        if blocklist is not None:
-            registry.register("firewall", RuleEngine(config, db, timeline, blocklist))
-    except Exception as exc:
-        logger.error("Firewall rule engine unavailable: %s", exc, exc_info=True)
-
-    try:
-        from core.firewall.ids import IDSDetector
-
-        blocklist = registry.get("blocklist")
-        if blocklist is not None:
-            registry.register("ids", IDSDetector(
-                config, db, timeline,
-                blocklist=blocklist,
-                rule_engine=registry.get("firewall"),
-            ))
-    except Exception as exc:
-        logger.error("IDS detector unavailable: %s", exc, exc_info=True)
-
-    try:
-        from core.firewall.connection_monitor import ConnectionMonitor
-
-        rule_engine = registry.get("firewall")
-        ids = registry.get("ids")
-        if rule_engine is not None and ids is not None:
-            registry.register("connection_monitor", ConnectionMonitor(config, db, timeline, rule_engine, ids))
-    except Exception as exc:
-        logger.error("Connection monitor unavailable: %s", exc, exc_info=True)
-
-    try:
-        from core.firewall.packet_inspector import PacketInspector
-
-        ids = registry.get("ids")
-        if ids is not None:
-            registry.register("packet_inspector", PacketInspector(config, db, timeline, ids))
-    except Exception as exc:
-        logger.info("Packet inspector unavailable: %s", exc)
-
-    # ---- shared -----------------------------------------------------------------
-    try:
-        from core.notifications import NotificationEngine
-
-        registry.register("notifications", NotificationEngine(config, timeline))
-    except Exception as exc:
-        logger.error("Notification engine unavailable: %s", exc, exc_info=True)
-
-    return registry
+def build_engines(config: Config, db: Database, timeline: TimelineLogger) -> EngineBundle:
+    """Construct the full engine bundle (the function ``main.py`` calls)."""
+    return EngineBundle(config, db, timeline)

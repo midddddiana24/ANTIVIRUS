@@ -1,22 +1,23 @@
-"""Quarantine view — the vault: restore, delete, and inspect quarantined files.
+"""Quarantine view — browse, inspect, restore or permanently delete vaulted files.
 
-Every action goes through the ``quarantine`` engine (never the database directly),
-because the engine owns the file moves and the timeline narrative. Destructive
-actions confirm first, honouring ``antivirus.quarantine.confirm_before_delete``.
+The vault holds files moved there by the scanner (auto-quarantine) or the real-time
+monitor. Restoring is the escape hatch for false positives, so it asks before
+overwriting whatever now sits at the original location; deleting is permanent and asks
+too. Both confirmations route through the shell's dialogs so they stay modal to the app.
 """
 
 from __future__ import annotations
 
 import logging
 from pathlib import Path
-from tkinter import messagebox
 from typing import Any
 
 import customtkinter as ctk
 
+from core.antivirus.quarantine import QuarantineError, QuarantineManager
 from gui.base_view import BaseView
-from gui.theme import PAD, PAD_SM, PALETTE, font, mono_font
-from gui.widgets import Card, Chip, EmptyState, HoverRow, SeverityChip, StatLine, exclude_from_row_bindings
+from gui.theme import PAD, PAD_LG, PAD_SM, PALETTE, font, mono_font
+from gui.widgets import Card, Chip, EmptyState, HoverRow, SeverityChip, StatLine
 
 logger = logging.getLogger(__name__)
 
@@ -24,276 +25,235 @@ _STATUS_FILTERS: tuple[str, ...] = ("QUARANTINED", "RESTORED", "DELETED", "ALL")
 
 
 class QuarantineView(BaseView):
-    """List and manage quarantined files."""
+    """The quarantine vault management view."""
 
     title = "Quarantine"
-    subtitle = "Neutralised threats — restore a mistaken detection or delete forever"
+    subtitle = "Files moved out of harm's way — restore them or delete them for good"
 
     def build(self) -> None:
-        self._rows: list[ctk.CTkFrame] = []
-        self._filter = "QUARANTINED"
-        self._expanded_id: int | None = None
+        self._status_filter = ctk.StringVar(value="QUARANTINED")
+        self._entries: list[dict[str, Any]] = []
+        self._selected_id: int | None = None
 
         self.content.grid_columnconfigure(0, weight=1)
+        self.content.grid_columnconfigure(1, weight=0)
         self.content.grid_rowconfigure(2, weight=1)
 
+        self._build_actions()
         self._build_summary()
-        self._build_filters()
         self._build_list()
+        self._build_detail()
 
-    # ==================================================================
-    # Layout
-    # ==================================================================
-    def _build_summary(self) -> None:
-        card = Card(self.content, title="Vault summary")
-        card.grid(row=0, column=0, sticky="ew", pady=(0, PAD_SM))
-        body = card.body
-        for column in range(4):
-            body.grid_columnconfigure(column, weight=1, uniform="quar")
-
-        self._summary_lines: dict[str, StatLine] = {}
-        for column, (key, label) in enumerate((
-            ("quarantined", "Quarantined now"),
-            ("restored", "Restored"),
-            ("deleted", "Deleted forever"),
-            ("missing", "Vault files missing"),
-        )):
-            line = StatLine(body, label)
-            line.grid(row=0, column=column, sticky="ew", padx=PAD_SM)
-            self._summary_lines[key] = line
-
-        ctk.CTkButton(
-            body, text="Drop entries whose vault file is gone", height=28, font=font(11),
+    # ================================================================== header
+    def _build_actions(self) -> None:
+        self._refresh_button = ctk.CTkButton(
+            self.actions, text="Refresh", width=90, height=30, font=font(12, "bold"),
             fg_color=PALETTE["surface_alt"], text_color=PALETTE["text"],
-            hover_color=PALETTE["surface_hover"], command=self._cleanup_missing,
-        ).grid(row=1, column=0, columnspan=4, sticky="w", pady=(PAD_SM, 0))
-
-    def _build_filters(self) -> None:
-        card = Card(self.content)
-        card.grid(row=1, column=0, sticky="ew", pady=(0, PAD_SM))
-        body = card.body
-        ctk.CTkLabel(
-            body, text="SHOW", font=font(10, "bold"), text_color=PALETTE["text_muted"],
-        ).grid(row=0, column=0, padx=(0, PAD_SM))
-        self._filter_menu = ctk.CTkOptionMenu(
-            body, values=list(_STATUS_FILTERS), width=160, height=28, font=font(12),
-            fg_color=PALETTE["surface_alt"], button_color=PALETTE["accent"],
-            button_hover_color=PALETTE["accent_hover"], text_color=PALETTE["text"],
-            command=lambda value: self._on_filter(value),
+            hover_color=PALETTE["surface_hover"], command=self.refresh,
         )
-        self._filter_menu.grid(row=0, column=1, sticky="w")
-        self._count_label = ctk.CTkLabel(
-            body, text="", font=font(11), text_color=PALETTE["text_muted"], anchor="e"
-        )
-        self._count_label.grid(row=0, column=2, sticky="e")
+        self._refresh_button.grid(row=0, column=0)
 
-    def _build_list(self) -> None:
-        card = Card(self.content, title="Entries", subtitle="Click a row to expand actions")
-        card.grid(row=2, column=0, sticky="nsew")
-        card.grid_rowconfigure(1, weight=1)
+    def _build_summary(self) -> None:
+        card = Card(self.content, title="Vault")
+        card.grid(row=0, column=0, columnspan=2, sticky="ew", pady=(0, PAD))
         body = card.body
-        body.grid_columnconfigure(0, weight=1)
-        body.grid_rowconfigure(1, weight=1)
+        body.grid_columnconfigure((0, 1, 2, 3), weight=1)
 
-        header = ctk.CTkFrame(body, fg_color="transparent")
-        header.grid(row=0, column=0, sticky="ew", pady=(0, PAD_SM))
-        for column, (text, width) in enumerate((
-            ("SEVERITY", 90), ("THREAT", 190), ("ORIGINAL PATH", 0), ("DATE", 150), ("STATUS", 110)
+        for column, (label, variable) in enumerate((
+            ("Quarantined", "QUARANTINED"), ("Restored", "RESTORED"),
+            ("Deleted", "DELETED"), ("Showing", None),
         )):
-            header.grid_columnconfigure(column, weight=1 if width == 0 else 0)
-            ctk.CTkLabel(
-                header, text=text, font=font(10, "bold"), text_color=PALETTE["text_muted"],
-                anchor="w", width=width,
-            ).grid(row=0, column=column, sticky="w", padx=(PAD_SM, PAD_SM))
+            stat = StatLine(body, label)
+            stat.grid(row=0, column=column, sticky="ew", padx=(0, PAD))
+            if variable is None:
+                self._stat_showing = stat
+            else:
+                setattr(self, f"_stat_{variable.lower()}", stat)
 
-        self._scroll = ctk.CTkScrollableFrame(body, fg_color="transparent")
-        self._scroll.grid(row=1, column=0, sticky="nsew")
-        self._scroll.grid_columnconfigure(0, weight=1)
+        filters = ctk.CTkFrame(body, fg_color="transparent")
+        filters.grid(row=1, column=0, columnspan=4, sticky="w", pady=(PAD_SM, 0))
+        ctk.CTkLabel(
+            filters, text="Show:", font=font(12), text_color=PALETTE["text_muted"]
+        ).grid(row=0, column=0, padx=(0, PAD_SM))
+        for index, value in enumerate(_STATUS_FILTERS):
+            ctk.CTkRadioButton(
+                filters, text=value.title(), value=value, variable=self._status_filter,
+                font=font(11), command=self.refresh,
+            ).grid(row=0, column=index + 1, padx=(0, PAD))
 
-        self._empty = EmptyState(
-            self._scroll, "Quarantine is empty.\nDetections land here automatically."
+    # ================================================================== list
+    def _build_list(self) -> None:
+        card = Card(self.content, title="Files")
+        card.grid(row=2, column=0, sticky="nsew", padx=(0, PAD))
+        body = card.body
+        body.grid_rowconfigure(0, weight=1)
+
+        self._list_frame = ctk.CTkScrollableFrame(body, fg_color="transparent")
+        self._list_frame.grid(row=0, column=0, sticky="nsew")
+        self._list_frame.grid_columnconfigure(0, weight=1)
+        self._list_empty = EmptyState(self._list_frame, "Nothing in the quarantine vault")
+        self._list_empty.grid(row=0, column=0, pady=PAD_LG)
+
+    def _build_detail(self) -> None:
+        card = Card(self.content, title="Selected file")
+        card.grid(row=2, column=1, sticky="ns", padx=(0, 0))
+        card.grid_columnconfigure(0, weight=1, minsize=380)
+
+        self._detail_frame = card.body
+        self._detail_frame.grid_columnconfigure(0, weight=1)
+        self._detail_empty = EmptyState(
+            self._detail_frame, "Select a file to see its details"
         )
+        self._detail_empty.grid(row=0, column=0, pady=PAD_LG)
 
-    # ==================================================================
-    # Data
-    # ==================================================================
-    def _engine(self) -> Any | None:
-        return self.app.get_engine("quarantine")
+    # ================================================================== manager
+    def _manager(self) -> QuarantineManager:
+        engine = self.app.get_engine("quarantine")
+        if engine is not None:
+            return engine
+        return QuarantineManager(self.cfg, self.db, self.timeline)
 
-    def _on_filter(self, value: str) -> None:
-        self._filter = value
-        self.refresh()
-
+    # ================================================================== data
     def refresh(self) -> None:
-        """Reload summary counters and the filtered entry list."""
-        engine = self._engine()
-        entries = self.db.get_quarantine_entries(
-            status=None if self._filter == "ALL" else self._filter
-        )
-        self._summary_lines["quarantined"].set_value(
-            f"{self.db.quarantine_count('QUARANTINED'):,}"
-        )
-        self._summary_lines["restored"].set_value(f"{self.db.quarantine_count('RESTORED'):,}")
-        self._summary_lines["deleted"].set_value(f"{self.db.quarantine_count('DELETED'):,}")
-        missing = sum(
-            1 for entry in self.db.get_quarantine_entries(status="QUARANTINED", limit=100_000)
-            if not Path(str(entry.get("quarantine_path") or "")).exists()
-        )
-        self._summary_lines["missing"].set_value(f"{missing:,}", PALETTE["warning"] if missing else PALETTE["text"])
-        self._count_label.configure(text=f"{len(entries)} entrie(s) shown · filter: {self._filter}")
-        self._render(entries)
+        status = self._status_filter.get()
+        wanted = None if status == "ALL" else status
+        try:
+            self._entries = self._manager().entries(status=wanted)
+        except Exception as exc:
+            logger.exception("Could not list quarantine entries")
+            self.app.set_status_message(f"Quarantine read failed: {exc}")
+            self._entries = []
+        self._render_list()
+        self._update_stats()
 
-    def _render(self, entries: list[dict[str, Any]]) -> None:
-        for row in self._rows:
-            row.destroy()
-        self._rows.clear()
+    def _update_stats(self) -> None:
+        manager = self._manager()
+        self._stat_quarantined.set_value(f"{manager.count('QUARANTINED'):,}")
+        self._stat_restored.set_value(f"{manager.count('RESTORED'):,}")
+        self._stat_deleted.set_value(f"{manager.count('DELETED'):,}")
+        self._stat_showing.set_value(f"{len(self._entries):,}")
 
-        if not entries:
-            self._empty.grid(row=0, column=0, pady=PAD_SM * 4)
+    def _render_list(self) -> None:
+        for child in self._list_frame.winfo_children():
+            child.destroy()
+        if not self._entries:
+            EmptyState(self._list_frame, "No entries for this filter").grid(
+                row=0, column=0, pady=PAD_LG
+            )
+            self._selected_id = None
+            self._render_detail(None)
             return
-        self._empty.grid_remove()
 
-        for index, entry in enumerate(entries):
-            self._rows.append(self._build_row(index, entry))
+        for entry in self._entries:
+            self._render_entry_row(entry)
 
-    def _build_row(self, index: int, entry: dict[str, Any]) -> ctk.CTkFrame:
-        entry_id = int(entry.get("id") or 0)
-        row = HoverRow(self._scroll, on_click=lambda eid=entry_id: self._toggle(eid))
-        row.grid(row=index, column=0, sticky="ew", pady=2)
-        row.grid_columnconfigure(2, weight=1)
-
-        SeverityChip(row, str(entry.get("severity") or "Info")).grid(
-            row=0, column=0, padx=(PAD_SM, PAD_SM), pady=PAD_SM
+    def _render_entry_row(self, entry: dict[str, Any]) -> None:
+        row = HoverRow(self._list_frame, on_click=lambda e=entry: self._select(e))
+        row.grid(sticky="ew", pady=(0, PAD_SM))
+        row.grid_columnconfigure(1, weight=1)
+        SeverityChip(row, str(entry.get("severity", "Low"))).grid(
+            row=0, column=0, padx=(0, PAD), pady=PAD_SM
         )
+
+        text = ctk.CTkFrame(row, fg_color="transparent")
+        text.grid(row=0, column=1, sticky="ew", padx=(0, PAD))
+        text.grid_columnconfigure(0, weight=1)
         ctk.CTkLabel(
-            row, text=str(entry.get("threat_name") or "Unknown"), font=font(12, "bold"),
-            text_color=PALETTE["text"], anchor="w",
-        ).grid(row=0, column=1, sticky="w", padx=(0, PAD_SM), pady=PAD_SM)
+            text, text=Path(str(entry.get("original_path", "?"))).name,
+            font=font(12, "bold"), anchor="w",
+        ).grid(row=0, column=0, sticky="ew")
         ctk.CTkLabel(
-            row, text=str(entry.get("original_path") or "—"), font=mono_font(11),
-            text_color=PALETTE["text_muted"], anchor="w", justify="left",
-        ).grid(row=0, column=2, sticky="ew", pady=PAD_SM)
-        ctk.CTkLabel(
-            row, text=str(entry.get("date_quarantined") or "")[:16], font=mono_font(11),
+            text, text=str(entry.get("threat_name", "")), font=font(11),
             text_color=PALETTE["text_muted"], anchor="w",
-        ).grid(row=0, column=3, sticky="w", padx=(0, PAD_SM), pady=PAD_SM)
-        status = str(entry.get("status") or "")
-        status_color = {
-            "QUARANTINED": PALETTE["warning"],
-            "RESTORED": PALETTE["success"],
-            "DELETED": PALETTE["neutral"],
-        }.get(status, PALETTE["neutral"])
-        Chip(row, status.title(), status_color).grid(row=0, column=4, padx=PAD_SM, pady=PAD_SM)
-
-        # Bindings first, then the expanded panel: bind_recursive would otherwise give
-        # the panel's buttons the row's click handler too (see gui/widgets.py).
+        ).grid(row=1, column=0, sticky="ew")
         row.activate_bindings()
-        if entry_id and entry_id == self._expanded_id:
-            self._build_action_panel(row, entry)
-        return row
 
-    def _toggle(self, entry_id: int) -> None:
-        self._expanded_id = None if self._expanded_id == entry_id else entry_id
-        self.refresh()
+        if self._selected_id == int(entry.get("id", 0)):
+            row.set_base_color(PALETTE["surface_hover"])
 
-    def _build_action_panel(self, row: ctk.CTkFrame, entry: dict[str, Any]) -> None:
-        """Detail + Restore/Delete buttons under the expanded row."""
-        panel = exclude_from_row_bindings(
-            ctk.CTkFrame(row, fg_color=PALETTE["surface"], corner_radius=6)
-        )
-        panel.grid(row=1, column=0, columnspan=5, sticky="ew", padx=PAD_SM, pady=(0, PAD_SM))
-        panel.grid_columnconfigure(1, weight=1)
-
-        fields = (
-            ("Vault file", str(entry.get("quarantine_path") or "—")),
-            ("SHA-256", str(entry.get("file_hash") or "—")),
-            ("Scan id", str(entry.get("scan_id") or "—")),
-        )
-        for index, (name, value) in enumerate(fields):
-            ctk.CTkLabel(
-                panel, text=name, font=font(11, "bold"), text_color=PALETTE["text_muted"],
-                anchor="nw", width=80,
-            ).grid(row=index, column=0, sticky="nw", padx=(PAD_SM, PAD_SM), pady=2)
-            ctk.CTkLabel(
-                panel, text=value, font=mono_font(11), text_color=PALETTE["text"],
-                anchor="w", justify="left", wraplength=640,
-            ).grid(row=index, column=1, sticky="ew", padx=(0, PAD_SM), pady=2)
-
-        if str(entry.get("status")) == "QUARANTINED":
-            buttons = ctk.CTkFrame(panel, fg_color="transparent")
-            buttons.grid(row=len(fields), column=0, columnspan=2, sticky="w", pady=(PAD_SM, PAD_SM))
-            ctk.CTkButton(
-                buttons, text="Restore to original location", width=200, height=28,
-                font=font(11, "bold"), fg_color=PALETTE["success"], hover_color="#25823a",
-                command=lambda eid=int(entry.get("id") or 0): self._restore(eid),
-            ).grid(row=0, column=0, padx=(0, PAD_SM))
-            ctk.CTkButton(
-                buttons, text="Delete forever", width=140, height=28, font=font(11, "bold"),
-                fg_color=PALETTE["danger"], hover_color="#b03a35",
-                command=lambda eid=int(entry.get("id") or 0): self._delete(eid),
-            ).grid(row=0, column=1)
-
-    def _restore(self, entry_id: int) -> None:
-        engine = self._engine()
-        if engine is None:
-            self.app.show_error("Quarantine", "The quarantine engine is not loaded.")
-            return
-        entry = self.db.get_quarantine_entry(entry_id)
-        original = str(entry.get("original_path")) if entry else ""
-        if self.app.ask_yes_no(
-            "Restore file",
-            f"Put the file back at:\n{original}\n\n"
-            "Anything currently at that path will be overwritten. Continue?",
-        ):
+    def _select(self, entry: dict[str, Any]) -> None:
+        self._selected_id = int(entry.get("id", 0))
+        self._render_detail(entry)
+        for child in self._list_frame.winfo_children():
             try:
-                restored = engine.restore(entry_id)
-                self.app.set_status_message(f"Restored {restored}")
-            except Exception as exc:
-                logger.error("Restore failed: %s", exc, exc_info=True)
-                self.app.show_error("Restore failed", str(exc))
-                return
-            self._expanded_id = None
-            self.refresh()
+                child.set_base_color(PALETTE["surface_alt"])
+            except AttributeError:
+                pass
+        self._render_list()
 
-    def _delete(self, entry_id: int) -> None:
-        engine = self._engine()
-        if engine is None:
-            self.app.show_error("Quarantine", "The quarantine engine is not loaded.")
+    # ================================================================== detail
+    def _render_detail(self, entry: dict[str, Any] | None) -> None:
+        for child in self._detail_frame.winfo_children():
+            child.destroy()
+        if entry is None:
+            EmptyState(self._detail_frame, "Select a file to see its details").grid(
+                row=0, column=0, pady=PAD_LG
+            )
             return
-        confirm_needed = bool(self.cfg.get("antivirus.quarantine.confirm_before_delete", True))
-        if confirm_needed and not self.app.ask_yes_no(
-            "Delete forever",
-            "The vault copy and its record will be permanently deleted.\n"
-            "This cannot be undone. Continue?",
+
+        frame = ctk.CTkFrame(self._detail_frame, fg_color="transparent")
+        frame.grid(row=0, column=0, sticky="nsew")
+        frame.grid_columnconfigure(0, weight=1)
+
+        def line(label: str, value: str, row: int, mono: bool = False) -> None:
+            stat = StatLine(frame, label, value or "—", monospace=mono)
+            stat.grid(row=row, column=0, sticky="ew", pady=(0, PAD_SM))
+
+        line("Threat", str(entry.get("threat_name", "—")), 0)
+        line("Severity", str(entry.get("severity", "—")), 1)
+        line("Status", str(entry.get("status", "—")), 2)
+        line("Original path", str(entry.get("original_path", "—")), 3, mono=True)
+        line("Vault location", str(entry.get("quarantine_path", "—")), 4, mono=True)
+        line("SHA-256", str(entry.get("file_hash") or "—"), 5, mono=True)
+        line("Quarantined at", str(entry.get("date_quarantined", "—")), 6)
+
+        buttons = ctk.CTkFrame(frame, fg_color="transparent")
+        buttons.grid(row=7, column=0, sticky="ew", pady=(PAD, 0))
+        buttons.grid_columnconfigure((0, 1), weight=1)
+
+        can_act = str(entry.get("status")) == "QUARANTINED"
+        state = "normal" if can_act else "disabled"
+        self._restore_button = ctk.CTkButton(
+            buttons, text="Restore File", height=32, font=font(12, "bold"),
+            fg_color=PALETTE["success"], hover_color="#24824a",
+            state=state, command=lambda: self._restore(entry),
+        )
+        self._restore_button.grid(row=0, column=0, sticky="ew", padx=(0, PAD_SM))
+        self._delete_button = ctk.CTkButton(
+            buttons, text="Delete Forever", height=32, font=font(12, "bold"),
+            fg_color=PALETTE["danger"], hover_color="#b83833",
+            state=state, command=lambda: self._delete(entry),
+        )
+        self._delete_button.grid(row=0, column=1, sticky="ew")
+
+    # ================================================================== actions
+    def _restore(self, entry: dict[str, Any]) -> None:
+        entry_id = int(entry.get("id", 0))
+        original = str(entry.get("original_path", "the original location"))
+        if Path(original).exists() and not self.app.ask_yes_no(
+            "Overwrite existing file",
+            f"{original} already exists.\n\nRestoring will overwrite it. Continue?",
         ):
             return
         try:
-            engine.delete_forever(entry_id)
-        except Exception as exc:
-            logger.error("Delete failed: %s", exc, exc_info=True)
-            self.app.show_error("Delete failed", str(exc))
-            return
-        self._expanded_id = None
+            restored = self._manager().restore(entry_id)
+            self.app.show_info("Restored", f"The file was restored to:\n{restored}")
+        except QuarantineError as exc:
+            self.app.show_error("Restore failed", str(exc))
         self.refresh()
 
-    # ==================================================================
-    # Actions
-    # ==================================================================
-    def _cleanup_missing(self) -> None:
-        engine = self._engine()
-        if engine is None:
-            self.app.show_error("Quarantine", "The quarantine engine is not loaded.")
-            return
-        removed = engine.delete_missing_files()
-        self.app.set_status_message(
-            f"Dropped {removed} missing vault entrie(s)" if removed else "No missing vault files"
-        )
-        self.refresh()
-
-    def on_timeline_events(self, events: list[dict[str, Any]]) -> None:
-        """A new quarantine/restore/removal event lands — refresh immediately."""
-        if any(
-            event.get("event_type") in ("QUARANTINE_ACTION", "QUARANTINE_RESTORED", "THREAT_REMOVED")
-            for event in events
+    def _delete(self, entry: dict[str, Any]) -> None:
+        entry_id = int(entry.get("id", 0))
+        name = Path(str(entry.get("original_path", "?"))).name
+        if not self.app.ask_yes_no(
+            "Delete permanently",
+            f"Delete {name} from the quarantine vault for good?\n\nThis cannot be undone.",
         ):
-            self.refresh()
+            return
+        try:
+            self._manager().delete_forever(entry_id)
+            self.app.set_status_message(f"Deleted {name} permanently")
+        except QuarantineError as exc:
+            self.app.show_error("Delete failed", str(exc))
+        self._selected_id = None
+        self.refresh()

@@ -41,6 +41,19 @@ def _ext(path: Path) -> str:
     return path.suffix.lower()
 
 
+#: Suffixes whose content we treat as *executable*: packed/encrypted payload inside
+#: these is suspicious. Everything else (documents, archives, media) legitimately has
+#: high entropy, so scanning %APPDATA% would flag every installer and image it meets.
+_EXECUTABLE_SUFFIXES = {
+    ".exe", ".dll", ".sys", ".com", ".scr", ".pif", ".cpl", ".msi", ".jar",
+    ".bat", ".cmd", ".ps1", ".vbs", ".vbe", ".js", ".jse", ".wsf", ".hta",
+}
+
+
+def _is_executable_like(path: Path) -> bool:
+    return path.suffix.lower() in _EXECUTABLE_SUFFIXES
+
+
 class HeuristicEngine:
     """Evaluates the configured static heuristics against single files."""
 
@@ -173,10 +186,17 @@ class HeuristicEngine:
         ]
 
     def _recently_modified_in_protected_dir(self, path: Path, stat: os.stat_result) -> list[Finding]:
-        """Something changed inside a protected directory recently."""
+        """Something changed inside a protected directory recently.
+
+        Restricted to executable/script-suffixed files: %APPDATA% and %STARTUP% are
+        written to constantly by ordinary applications (caches, profiles, state files),
+        so without the gate the rule fires on every one of them and loses all meaning.
+        """
         if not bool(
             self.cfg.get("antivirus.heuristics.recently_modified_in_protected_dir.enabled", True)
         ):
+            return []
+        if not _is_executable_like(path):
             return []
         protected = self.cfg.resolve_paths("antivirus.protected_paths", existing_only=True)
         if not self._under_any(path, protected):
@@ -197,8 +217,15 @@ class HeuristicEngine:
         ]
 
     def _high_entropy(self, path: Path, stat: os.stat_result) -> list[Finding]:
-        """Packed/encrypted payload hiding inside an otherwise ordinary file."""
+        """Packed/encrypted payload hiding inside an otherwise ordinary executable.
+
+        Only applies to executable/script-suffixed files (see :data:`_EXECUTABLE_SUFFIXES`):
+        archives, images and installers are legitimately high-entropy, so without that
+        gate every downloaded .zip in %DOWNLOADS% would be flagged.
+        """
         if not bool(self.cfg.get("antivirus.heuristics.entropy.enabled", True)):
+            return []
+        if not _is_executable_like(path):
             return []
         min_kb = float(self.cfg.get("antivirus.heuristics.entropy.min_file_size_kb", 16))
         if stat.st_size < min_kb * 1024:

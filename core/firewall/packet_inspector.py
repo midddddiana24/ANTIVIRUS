@@ -23,6 +23,13 @@ from core.timeline import EventType, Severity, TimelineLogger
 
 logger = logging.getLogger(__name__)
 
+try:  # optional dependency: only the packet inspector needs scapy
+    from scapy.all import AsyncSniffer, ICMP, IP, TCP, get_if_list
+except ImportError:  # keep the module importable everywhere else
+    AsyncSniffer = ICMP = IP = TCP = get_if_list = None
+
+SYN_ONLY = 0x02
+
 __all__ = ["PacketInspector"]
 
 
@@ -54,15 +61,16 @@ class PacketInspector:
         """True when scapy imports and a capture interface exists. Cached."""
         if self._available is not None:
             return self._available
+        if get_if_list is None:
+            logger.info("Packet inspector unavailable: scapy is not installed")
+            self._available = False
+            return False
         try:
-            from scapy.arch import get_if_list  # noqa: F401  (probes the driver)
-            from scapy.all import conf  # noqa: F401
-
             interfaces = get_if_list()
             self._available = bool(interfaces)
             if not self._available:
                 logger.info("Packet inspector: no capture interfaces (Npcap missing?)")
-        except Exception as exc:
+        except Exception as exc:  # a missing Npcap driver raises here, not at import
             logger.info("Packet inspector unavailable: %s", exc)
             self._available = False
         return self._available
@@ -94,28 +102,18 @@ class PacketInspector:
         return True
 
     def stop(self) -> None:
-        """Stop sniffing (scapy's stop flag ends the capture thread)."""
+        """Stop sniffing; the loop's stop_flag ends the capture at the next packet."""
         self._stop_event.set()
-        try:
-            from scapy.all import stop_sniff_if_running  # type: ignore[attr-defined]
-        except Exception:
-            pass
         thread = self._thread
         if thread is not None and thread.is_alive():
-            thread.join(timeout=3)
+            thread.join(timeout=5)
         self._thread = None
 
     # ------------------------------------------------------------------ sniffing
     def _sniff_loop(self) -> None:
-        """Run scapy's sniff until stopped (retrying after transient errors)."""
-        try:
-            from scapy.all import ICMP, IP, TCP  # noqa: F401
-
-            from scapy.all import AsyncSniffer
-        except Exception as exc:
-            logger.info("Packet inspector unavailable: %s", exc)
+        """Run scapy's sniff until stopped, retrying after transient errors."""
+        if AsyncSniffer is None:
             return
-
         while not self._stop_event.is_set():
             sniffer = None
             try:
@@ -146,15 +144,11 @@ class PacketInspector:
         try:
             if self._stop_event.is_set():
                 return
-            if packet.haslayer(TCP):
-                flags = int(packet[TCP].flags)
-                SYN_ONLY = 0x02
-                if flags == SYN_ONLY:
-                    src_ip = packet[IP].src
-                    self.ids.observe_syn(src_ip)
-            elif packet.haslayer(ICMP):
-                src_ip = packet[IP].src
+            if packet.haslayer(TCP) and packet.haslayer(IP):
+                if int(packet[TCP].flags) == SYN_ONLY:
+                    self.ids.observe_syn(packet[IP].src)
+            elif packet.haslayer(ICMP) and packet.haslayer(IP):
                 if packet[ICMP].type in (8, 0):  # echo request/reply
-                    self.ids.observe_icmp(src_ip)
+                    self.ids.observe_icmp(packet[IP].src)
         except Exception:
             logger.exception("Packet classification failed")

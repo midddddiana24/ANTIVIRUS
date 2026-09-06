@@ -1,10 +1,15 @@
-"""Desktop notifications — plyer-based alerts for high-severity events.
+"""Desktop notifications — the user-facing end of the timeline.
 
-Subscribes to the timeline and turns qualifying events into desktop notifications
-(Windows toast / POSIX notify), honouring ``notifications.*`` from config.json. The
-engine is deliberately tolerant: plyer can be missing or the desktop bus absent
-(headless CI, services session), in which case notifications degrade to log lines —
-never exceptions into the timeline's emit path.
+Subscribes to the timeline and turns qualifying events into desktop toasts via
+``plyer``. Two details keep it safe:
+
+* **Recursion guard**: the notifier writes NOTIFICATION_SENT events to the timeline
+  (so "we told the user" is auditable). It must never react to its own events — with a
+  ``min_severity`` of Info that would be an infinite notification loop, because every
+  "notification sent" event meets the bar for sending the next one.
+* **No blocking**: ``plyer`` is guarded and every send is best-effort; a notification
+  backend that hangs must not hold up the thread that logged the event (usually the
+  scanner or the connection monitor mid-scan).
 """
 
 from __future__ import annotations
@@ -14,99 +19,102 @@ import threading
 from typing import Any
 
 from core.config import Config
+from core.database import Database
 from core.timeline import EventType, Severity, TimelineLogger
 
 logger = logging.getLogger(__name__)
 
-__all__ = ["NotificationEngine"]
+__all__ = ["Notifier"]
 
-try:  # optional dependency, like watchdog and scapy
-    from plyer import notification as _plyer_notification
-except ImportError:  # pragma: no cover - depends on the environment
-    _plyer_notification = None
+try:  # optional dependency: notifications degrade to log lines without plyer
+    import plyer
+except ImportError:
+    plyer = None
 
 
-class NotificationEngine:
-    """Sends a desktop notification for timeline events at or above the threshold."""
+class Notifier:
+    """Timeline subscriber that raises desktop notifications for severe events."""
 
-    def __init__(self, config: Config, timeline: TimelineLogger) -> None:
+    def __init__(self, config: Config, db: Database, timeline: TimelineLogger) -> None:
         self.cfg = config
+        self.db = db
         self.timeline = timeline
-        self.enabled = bool(config.get("notifications.enabled", True))
-        self.app_name = str(config.get("notifications.app_name", "ShieldEX"))
-        self.timeout = int(config.get("notifications.timeout_seconds", 8))
-        self.min_severity = Severity.normalize(
-            str(config.get("notifications.min_severity", Severity.MEDIUM))
-        )
+
+        self._enabled = bool(config.get("notifications.enabled", True))
+        self._min_severity = str(config.get("notifications.min_severity", Severity.MEDIUM))
+        self._app_name = str(config.get("notifications.app_name", "ShieldEX"))
+        self._timeout = int(config.get("notifications.timeout_seconds", 8))
         self._lock = threading.Lock()
-        self._recent: list[str] = []  # de-dup guard for bursts
-        self._recent_max = 50
 
-        if _plyer_notification is None:
-            logger.info("Desktop notifications unavailable: plyer is not installed")
-        timeline.subscribe(self._on_event)
+    # ------------------------------------------------------------------ wiring
+    def attach(self) -> None:
+        """Subscribe to the timeline (idempotent)."""
+        self.timeline.subscribe(self.on_event)
 
-    # ------------------------------------------------------------------ lifecycle
-    @property
-    def available(self) -> bool:
-        """True when notifications can actually be delivered."""
-        return _plyer_notification is not None
+    def detach(self) -> None:
+        self.timeline.unsubscribe(self.on_event)
 
     def stop(self) -> None:
-        """Engine-registry symmetry: drop the subscription."""
-        try:
-            self.timeline.unsubscribe(self._on_event)
-        except Exception as exc:  # pragma: no cover - defensive
-            logger.debug("Unsubscribe failed: %s", exc)
+        """Engine-registry symmetry: detach and disable."""
+        self._enabled = False
+        self.detach()
 
     # ------------------------------------------------------------------ events
-    def _on_event(self, event: dict[str, Any]) -> None:
-        """Timeline subscriber (runs on the emitting thread)."""
-        if not self.enabled or _plyer_notification is None:
+    def on_event(self, event: dict[str, Any]) -> None:
+        """Timeline subscriber: notify when the event is severe enough."""
+        if not self._enabled:
             return
-        if not Severity.at_least(str(event.get("severity") or Severity.INFO), self.min_severity):
+        if event.get("event_type") == EventType.NOTIFICATION_SENT:
+            return  # recursion guard: never react to our own audit entries
+        severity = str(event.get("severity", Severity.INFO))
+        if not Severity.at_least(severity, self._min_severity):
             return
 
-        event_type = str(event.get("event_type") or "")
-        if event_type in (EventType.NOTIFICATION_SENT, EventType.SCAN_PROGRESS):
-            return  # procedural noise must not notify
+        title, message = self._compose(event)
+        if message is None:
+            return
+        self._send(title, message)
 
-        # One notification per subject+type per burst: a scan hitting 20 packed
-        # detections would otherwise fire 20 toasts within a second.
-        dedup_key = f"{event_type}:{event.get('file_path') or event.get('remote_ip') or ''}"
-        with self._lock:
-            if dedup_key in self._recent:
-                return
-            self._recent.append(dedup_key)
-            if len(self._recent) > self._recent_max:
-                self._recent = self._recent[-self._recent_max // 2 :]
+    def _compose(self, event: dict[str, Any]) -> tuple[str, str | None]:
+        """Human-readable (title, message) for one timeline event."""
+        source = str(event.get("source", "SYSTEM"))
+        event_type = str(event.get("event_type", ""))
+        detail = str(event.get("event_detail", "")) or event_type
+        subject = event.get("file_path") or event.get("remote_ip") or ""
 
-        title = f"{self.app_name}: {event_type.replace('_', ' ').title()}"
-        detail = str(event.get("event_detail") or "")
-        subject = str(event.get("file_path") or event.get("remote_ip") or "")
-        message = f"{detail} — {subject}" if subject and subject not in detail else detail
+        title = f"{self._app_name}: {self._label(source, event_type)}"
+        message = detail
+        if subject:
+            message = f"{detail}\n{subject}"
+        return title, message
 
-        # plyer's notify can block on the desktop bus; the timeline's emit path must
-        # never wait on it, so delivery happens on a short-lived daemon thread.
-        threading.Thread(
-            target=self._deliver, args=(title, message), daemon=True,
-            name="shieldex-notify",
-        ).start()
+    @staticmethod
+    def _label(source: str, event_type: str) -> str:
+        if source == "ANTIVIRUS" and event_type.startswith("IDS_"):
+            return "Intrusion detected"
+        if event_type == EventType.MATCH_FOUND:
+            return "Threat detected"
+        if event_type == EventType.QUARANTINE_ACTION:
+            return "Threat quarantined"
+        if event_type == EventType.IDS_PORT_SCAN:
+            return "Port scan detected"
+        if event_type == EventType.SIGNATURE_DB_UPDATED:
+            return "Signature database"
+        return "Security event"
 
-    def _deliver(self, title: str, message: str) -> None:
-        """Deliver one notification; any failure is logged, never raised."""
+    # ------------------------------------------------------------------ delivery
+    def _send(self, title: str, message: str) -> None:
+        """Deliver one toast; never raises and never blocks the emitting thread."""
+        if plyer is None:
+            logger.info("[notification] %s — %s", title, message.splitlines()[0])
+            return
         try:
-            _plyer_notification.notify(  # type: ignore[misc]
-                title=title[:60],
-                message=message[:220],
-                app_name=self.app_name,
-                timeout=self.timeout,
+            plyer.notification.notify(
+                title=title,
+                message=message,
+                app_name=self._app_name,
+                timeout=self._timeout,
             )
-            # Best-effort audit line: a closed database (shutdown racing the notify
-            # thread) is logged, not raised into the timeline's emit path.
-            try:
-                self.timeline.notification_sent(self.app_name, f"{title}: {message}")
-            except Exception:
-                logger.debug("Could not record notification in the timeline (shutting down?)")
+            self.timeline.notification_sent("SYSTEM", f"{title}: {message.splitlines()[0]}")
         except Exception as exc:
-            logger.warning("Desktop notification failed: %s", exc)
+            logger.debug("Notification delivery failed: %s", exc)

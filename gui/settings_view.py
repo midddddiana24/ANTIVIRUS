@@ -132,12 +132,14 @@ class SettingsView(BaseView):
         # observe_* entry points check, so flipping it is the whole action.
         enabled = bool(self._ids_switch.get())
         self.cfg.set("firewall.ids.enabled", enabled)
+        self._persist_config()
         self.app.set_status_message(f"Intrusion detection {'enabled' if enabled else 'disabled'}")
         self.refresh()
 
     def _toggle_auto_block(self) -> None:
         enabled = bool(self._ids_auto_block_switch.get())
         self.cfg.set("firewall.ids.auto_block_source", enabled)
+        self._persist_config()
         self.app.set_status_message(
             f"IDS auto-block {'enabled' if enabled else 'disabled'} (applies to future alerts)"
         )
@@ -170,8 +172,25 @@ class SettingsView(BaseView):
             self._sync_switch("packet_inspector", not enabled)
             return
         self.cfg.set("firewall.packet_inspector.enabled", enabled)
+        self._persist_config()
         self.app.set_status_message(f"Packet inspector {'started' if enabled else 'stopped'}")
         self.refresh()
+
+    def _persist_config(self) -> None:
+        """Write config.json so toggle changes survive a restart.
+
+        Without this the switches only mutated the in-memory tree: every settings
+        change silently reset on the next launch, while the status messages claimed
+        persistence ("applies to future alerts").
+        """
+        if self.cfg.save():
+            logger.debug("config.json persisted by settings view")
+        else:
+            self.app.show_error(
+                "Could not save settings",
+                f"Changes apply now but could not be written to\n{self.cfg.path}\n\n"
+                "Check that the file is writable.",
+            )
 
     def _sync_switch(self, key: str, on: bool) -> None:
         switch = self._switches.get(key)

@@ -119,19 +119,21 @@ class Scanner:
         file only, no scan_history row; used by the real-time monitor).
         """
         started = time.monotonic()
-        targets = self._resolve_targets(scan_type, target)
-        label = ", ".join(str(item) for item in targets) if targets else str(target or "")
         scan_id = -1
-        if scan_type != "single":
-            scan_id = self.db.start_scan(scan_type, label or scan_type)
-            self.timeline.log_antivirus(
-                EventType.SCAN_STARTED,
-                f"{scan_type.title()} scan started on {label or 'system locations'}",
-                Severity.INFO,
-            )
-
-        result = ScanResult(scan_id=scan_id, scan_type=scan_type, target=label)
+        result = ScanResult(scan_id=-1, scan_type=scan_type, target=str(target or ""))
         try:
+            targets = self._resolve_targets(scan_type, target)
+            label = ", ".join(str(item) for item in targets) if targets else str(target or "")
+            result.target = label
+            if scan_type != "single":
+                scan_id = self.db.start_scan(scan_type, label or scan_type)
+                result.scan_id = scan_id
+                self.timeline.log_antivirus(
+                    EventType.SCAN_STARTED,
+                    f"{scan_type.title()} scan started on {label or 'system locations'}",
+                    Severity.INFO,
+                )
+
             for root in targets:
                 if self._cancelled(should_cancel):
                     break
@@ -143,15 +145,15 @@ class Scanner:
                 result.status = "CANCELLED"
             else:
                 result.status = "COMPLETED"
-        except Exception as exc:  # a walk that dies must still close its history row
+        except Exception as exc:  # a bad target or dead walk must still close the history row
             result.status = "FAILED"
             result.error = str(exc)
-            logger.exception("Scan of %s failed", label)
+            logger.exception("Scan of %s failed", target)
 
         result.duration_seconds = time.monotonic() - started
         result.threats_found = len(result.detections)
 
-        if scan_type != "single":
+        if scan_type != "single" and scan_id > 0:
             self.db.finish_scan(
                 scan_id,
                 files_scanned=result.files_scanned,
@@ -172,6 +174,14 @@ class Scanner:
             if result.status == "FAILED":
                 detail += f" — {result.error}"
             self.timeline.log_antivirus(event, detail, Severity.INFO)
+        elif scan_type != "single" and result.status == "FAILED":
+            # The target never resolved (missing path, unreadable disk): no history row
+            # exists to close, but the failure must still reach the timeline.
+            self.timeline.log_antivirus(
+                EventType.SCAN_FAILED,
+                f"{scan_type.title()} scan failed — {result.error}",
+                Severity.MEDIUM,
+            )
 
         return result
 
@@ -307,6 +317,7 @@ class Scanner:
 
         self._log_narrative(path, file_hash, signature, findings, origin)
         detection = self._classify(path, file_hash, signature, findings)
+        self.timeline.threat_classified(path, detection.severity)
 
         if (
             signature is not None
