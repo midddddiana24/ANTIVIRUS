@@ -311,18 +311,25 @@ def test_quarantine_restore_round_trip(scanner, db, timeline, tmp_path):
     target.write_bytes(DEMO_PAYLOAD)
     original_bytes = DEMO_PAYLOAD
 
-    result = scanner.run("custom", target)
-    assert result.detections[0].quarantined is True
-    manager = QuarantineManager(config_from(db), db, timeline)
+    try:
+        result = scanner.run("custom", target)
+        assert result.detections[0].quarantined is True
+        manager = QuarantineManager(config_from(db), db, timeline)
 
-    entry = db.get_quarantine_entries()[0]
-    restored = manager.restore(int(entry["id"]))
-    assert restored == target
-    assert target.read_bytes() == original_bytes
-    assert not Path(entry["quarantine_path"]).exists()
+        entry = db.get_quarantine_entries()[0]
+        restored = manager.restore(int(entry["id"]))
+        assert restored == target
+        assert target.read_bytes() == original_bytes
+        assert not Path(entry["quarantine_path"]).exists()
 
-    statuses = db.get_quarantine_entries(status="RESTORED")
-    assert len(statuses) == 1
+        statuses = db.get_quarantine_entries(status="RESTORED")
+        assert len(statuses) == 1
+    finally:
+        # The restore leaves a known-malicious payload on disk by design (that is what
+        # "restore" means) — but this test runs under %TEMP%, which real GUI quick scans
+        # sweep. Without cleanup every later scan re-detected this file and the user's
+        # threat counter grew by one per test run.
+        target.unlink(missing_ok=True)
 
 
 def config_from(db: Database) -> Config:

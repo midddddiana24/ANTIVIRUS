@@ -93,6 +93,8 @@ class DashboardView(BaseView):
 
         self._newest_event_id: int | None = None
         self._activity_rows: list[HoverRow] = []
+        #: Debounce timer id for live-event-driven refreshes; None when idle.
+        self._live_refresh_after: str | None = None
 
         self._build_status_card()
         self._build_antivirus_card()
@@ -534,5 +536,25 @@ class DashboardView(BaseView):
             self._rebuild_activity(events)
 
     def on_timeline_events(self, events: list[dict[str, Any]]) -> None:
-        """Live engine events arrived — refresh immediately instead of waiting for the poll."""
+        """Live engine events arrived — refresh instead of waiting for the poll.
+
+        Debounced to one per second: during a scan the pump delivers batches several
+        times a second, and each unthrottled refresh ran a dozen counting queries plus
+        ~30 widget updates, freezing the UI on the dashboard while it happened.
+        """
+        if self._live_refresh_after is None:
+            self._live_refresh_after = self.after(1000, self._run_live_refresh)
+
+    def _run_live_refresh(self) -> None:
+        """Timer body for the live-event debounce."""
+        self._live_refresh_after = None
         self.refresh()
+
+    def on_hide(self) -> None:
+        """Cancel any pending live refresh; the shell re-arms it on the next show."""
+        if self._live_refresh_after is not None:
+            try:
+                self.after_cancel(self._live_refresh_after)
+            except Exception:  # the timer may already have fired
+                pass
+            self._live_refresh_after = None

@@ -1100,8 +1100,11 @@ class Database:
     def count_timeline_events(
         self,
         source: str | None = None,
+        event_type: str | None = None,
         event_type_prefix: str | None = None,
         severities: Sequence[str] | str | None = None,  # CHANGED: a bare level is accepted
+        date_from: str | None = None,
+        date_to: str | None = None,
         today: bool = False,
     ) -> int:
         """Count timeline events matching the filters.
@@ -1109,12 +1112,19 @@ class Database:
         ``event_type_prefix`` uses ``LIKE`` with an explicit escape character so that an
         underscore in a prefix such as ``IDS_`` stays literal instead of acting as a
         single-character wildcard.
+
+        ``date_from``/``date_to``/``event_type`` let views count without fetching the
+        rows first — the IDS alerts view used to pull up to 100,000 rows per refresh
+        just to take ``len()``.
         """
         clauses: list[str] = []
         params: list[Any] = []
         if source:
             clauses.append("source = ?")
             params.append(source.upper())
+        if event_type:
+            clauses.append("event_type = ?")
+            params.append(event_type)
         if event_type_prefix:
             escaped = event_type_prefix.replace("\\", "\\\\").replace("_", "\\_").replace("%", "\\%")
             clauses.append("event_type LIKE ? ESCAPE '\\'")
@@ -1124,6 +1134,12 @@ class Database:
             placeholders = ",".join("?" for _ in levels)
             clauses.append(f"severity IN ({placeholders})")
             params.extend(levels)
+        if date_from:
+            clauses.append("timestamp >= ?")
+            params.append(date_from)
+        if date_to:
+            clauses.append("timestamp <= ?")
+            params.append(date_to)
         if today:
             clauses.append("date(timestamp) = date('now','localtime')")
         where = f"WHERE {' AND '.join(clauses)}" if clauses else ""

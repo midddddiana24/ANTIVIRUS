@@ -462,6 +462,31 @@ def open_database(config: Config) -> Database:
     return db
 
 
+def purge_old_data(db: Database, config: Config) -> None:
+    """Drop expired timeline events and connection-log rows, per ``retention`` config.
+
+    Without a cap the timeline grows by hundreds of rows per scan forever (a narrative
+    chain is several rows per detection), the queries that drive the dashboard and the
+    timeline view slow down proportionally, and the file itself never shrinks. Runs
+    after the app's own startup rows exist so the current launch is never the thing
+    being purged. VACUUM reclaims the space rather than leaving it as free pages.
+    """
+    if not bool(config.get("retention.purge_on_startup", True)):
+        return
+
+    timeline_days = int(config.get("retention.timeline_days", 90) or 0)
+    connection_days = int(config.get("retention.connection_log_days", 30) or 0)
+
+    try:
+        removed = db.purge_timeline(timeline_days) if timeline_days > 0 else 0
+        removed += db.purge_connection_log(connection_days) if connection_days > 0 else 0
+        if removed:
+            logger.info("Retention purge removed %d expired row(s)", removed)
+            db.vacuum()
+    except Exception as exc:  # a cleanup failure must never block startup
+        logger.warning("Retention purge failed: %s", exc)
+
+
 # ----------------------------------------------------------------------------------
 # Main
 # ----------------------------------------------------------------------------------
@@ -516,6 +541,7 @@ def main(argv: list[str] | None = None) -> int:
             f"{app_name} {app_version} started on {platform.system()} {platform.release()}",
             Severity.INFO,
         )
+        purge_old_data(db, config)
         timeline.log_system(
             EventType.PRIVILEGE_STATE,
             "Elevated: firewall enforcement available"

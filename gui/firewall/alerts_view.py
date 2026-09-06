@@ -48,6 +48,11 @@ class AlertsView(BaseView):
     def build(self) -> None:
         self._rows: list[ctk.CTkFrame] = []
         self._expanded_id: int | None = None
+        #: Identity of what is on screen, so refresh() can skip rebuilding an
+        #: identical list (the 5-second poll re-queries even when nothing changed).
+        self._rendered_signature: tuple[Any, ...] | None = None
+        #: Debounce timer id for live-event-driven refreshes; None when idle.
+        self._live_refresh_after: str | None = None
 
         self.content.grid_columnconfigure(0, weight=1)
         self.content.grid_rowconfigure(3, weight=1)
@@ -174,14 +179,16 @@ class AlertsView(BaseView):
         self._summary["today"].set_value(
             f"{self.db.count_timeline_events(source='FIREWALL', event_type_prefix=EventType.IDS_PREFIX, today=True):,}"
         )
+        # CHANGED: count query, not a 100k-row fetch. Pulling every week-old IDS row
+        # into Python on each refresh tick just to take its len() froze the view once
+        # the log grew.
         week_start = (date.today() - timedelta(days=6)).strftime("%Y-%m-%d 00:00:00")
-        week_events = self.timeline.query(
-            source="FIREWALL", event_type_prefix=EventType.IDS_PREFIX,
-            date_from=week_start, limit=100_000,
+        week_count = self.db.count_timeline_events(
+            source="FIREWALL", event_type_prefix=EventType.IDS_PREFIX, date_from=week_start
         )
-        self._summary["week"].set_value(f"{len(week_events):,}")
+        self._summary["week"].set_value(f"{week_count:,}")
         self._summary["scans"].set_value(
-            f"{sum(1 for event in week_events if event.get('event_type') == EventType.IDS_PORT_SCAN):,}"
+            f"{self.db.count_timeline_events(source='FIREWALL', event_type=EventType.IDS_PORT_SCAN, date_from=week_start):,}"
         )
 
         ids_enabled = bool(self.cfg.get("firewall.ids.enabled", True))
@@ -193,7 +200,11 @@ class AlertsView(BaseView):
         self._count_label.configure(
             text=f"{len(events)} alert(s) shown · range: {self._range_menu.get()}"
         )
-        self._render(events)
+
+        signature = (self._expanded_id, tuple(int(e.get("id") or 0) for e in events))
+        if signature != self._rendered_signature:
+            self._rendered_signature = signature
+            self._render(events)
 
     def _render(self, events: list[dict[str, Any]]) -> None:
         for row in self._rows:
@@ -276,5 +287,25 @@ class AlertsView(BaseView):
         self.refresh()
 
     def on_timeline_events(self, events: list[dict[str, Any]]) -> None:
-        if any(str(event.get("event_type") or "").startswith(EventType.IDS_PREFIX) for event in events):
-            self.refresh()
+        """New IDS alerts — debounced refresh so an alert storm cannot freeze the UI."""
+        if not any(
+            str(event.get("event_type") or "").startswith(EventType.IDS_PREFIX)
+            for event in events
+        ):
+            return
+        if self._live_refresh_after is None:
+            self._live_refresh_after = self.after(1000, self._run_live_refresh)
+
+    def _run_live_refresh(self) -> None:
+        """Timer body for the live-event debounce."""
+        self._live_refresh_after = None
+        self.refresh()
+
+    def on_hide(self) -> None:
+        """Cancel any pending live refresh; the shell re-arms it on the next show."""
+        if self._live_refresh_after is not None:
+            try:
+                self.after_cancel(self._live_refresh_after)
+            except Exception:
+                pass
+            self._live_refresh_after = None

@@ -3,13 +3,14 @@
 Split into what a security product's settings page actually holds:
 
 * protection toggles that persist through the engine registry (real-time monitor,
-  connection monitor, IDS, packet inspector);
+  connection monitor, IDS, packet inspector, firewall enforcement);
 * signature database: version, counts, manual update, last check outcome;
 * environment info: elevation, enforcement mode, watched paths, database location.
 
-Config-file editing stays out of the UI on purpose: the dangerous keys
-(``firewall.enforce_rules`` especially) are dry-run-protected and belong in a text
-editor, not behind a switch a cat could walk across.
+Firewall enforcement has a switch here *with* a confirmation dialog and an elevation
+check: it is the one setting that can change the machine's networking, so it gets the
+same treatment as deleting a quarantined file — explicit user intent, recorded on the
+timeline. Other dangerous keys still belong in config.json, not behind a switch.
 """
 
 from __future__ import annotations
@@ -85,11 +86,54 @@ class SettingsView(BaseView):
         self._packet_switch.grid(row=4, column=0, sticky="w", pady=2)
         self._switches["packet_inspector"] = self._packet_switch
 
+        self._enforce_switch = ctk.CTkSwitch(
+            body, text="Firewall enforcement (apply rules to the OS firewall)", font=font(12),
+            command=self._toggle_enforcement, progress_color=PALETTE["danger"],
+        )
+        self._enforce_switch.grid(row=5, column=0, sticky="w", pady=2)
+        self._switches["enforcement"] = self._enforce_switch
+
         self._notes = ctk.CTkLabel(
             body, text="", font=font(11), text_color=PALETTE["text_muted"],
             anchor="w", justify="left", wraplength=700,
         )
-        self._notes.grid(row=5, column=0, sticky="w", pady=(PAD_SM, 0))
+        self._notes.grid(row=6, column=0, sticky="w", pady=(PAD_SM, 0))
+
+    def _toggle_enforcement(self) -> None:
+        """Flip ``firewall.enforce_rules`` — with a hard confirmation when enabling.
+
+        Enforcement is the one setting that can break the machine's networking (a
+        wrong block rule with enforcement on really does block traffic), which is why
+        it lives behind an explicit dialog instead of a silent switch flip. Disabling
+        is always safe and needs no prompt.
+        """
+        enabled = bool(self._enforce_switch.get())
+        if enabled:
+            if not self.app.elevated:
+                self.app.show_error(
+                    "Administrator required",
+                    "Firewall enforcement needs administrator privileges.\n"
+                    "Restart ShieldEX as administrator, then enable enforcement.",
+                )
+                self._sync_switch("enforcement", False)
+                return
+            if not self.app.ask_yes_no(
+                "Enable firewall enforcement?",
+                "ShieldEX will program your Windows firewall from its rule table.\n\n"
+                "Only rules you create in the Rules view are applied, and every OS\n"
+                "rule it creates is named 'ShieldEX-…' so it can be audited and\n"
+                "removed. Disabling enforcement removes nothing.\n\n"
+                "Enable enforcement now?",
+            ):
+                self._sync_switch("enforcement", False)
+                return
+        self.cfg.set("firewall.enforce_rules", enabled)
+        self._persist_config()
+        self.app.set_status_message(
+            f"Firewall enforcement {'enabled' if enabled else 'disabled'} — "
+            f"{'rules now apply to the OS firewall' if enabled else 'dry-run mode restored'}"
+        )
+        self.refresh()
 
     def _toggle_realtime(self) -> None:
         enabled = bool(self._realtime_switch.get())
@@ -279,6 +323,9 @@ class SettingsView(BaseView):
         packet = self.app.get_engine("packet_inspector")
         packet_on = bool(packet is not None and packet.running)
         self._sync_switch("packet_inspector", packet_on)
+
+        enforcing_cfg = bool(self.cfg.get("firewall.enforce_rules", False))
+        self._sync_switch("enforcement", enforcing_cfg and self.app.elevated)
 
         engines_online = {
             "realtime monitor": realtime_running,

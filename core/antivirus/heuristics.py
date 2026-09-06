@@ -100,6 +100,22 @@ class HeuristicEngine:
 
     def __init__(self, config: Config) -> None:
         self.cfg = config
+        #: Resolved watched/protected/system path sets, cached for the engine's
+        #: lifetime. ``Config.resolve_paths`` hits the filesystem (token expansion,
+        #: existence checks) and used to run *per scanned file*, costing ~0.6 ms
+        #: each — several seconds across a quick scan.
+        self._watched_cache: list[Path] | None = None
+        self._protected_cache: list[Path] | None = None
+        self._system_cache: list[Path] | None = None
+        self._startup_cache: list[Path] | None = None
+
+    def _cached_paths(self, key: str, cache_attr: str) -> list[Path]:
+        """Resolve (once) and cache a configured path list."""
+        cached = getattr(self, cache_attr)
+        if cached is None:
+            cached = self.cfg.resolve_paths(key, existing_only=True)
+            setattr(self, cache_attr, cached)
+        return cached
 
     # ------------------------------------------------------------------ public API
     def examine(self, path: Path, stat: os.stat_result | None = None) -> list[Finding]:
@@ -183,8 +199,8 @@ class HeuristicEngine:
         """
         if not bool(self.cfg.get("antivirus.heuristics.script_in_user_dirs.enabled", True)):
             return []
-        watched = self.cfg.resolve_paths(
-            "antivirus.realtime_monitor.watched_paths", existing_only=False
+        watched = self._cached_paths(
+            "antivirus.realtime_monitor.watched_paths", "_watched_cache"
         )
         if not watched or not self._under_any(path, watched):
             return []
@@ -206,7 +222,7 @@ class HeuristicEngine:
         """Extension-less executables hiding in System32-style directories."""
         if not bool(self.cfg.get("antivirus.heuristics.no_extension_in_system_dir.enabled", True)):
             return []
-        system_dirs = self.cfg.resolve_paths(["%SYSTEM32%"], existing_only=True)
+        system_dirs = self._cached_paths(["%SYSTEM32%"], "_system_cache")
         if not self._under_any(path, system_dirs) or path.suffix:
             return []
         # PE files start with "MZ"; anything else in System32 without an extension is
@@ -229,7 +245,7 @@ class HeuristicEngine:
         """A big blob sitting in a startup folder is usually a dropper."""
         if not bool(self.cfg.get("antivirus.heuristics.large_file_in_startup.enabled", True)):
             return []
-        startup = self.cfg.resolve_paths(["%STARTUP%"], existing_only=True)
+        startup = self._cached_paths(["%STARTUP%"], "_startup_cache")
         if not self._under_any(path, startup):
             return []
         threshold_mb = float(self.cfg.get("antivirus.heuristics.large_file_in_startup.threshold_mb", 50))
@@ -256,7 +272,7 @@ class HeuristicEngine:
             return []
         if not _is_executable_like(path):
             return []
-        protected = self.cfg.resolve_paths("antivirus.protected_paths", existing_only=True)
+        protected = self._cached_paths("antivirus.protected_paths", "_protected_cache")
         if not self._under_any(path, protected):
             return []
         window_hours = float(self.cfg.get("antivirus.heuristics.recently_modified_in_protected_dir.window_hours", 24))

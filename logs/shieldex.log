@@ -1346,3 +1346,213 @@ ImportError: cannot import name 'NotificationEngine' from 'core.notifications' (
 2026-09-06 11:01:56 | INFO     | gui.app                      | Engine registered: connection_monitor (ConnectionMonitor)
 2026-09-06 11:01:56 | INFO     | gui.app                      | Engine registered: packet_inspector (PacketInspector)
 2026-09-06 11:01:56 | INFO     | gui.app                      | Engine registered: notifications (Notifier)
+2026-09-06 14:50:33 | INFO     | shieldex                     | ==============================================================================
+2026-09-06 14:50:33 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-06 14:50:33 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-06 14:50:33 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-06 14:50:33 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-06 14:50:33 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Limited mode: no administrator privileges, firewall enforcement unavailable
+2026-09-06 14:50:33 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-06 14:50:33 | INFO     | shieldex                     | --no-gui specified; initialisation complete, exiting
+2026-09-06 14:50:33 | INFO     | shieldex                     | ShieldEX shutdown complete
+2026-09-06 14:58:52 | INFO     | shieldex                     | ==============================================================================
+2026-09-06 14:58:52 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-06 14:58:54 | WARNING  | shieldex                     | Elevation declined or failed (ShellExecuteW=5)
+2026-09-06 14:58:54 | WARNING  | shieldex                     | Running WITHOUT administrator privileges: firewall rules cannot be applied to the OS and some protected directories will be unreadable.
+2026-09-06 14:58:54 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-06 14:58:54 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-06 14:58:54 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-06 14:58:54 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Limited mode: no administrator privileges, firewall enforcement unavailable
+2026-09-06 14:58:54 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-06 14:58:56 | INFO     | gui.app                      | GUI ready (elevated=False)
+2026-09-06 14:58:56 | INFO     | gui.app                      | Engine registered: quarantine (QuarantineManager)
+2026-09-06 14:58:56 | INFO     | gui.app                      | Engine registered: scanner (Scanner)
+2026-09-06 14:58:56 | INFO     | gui.app                      | Engine registered: realtime_monitor (RealTimeMonitor)
+2026-09-06 14:58:56 | INFO     | gui.app                      | Engine registered: updater (SignatureUpdater)
+2026-09-06 14:58:56 | INFO     | gui.app                      | Engine registered: blocklist (IPBlocklist)
+2026-09-06 14:58:56 | INFO     | gui.app                      | Engine registered: firewall (RuleEngine)
+2026-09-06 14:58:56 | INFO     | gui.app                      | Engine registered: ids (IDSDetector)
+2026-09-06 14:58:56 | INFO     | gui.app                      | Engine registered: connection_monitor (ConnectionMonitor)
+2026-09-06 14:58:56 | INFO     | gui.app                      | Engine registered: packet_inspector (PacketInspector)
+2026-09-06 14:58:56 | INFO     | gui.app                      | Engine registered: notifications (Notifier)
+2026-09-06 14:59:02 | INFO     | gui.app                      | Shutting down GUI
+2026-09-06 14:59:02 | INFO     | core.timeline                | [ANTIVIRUS] MONITOR_STOPPED — Real-time protection stopped
+2026-09-06 14:59:02 | INFO     | gui.app                      | Engine stopped: realtime_monitor
+2026-09-06 14:59:02 | INFO     | gui.app                      | Engine stopped: updater
+2026-09-06 14:59:02 | INFO     | gui.app                      | Engine stopped: firewall
+2026-09-06 14:59:02 | INFO     | gui.app                      | Engine stopped: ids
+2026-09-06 14:59:02 | INFO     | gui.app                      | Engine stopped: connection_monitor
+2026-09-06 14:59:02 | INFO     | gui.app                      | Engine stopped: packet_inspector
+2026-09-06 14:59:02 | INFO     | gui.app                      | Engine stopped: notifications
+2026-09-06 14:59:02 | INFO     | core.timeline                | [SYSTEM] APP_STOPPED — ShieldEX closed normally
+2026-09-06 14:59:02 | INFO     | core.engines                 | Engine stopped: notifications
+2026-09-06 14:59:02 | INFO     | core.engines                 | Engine stopped: packet_inspector
+2026-09-06 14:59:02 | INFO     | core.engines                 | Engine stopped: connection_monitor
+2026-09-06 14:59:02 | INFO     | core.engines                 | Engine stopped: ids
+2026-09-06 14:59:02 | INFO     | core.engines                 | Engine stopped: firewall
+2026-09-06 14:59:02 | INFO     | core.engines                 | Engine stopped: updater
+2026-09-06 14:59:02 | INFO     | core.timeline                | [ANTIVIRUS] MONITOR_STOPPED — Real-time protection stopped
+2026-09-06 14:59:02 | INFO     | core.engines                 | Engine stopped: realtime_monitor
+2026-09-06 14:59:02 | INFO     | shieldex                     | ShieldEX shutdown complete
+2026-09-06 14:59:07 | INFO     | shieldex                     | ==============================================================================
+2026-09-06 14:59:07 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-06 14:59:09 | INFO     | shieldex                     | Elevated instance launched; this instance will exit
+2026-09-06 14:59:10 | INFO     | shieldex                     | ==============================================================================
+2026-09-06 14:59:10 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-06 14:59:10 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-06 14:59:10 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-06 14:59:10 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-06 14:59:10 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Elevated: firewall enforcement available
+2026-09-06 14:59:10 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-06 14:59:11 | INFO     | gui.app                      | GUI ready (elevated=True)
+2026-09-06 14:59:11 | INFO     | gui.app                      | Engine registered: quarantine (QuarantineManager)
+2026-09-06 14:59:11 | INFO     | gui.app                      | Engine registered: scanner (Scanner)
+2026-09-06 14:59:11 | INFO     | gui.app                      | Engine registered: realtime_monitor (RealTimeMonitor)
+2026-09-06 14:59:11 | INFO     | gui.app                      | Engine registered: updater (SignatureUpdater)
+2026-09-06 14:59:11 | INFO     | gui.app                      | Engine registered: blocklist (IPBlocklist)
+2026-09-06 14:59:11 | INFO     | gui.app                      | Engine registered: firewall (RuleEngine)
+2026-09-06 14:59:11 | INFO     | gui.app                      | Engine registered: ids (IDSDetector)
+2026-09-06 14:59:11 | INFO     | gui.app                      | Engine registered: connection_monitor (ConnectionMonitor)
+2026-09-06 14:59:11 | INFO     | gui.app                      | Engine registered: packet_inspector (PacketInspector)
+2026-09-06 14:59:11 | INFO     | gui.app                      | Engine registered: notifications (Notifier)
+2026-09-06 14:59:28 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_STARTED — Quick scan started on C:\Users\rober\AppData\Local\Temp, C:\Users\rober\AppData\Roaming, C:\Users\rober\AppData\Local, C:\Users\rober\Downloads, C:\Users\rober\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup, C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp, C:\Users\rober\AppData\Local\Google\Chrome\User Data\Default\Cache, C:\Users\rober\AppData\Local\Microsoft\Edge\User Data\Default\Cache, C:\Users\rober\AppData\Local\BraveSoftware\Brave-Browser\User Data\Default\Cache
+2026-09-06 14:59:56 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 500 file(s), 0 threat(s) so far
+2026-09-06 15:00:08 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 1000 file(s), 0 threat(s) so far
+2026-09-06 15:00:14 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 1500 file(s), 0 threat(s) so far
+2026-09-06 15:00:27 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 2000 file(s), 0 threat(s) so far
+2026-09-06 15:00:36 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 2500 file(s), 0 threat(s) so far
+2026-09-06 15:00:43 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 3000 file(s), 0 threat(s) so far
+2026-09-06 15:00:45 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_COMPLETED — Quick scan cancelled: 3216 file(s), 0 threat(s) in 77.1s
+2026-09-06 15:00:56 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_STARTED — Custom scan started on C:\Users\rober\Downloads\alb
+2026-09-06 15:00:56 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_COMPLETED — Custom scan completed: 6 file(s), 0 threat(s) in 0.1s
+2026-09-06 15:01:02 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_STARTED — Custom scan started on C:\Users\rober\Downloads\alb
+2026-09-06 15:01:02 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_COMPLETED — Custom scan completed: 6 file(s), 0 threat(s) in 0.0s
+2026-09-06 15:01:03 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_STARTED — Custom scan started on C:\Users\rober\Downloads\alb
+2026-09-06 15:01:03 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_COMPLETED — Custom scan completed: 6 file(s), 0 threat(s) in 0.0s
+2026-09-06 15:01:04 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_STARTED — Custom scan started on C:\Users\rober\Downloads\alb
+2026-09-06 15:01:04 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_COMPLETED — Custom scan completed: 6 file(s), 0 threat(s) in 0.0s
+2026-09-06 15:01:07 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_STARTED — Custom scan started on C:\Users\rober\Downloads\alb
+2026-09-06 15:01:08 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_COMPLETED — Custom scan completed: 6 file(s), 0 threat(s) in 0.0s
+2026-09-06 15:01:08 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_STARTED — Custom scan started on C:\Users\rober\Downloads\alb
+2026-09-06 15:01:08 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_COMPLETED — Custom scan completed: 6 file(s), 0 threat(s) in 0.0s
+2026-09-06 15:01:24 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_STARTED — Full scan started on C:\
+2026-09-06 15:01:24 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 0 file(s), 0 threat(s) so far
+2026-09-06 15:01:24 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 0 file(s), 0 threat(s) so far
+2026-09-06 15:01:35 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 500 file(s), 0 threat(s) so far
+2026-09-06 15:01:37 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_COMPLETED — Full scan cancelled: 666 file(s), 0 threat(s) in 13.8s
+2026-09-06 15:01:57 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_STARTED — Quick scan started on C:\Users\rober\AppData\Local\Temp, C:\Users\rober\AppData\Roaming, C:\Users\rober\AppData\Local, C:\Users\rober\Downloads, C:\Users\rober\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup, C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp, C:\Users\rober\AppData\Local\Google\Chrome\User Data\Default\Cache, C:\Users\rober\AppData\Local\Microsoft\Edge\User Data\Default\Cache, C:\Users\rober\AppData\Local\BraveSoftware\Brave-Browser\User Data\Default\Cache
+2026-09-06 15:02:01 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 500 file(s), 0 threat(s) so far
+2026-09-06 15:02:05 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 1000 file(s), 0 threat(s) so far
+2026-09-06 15:02:11 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 1500 file(s), 0 threat(s) so far
+2026-09-06 15:02:16 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 2000 file(s), 0 threat(s) so far
+2026-09-06 15:02:21 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 2500 file(s), 0 threat(s) so far
+2026-09-06 15:02:26 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 3000 file(s), 0 threat(s) so far
+2026-09-06 15:02:31 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 3500 file(s), 0 threat(s) so far
+2026-09-06 15:02:40 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 4000 file(s), 0 threat(s) so far
+2026-09-06 15:02:46 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 4500 file(s), 0 threat(s) so far
+2026-09-06 15:02:52 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 5000 file(s), 0 threat(s) so far
+2026-09-06 15:02:58 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 5500 file(s), 0 threat(s) so far
+2026-09-06 15:03:04 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 6000 file(s), 0 threat(s) so far
+2026-09-06 15:03:10 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: invoice.pdf.exe
+2026-09-06 15:03:10 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: 014b8ce9fed0aaf124de966f635da95bf7025bee91d1a1c12d6ff5854eba3307
+2026-09-06 15:03:10 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 15:03:10 | INFO     | core.timeline                | [ANTIVIRUS] NO_MATCH — No signature match
+2026-09-06 15:03:10 | INFO     | core.timeline                | [ANTIVIRUS] HEURISTIC_FLAG — Heuristic triggered: double_extension
+2026-09-06 15:03:10 | INFO     | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: MEDIUM
+2026-09-06 15:03:10 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\opencode\sx-pytest\test_combined_indicators_escal0\invoice.pdf.exe (Suspicious (double_extension) — score 40, Medium)
+2026-09-06 15:03:10 | INFO     | core.timeline                | [ANTIVIRUS] FILE_DETECTED — File queued for analysis via quick: dropper.bin
+2026-09-06 15:03:10 | INFO     | core.timeline                | [ANTIVIRUS] HASH_GENERATED — SHA-256: fc0b00af601988f3ca81934a4cf9b0762fbc9c6665a3fe0d71899222a7f67c1a
+2026-09-06 15:03:10 | INFO     | core.timeline                | [ANTIVIRUS] SIGNATURE_CHECK — Checking against malware database (6 signatures)...
+2026-09-06 15:03:10 | WARNING  | core.timeline                | [ANTIVIRUS] MATCH_FOUND — Known malware: "ShieldEX.Demo.Dropper01"
+2026-09-06 15:03:10 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Threat detected: Known malware: "ShieldEX.Demo.Dropper01"
+2026-09-06 15:03:10 | WARNING  | core.timeline                | [ANTIVIRUS] THREAT_CLASSIFIED — Severity: CRITICAL
+2026-09-06 15:03:10 | WARNING  | core.timeline                | [ANTIVIRUS] QUARANTINE_ACTION — File moved to .quarantine/
+2026-09-06 15:03:10 | INFO     | core.timeline                | [SYSTEM] NOTIFICATION_SENT — ShieldEX: Threat quarantined: File moved to .quarantine/
+2026-09-06 15:03:10 | INFO     | core.antivirus.quarantine    | Quarantined C:\Users\rober\AppData\Local\Temp\opencode\sx-pytest\test_quarantine_restore_round_0\dropper.bin → 20260906_150310_c2e1e5a8.quar (ShieldEX.Demo.Dropper01)
+2026-09-06 15:03:10 | INFO     | core.antivirus.scanner       | Detection: C:\Users\rober\AppData\Local\Temp\opencode\sx-pytest\test_quarantine_restore_round_0\dropper.bin (ShieldEX.Demo.Dropper01, Critical)
+2026-09-06 15:03:10 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 6500 file(s), 0 threat(s) so far
+2026-09-06 15:03:17 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 7000 file(s), 0 threat(s) so far
+2026-09-06 15:03:23 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 7500 file(s), 0 threat(s) so far
+2026-09-06 15:03:30 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 8000 file(s), 0 threat(s) so far
+2026-09-06 15:03:43 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 8500 file(s), 0 threat(s) so far
+2026-09-06 15:03:53 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 9000 file(s), 0 threat(s) so far
+2026-09-06 15:04:01 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 9500 file(s), 0 threat(s) so far
+2026-09-06 15:04:09 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 10000 file(s), 0 threat(s) so far
+2026-09-06 15:04:18 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 10500 file(s), 0 threat(s) so far
+2026-09-06 15:04:23 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 11000 file(s), 0 threat(s) so far
+2026-09-06 15:04:35 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 11500 file(s), 0 threat(s) so far
+2026-09-06 15:05:03 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 12000 file(s), 0 threat(s) so far
+2026-09-06 15:05:26 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 12500 file(s), 0 threat(s) so far
+2026-09-06 15:05:38 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 13000 file(s), 0 threat(s) so far
+2026-09-06 15:05:50 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 13500 file(s), 0 threat(s) so far
+2026-09-06 15:05:58 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 14000 file(s), 0 threat(s) so far
+2026-09-06 15:06:06 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 14500 file(s), 0 threat(s) so far
+2026-09-06 15:06:14 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 15000 file(s), 0 threat(s) so far
+2026-09-06 15:06:25 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 15500 file(s), 0 threat(s) so far
+2026-09-06 15:06:47 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 16000 file(s), 0 threat(s) so far
+2026-09-06 15:07:07 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 16500 file(s), 0 threat(s) so far
+2026-09-06 15:07:22 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 17000 file(s), 0 threat(s) so far
+2026-09-06 15:07:39 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 17500 file(s), 0 threat(s) so far
+2026-09-06 15:07:58 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 18000 file(s), 0 threat(s) so far
+2026-09-06 15:08:15 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 18500 file(s), 0 threat(s) so far
+2026-09-06 15:08:40 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 19000 file(s), 0 threat(s) so far
+2026-09-06 15:08:57 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 19500 file(s), 0 threat(s) so far
+2026-09-06 15:09:18 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 20000 file(s), 0 threat(s) so far
+2026-09-06 15:09:42 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 20500 file(s), 0 threat(s) so far
+2026-09-06 15:10:08 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 21000 file(s), 0 threat(s) so far
+2026-09-06 15:10:23 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 21500 file(s), 0 threat(s) so far
+2026-09-06 15:10:38 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 22000 file(s), 0 threat(s) so far
+2026-09-06 15:11:02 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 22500 file(s), 0 threat(s) so far
+2026-09-06 15:11:23 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 23000 file(s), 0 threat(s) so far
+2026-09-06 15:11:46 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 23500 file(s), 0 threat(s) so far
+2026-09-06 15:12:08 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 24000 file(s), 0 threat(s) so far
+2026-09-06 15:12:27 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_PROGRESS — Scanned 24500 file(s), 0 threat(s) so far
+2026-09-06 15:12:32 | INFO     | core.timeline                | [ANTIVIRUS] SCAN_COMPLETED — Quick scan cancelled: 24656 file(s), 2 threat(s) in 635.1s
+2026-09-06 15:13:00 | INFO     | core.timeline                | [SYSTEM] SIGNATURE_DB_UPDATED — Signature update check failed: HTTPSConnectionPool(host='example.invalid', port=443): Max retries exceeded with url: /shieldex/signatures.json (Caused by NameResolutionError("HTTPSConnection(host='example.invalid', port=443): Failed to resolve 'example.invalid' ([Errno 11001] getaddrinfo failed)"))
+2026-09-06 15:13:08 | INFO     | core.timeline                | [SYSTEM] SIGNATURE_DB_UPDATED — Signature update check failed: HTTPSConnectionPool(host='example.invalid', port=443): Max retries exceeded with url: /shieldex/signatures.json (Caused by NameResolutionError("HTTPSConnection(host='example.invalid', port=443): Failed to resolve 'example.invalid' ([Errno 11001] getaddrinfo failed)"))
+2026-09-06 15:17:27 | INFO     | gui.app                      | Shutting down GUI
+2026-09-06 15:17:27 | INFO     | core.timeline                | [ANTIVIRUS] MONITOR_STOPPED — Real-time protection stopped
+2026-09-06 15:17:27 | INFO     | gui.app                      | Engine stopped: realtime_monitor
+2026-09-06 15:17:27 | INFO     | gui.app                      | Engine stopped: updater
+2026-09-06 15:17:27 | INFO     | gui.app                      | Engine stopped: firewall
+2026-09-06 15:17:27 | INFO     | gui.app                      | Engine stopped: ids
+2026-09-06 15:17:27 | INFO     | gui.app                      | Engine stopped: connection_monitor
+2026-09-06 15:17:27 | INFO     | gui.app                      | Engine stopped: packet_inspector
+2026-09-06 15:17:27 | INFO     | gui.app                      | Engine stopped: notifications
+2026-09-06 15:17:29 | INFO     | core.timeline                | [SYSTEM] APP_STOPPED — ShieldEX closed normally
+2026-09-06 15:17:29 | INFO     | core.engines                 | Engine stopped: notifications
+2026-09-06 15:17:29 | INFO     | core.engines                 | Engine stopped: packet_inspector
+2026-09-06 15:17:29 | INFO     | core.engines                 | Engine stopped: connection_monitor
+2026-09-06 15:17:29 | INFO     | core.engines                 | Engine stopped: ids
+2026-09-06 15:17:29 | INFO     | core.engines                 | Engine stopped: firewall
+2026-09-06 15:17:29 | INFO     | core.engines                 | Engine stopped: updater
+2026-09-06 15:17:29 | INFO     | core.timeline                | [ANTIVIRUS] MONITOR_STOPPED — Real-time protection stopped
+2026-09-06 15:17:29 | INFO     | core.engines                 | Engine stopped: realtime_monitor
+2026-09-06 15:17:29 | INFO     | shieldex                     | ShieldEX shutdown complete
+2026-09-06 16:03:00 | INFO     | shieldex                     | ==============================================================================
+2026-09-06 16:03:00 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-06 16:03:00 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-06 16:03:00 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-06 16:03:00 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-06 16:03:00 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Limited mode: no administrator privileges, firewall enforcement unavailable
+2026-09-06 16:03:00 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-06 16:03:00 | INFO     | shieldex                     | --no-gui specified; initialisation complete, exiting
+2026-09-06 16:03:00 | INFO     | shieldex                     | ShieldEX shutdown complete
+2026-09-06 16:05:07 | INFO     | shieldex                     | ==============================================================================
+2026-09-06 16:05:07 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-06 16:05:07 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-06 16:05:07 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-06 16:05:07 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-06 16:05:07 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Limited mode: no administrator privileges, firewall enforcement unavailable
+2026-09-06 16:05:07 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-06 16:05:07 | INFO     | shieldex                     | --no-gui specified; initialisation complete, exiting
+2026-09-06 16:05:07 | INFO     | shieldex                     | ShieldEX shutdown complete
+2026-09-06 16:29:44 | INFO     | shieldex                     | ==============================================================================
+2026-09-06 16:29:44 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-06 16:29:44 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-06 16:29:44 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-06 16:29:44 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-06 16:29:44 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Limited mode: no administrator privileges, firewall enforcement unavailable
+2026-09-06 16:29:44 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-06 16:29:44 | INFO     | shieldex                     | --no-gui specified; initialisation complete, exiting
+2026-09-06 16:29:44 | INFO     | shieldex                     | ShieldEX shutdown complete

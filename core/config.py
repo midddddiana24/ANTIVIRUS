@@ -75,6 +75,7 @@ DEFAULT_CONFIG: dict[str, Any] = {
         "protected_paths": ["%STARTUP%", "%SYSTEM32%", "%APPDATA%"],
         "excluded_paths": ["%QUARANTINE%"],
         "max_file_size_mb": 512,
+        "quick_scan_max_depth": 2,
         "hash_chunk_size": 65_536,
         "follow_symlinks": False,
         "auto_quarantine_on_signature_match": True,
@@ -130,8 +131,9 @@ DEFAULT_CONFIG: dict[str, Any] = {
     "updater": {
         "enabled": True,
         "check_on_startup": True,
-        "feed_url": "https://example.invalid/shieldex/signatures.json",
-        "timeout_seconds": 15,
+        "feed_url": "",
+        "extra_feeds": ["https://bazaar.abuse.ch/export/csv/recent/"],
+        "timeout_seconds": 30,
         "check_interval_hours": 24,
         "verify_tls": True,
     },
@@ -190,6 +192,11 @@ DEFAULT_CONFIG: dict[str, Any] = {
         "timeline_page_size": 200,
         "recent_activity_count": 10,
         "dashboard_refresh_seconds": 5,
+    },
+    "retention": {
+        "timeline_days": 90,
+        "connection_log_days": 30,
+        "purge_on_startup": True,
     },
 }
 

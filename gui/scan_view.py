@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import logging
 import threading
+import time
 from pathlib import Path
 from tkinter import filedialog
 from typing import Any
@@ -119,12 +120,27 @@ class ScanView(BaseView):
             paths = self.cfg.resolve_paths("antivirus.quick_scan_paths", directories_only=True)
             joined = ", ".join(path.name or str(path) for path in paths[:6])
             self._hint.configure(
-                text=f"Scans the usual infection sites:\n{joined}" + (" …" if len(paths) > 6 else "")
+                text=(
+                    "Quick scan — the usual infection sites (%TEMP%, Startup, Downloads and\n"
+                    f"browser caches), two folder levels deep. Typically 1–3 minutes.\n"
+                    f"Locations: {joined}" + (" …" if len(paths) > 6 else "")
+                )
             )
         elif scan_type == "full":
-            self._hint.configure(text="Scans every fixed disk from its root. This can take a while.")
+            self._hint.configure(
+                text=(
+                    "Full scan — every fixed disk, every folder level. The thorough option\n"
+                    "when you suspect a deep infection. Can take 30+ minutes; progress and\n"
+                    "cancel stay live throughout."
+                )
+            )
         else:
-            self._hint.configure(text="Scans exactly the file or folder you choose.")
+            self._hint.configure(
+                text=(
+                    "Custom scan — exactly the file or folder you choose, at full depth.\n"
+                    "The result card shows how many files were examined even when clean."
+                )
+            )
 
     def _browse(self) -> None:
         chosen = filedialog.askdirectory(initialdir=self._custom_path.get() or str(Path.home()))
@@ -147,13 +163,16 @@ class ScanView(BaseView):
         stats.grid_columnconfigure(0, weight=1)
         stats.grid_columnconfigure(1, weight=1)
         stats.grid_columnconfigure(2, weight=1)
+        stats.grid_columnconfigure(3, weight=1)
 
         self._stat_files = StatLine(stats, "Files scanned", "0")
         self._stat_files.grid(row=0, column=0, sticky="ew")
         self._stat_threats = StatLine(stats, "Threats found", "0", value_color=PALETTE["success"])
         self._stat_threats.grid(row=0, column=1, sticky="ew")
+        self._stat_rate = StatLine(stats, "Speed", "—")
+        self._stat_rate.grid(row=0, column=2, sticky="ew")
         self._stat_state = StatLine(stats, "State", "Idle")
-        self._stat_state.grid(row=0, column=2, sticky="ew")
+        self._stat_state.grid(row=0, column=3, sticky="ew")
 
         self._current_file = ctk.CTkLabel(
             body, text="", font=mono_font(11), text_color=PALETTE["text_muted"],
@@ -182,14 +201,26 @@ class ScanView(BaseView):
                 self._results_frame,
                 "No threats found — the scanned locations are clean",
             ).grid(row=0, column=0, pady=PAD_LG)
-            return
+        else:
+            for detection in self._results:
+                self._render_detection_row(detection)
 
-        for detection in self._results:
-            self._render_detection_row(detection)
-
-        self._results_card.title_label.configure(
-            text=f"DETECTIONS ({len(self._results)})"
-        )
+        running = self._scan_thread is not None and self._scan_thread.is_alive()
+        if running:
+            self._results_card.title_label.configure(text="DETECTIONS (scanning…)")
+        elif self._results:
+            self._results_card.title_label.configure(
+                text=f"DETECTIONS ({len(self._results)})"
+            )
+        elif self._progress_files:
+            # A finished clean scan must still show evidence it *did* something:
+            # "no threats" over a blank panel read as "scan didn't run".
+            self._results_card.title_label.configure(
+                text=f"DETECTIONS — none in {self._progress_files:,} file(s) scanned "
+                f"({self._progress_threats} threat(s))"
+            )
+        else:
+            self._results_card.title_label.configure(text="DETECTIONS")
 
     def _render_detection_row(self, detection: Detection) -> None:
         row = HoverRow(self._results_frame)
@@ -250,8 +281,10 @@ class ScanView(BaseView):
         self._results = []
         self._progress_files = 0
         self._progress_threats = 0
+        self._scan_started_at = time.monotonic()
         self._set_running(True)
         self._stat_state.set_value("Running", PALETTE["warning"])
+        self._stat_rate.set_value("…")
         self._current_file.configure(text="Preparing…")
         self._render_results()
 
@@ -263,6 +296,10 @@ class ScanView(BaseView):
                 self._stat_threats.set_value(
                     f"{threats:,}", PALETTE["danger"] if threats else PALETTE["success"]
                 )
+                elapsed = time.monotonic() - self._scan_started_at
+                if elapsed > 2 and files > 50:
+                    rate = files / elapsed
+                    self._stat_rate.set_value(f"{rate:,.0f} files/s")
                 self._current_file.configure(text=current)
             self.app.post_to_ui(apply)
 
