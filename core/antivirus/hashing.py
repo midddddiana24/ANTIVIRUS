@@ -91,6 +91,39 @@ def shannon_entropy(data: bytes) -> float:
     return entropy
 
 
+def hash_with_entropy(
+    path: Path, chunk_size: int = 65_536, sample_bytes: int = 262_144
+) -> dict[str, Any] | None:
+    """SHA-256 plus head-sample entropy from a **single** read of ``path``.
+
+    The scanner needs both numbers for every file, and computing them separately read
+    the same file twice — the entropy rule re-read 256 KiB that ``sha256_file`` had
+    just digested. None when unreadable (a normal occurrence mid-scan).
+    """
+    digest = hashlib.sha256()
+    head = bytearray()
+    remaining = int(sample_bytes)
+    try:
+        with open(path, "rb") as handle:
+            while True:
+                block = handle.read(chunk_size)
+                if not block:
+                    break
+                digest.update(block)
+                if remaining > 0:
+                    take = block if len(block) <= remaining else block[:remaining]
+                    head.extend(take)
+                    remaining -= len(take)
+        return {
+            "sha256": digest.hexdigest(),
+            "entropy": shannon_entropy(bytes(head)),
+            "sampled_bytes": len(head),
+        }
+    except (OSError, ValueError) as exc:
+        logger.debug("Could not hash %s: %s", path, exc)
+        return None
+
+
 def file_entropy_stats(path: Path, sample_bytes: int = 262_144) -> dict[str, Any] | None:
     """Convenience bundle: head-sample entropy plus the sampled length."""
     data = sample_head(path, sample_bytes)

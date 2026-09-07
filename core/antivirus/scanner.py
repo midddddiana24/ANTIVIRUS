@@ -292,18 +292,44 @@ class Scanner:
             max_depth = 0  # unlimited
 
         workers = max(1, int(self.cfg.get("antivirus.scan_threads", 0)) or _default_threads())
+        chunk_size = int(self.cfg.get("antivirus.hash_chunk_size", 65_536))
         pending: list[tuple[Path, os.stat_result]] = []
 
         def hash_batch(
             paths: list[tuple[Path, os.stat_result]],
         ) -> list[str | None]:
             """Hash every file in ``paths`` on the pool (None per unreadable file)."""
-            chunk = int(self.cfg.get("antivirus.hash_chunk_size", 65_536))
-            if workers == 1 or len(paths) == 1:
-                return [sha256_file(path, chunk) for path, _stat in paths]
-            with ThreadPoolExecutor(max_workers=workers) as pool:
-                return list(pool.map(lambda item: sha256_file(item[0], chunk), paths))
+            if pool is None or len(paths) == 1:
+                return [sha256_file(path, chunk_size) for path, _stat in paths]
+            return list(pool.map(lambda item: sha256_file(item[0], chunk_size), paths))
 
+        from contextlib import ExitStack
+
+        with ExitStack() as stack:
+            pool = (
+                stack.enter_context(ThreadPoolExecutor(max_workers=workers))
+                if workers > 1
+                else None
+            )
+            self._walk_tree(
+                root, result, scan_id, scan_type, on_progress, should_cancel,
+                max_bytes, max_depth, pending, hash_batch,
+            )
+
+    def _walk_tree(
+        self,
+        root: Path,
+        result: ScanResult,
+        scan_id: int | None,
+        scan_type: str,
+        on_progress: ProgressCallback | None,
+        should_cancel: CancelCallback | None,
+        max_bytes: int,
+        max_depth: int,
+        pending: list[tuple[Path, os.stat_result]],
+        hash_batch: Callable[[list[tuple[Path, os.stat_result]]], list[str | None]],
+    ) -> None:
+        """The os.walk loop; ``pending`` is flushed in batches through ``hash_batch``."""
         root_depth = len(root.parts)
         for dirpath, dirnames, filenames in os.walk(
             root, followlinks=bool(self.cfg.get("antivirus.follow_symlinks", False))
@@ -349,7 +375,7 @@ class Scanner:
                         pending, batch_hashes, result, scan_id, scan_type,
                         on_progress, should_cancel,
                     )
-                    pending = []
+                    pending.clear()
                     if self._cancelled(should_cancel):
                         return
 

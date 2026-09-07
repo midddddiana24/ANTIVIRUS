@@ -133,6 +133,13 @@ class HeuristicEngine:
         except (OSError, ValueError):
             return findings  # vanished or unreadable; the scanner already logged it
 
+        # Resolved once here because several rules need it and Path.resolve() is a
+        # realpath syscall — resolving per rule cost three syscalls per scanned file.
+        try:
+            resolved = path.resolve()
+        except (OSError, ValueError):
+            resolved = path
+
         for rule in (
             self._double_extension,
             self._script_in_user_dirs,
@@ -142,7 +149,7 @@ class HeuristicEngine:
             self._high_entropy,
         ):
             try:
-                findings.extend(rule(path, stat) or [])
+                findings.extend(rule(path, stat, resolved) or [])
             except Exception as exc:  # a broken rule must never abort a scan
                 logger.error("Heuristic rule %s failed on %s: %s", rule.__name__, path, exc)
 
@@ -162,7 +169,7 @@ class HeuristicEngine:
             return default
         return max(0, min(100, score))
 
-    def _double_extension(self, path: Path, stat: os.stat_result) -> list[Finding]:
+    def _double_extension(self, path: Path, stat: os.stat_result, resolved: Path) -> list[Finding]:
         """``invoice.pdf.exe`` — a document extension hiding an executable one."""
         if not bool(self.cfg.get("antivirus.heuristics.double_extension.enabled", True)):
             return []
@@ -191,7 +198,7 @@ class HeuristicEngine:
             )
         ]
 
-    def _script_in_user_dirs(self, path: Path, stat: os.stat_result) -> list[Finding]:
+    def _script_in_user_dirs(self, path: Path, stat: os.stat_result, resolved: Path) -> list[Finding]:
         """Script files loose in user-writable locations.
 
         Worth 5 points on its own — the classic persistence *lead*, but half of %TEMP%'s
@@ -202,7 +209,7 @@ class HeuristicEngine:
         watched = self._cached_paths(
             "antivirus.realtime_monitor.watched_paths", "_watched_cache"
         )
-        if not watched or not self._under_any(path, watched):
+        if not watched or not self._under_any(resolved, watched):
             return []
         extensions = [
             ext.lower()
@@ -218,12 +225,12 @@ class HeuristicEngine:
             )
         ]
 
-    def _no_extension_in_system_dir(self, path: Path, stat: os.stat_result) -> list[Finding]:
+    def _no_extension_in_system_dir(self, path: Path, stat: os.stat_result, resolved: Path) -> list[Finding]:
         """Extension-less executables hiding in System32-style directories."""
         if not bool(self.cfg.get("antivirus.heuristics.no_extension_in_system_dir.enabled", True)):
             return []
         system_dirs = self._cached_paths(["%SYSTEM32%"], "_system_cache")
-        if not self._under_any(path, system_dirs) or path.suffix:
+        if not self._under_any(resolved, system_dirs) or path.suffix:
             return []
         # PE files start with "MZ"; anything else in System32 without an extension is
         # more likely a data file and not worth alarming the user over.
@@ -241,12 +248,12 @@ class HeuristicEngine:
             )
         ]
 
-    def _large_file_in_startup(self, path: Path, stat: os.stat_result) -> list[Finding]:
+    def _large_file_in_startup(self, path: Path, stat: os.stat_result, resolved: Path) -> list[Finding]:
         """A big blob sitting in a startup folder is usually a dropper."""
         if not bool(self.cfg.get("antivirus.heuristics.large_file_in_startup.enabled", True)):
             return []
         startup = self._cached_paths(["%STARTUP%"], "_startup_cache")
-        if not self._under_any(path, startup):
+        if not self._under_any(resolved, startup):
             return []
         threshold_mb = float(self.cfg.get("antivirus.heuristics.large_file_in_startup.threshold_mb", 50))
         if stat.st_size < threshold_mb * 1024 * 1024:
@@ -259,7 +266,7 @@ class HeuristicEngine:
             )
         ]
 
-    def _recently_modified_in_protected_dir(self, path: Path, stat: os.stat_result) -> list[Finding]:
+    def _recently_modified_in_protected_dir(self, path: Path, stat: os.stat_result, resolved: Path) -> list[Finding]:
         """Something changed inside a protected directory recently.
 
         Restricted to executable/script-suffixed files: %APPDATA% and %STARTUP% are
@@ -273,7 +280,7 @@ class HeuristicEngine:
         if not _is_executable_like(path):
             return []
         protected = self._cached_paths("antivirus.protected_paths", "_protected_cache")
-        if not self._under_any(path, protected):
+        if not self._under_any(resolved, protected):
             return []
         window_hours = float(self.cfg.get("antivirus.heuristics.recently_modified_in_protected_dir.window_hours", 24))
         age = max(0.0, time.time() - stat.st_mtime)
@@ -287,7 +294,7 @@ class HeuristicEngine:
             )
         ]
 
-    def _high_entropy(self, path: Path, stat: os.stat_result) -> list[Finding]:
+    def _high_entropy(self, path: Path, stat: os.stat_result, resolved: Path) -> list[Finding]:
         """Packed/encrypted payload hiding inside an otherwise ordinary executable.
 
         Only applies to executable/script-suffixed files (see :data:`_EXECUTABLE_SUFFIXES`):
@@ -324,12 +331,13 @@ class HeuristicEngine:
 
     # ------------------------------------------------------------------ helpers
     @staticmethod
-    def _under_any(path: Path, roots: list[Path]) -> bool:
-        """True when ``path`` sits beneath one of ``roots`` (case-insensitive on Windows)."""
-        try:
-            resolved = path.resolve()
-        except (OSError, ValueError):
-            resolved = path
+    def _under_any(resolved: Path, roots: list[Path]) -> bool:
+        """True when ``resolved`` (already canonical) sits beneath one of ``roots``.
+
+        ``Path.resolve()`` is a realpath syscall; it is the *caller's* job to resolve
+        once per file (``examine`` does) — this used to resolve per rule, three
+        syscalls per scanned file.
+        """
         for root in roots:
             try:
                 resolved.relative_to(root)
