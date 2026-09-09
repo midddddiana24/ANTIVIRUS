@@ -122,6 +122,11 @@ DEFAULT_CONFIG: dict[str, Any] = {
             "debounce_seconds": 1.5,
             "ignore_patterns": ["*.tmp", "*.part", "*.crdownload", "~$*", "*.quar"],
         },
+        "scheduled_scans": {
+            "enabled": False,
+            "scan_type": "quick",
+            "time": "02:00",
+        },
         "quarantine": {
             "path": ".quarantine",
             "extension": ".quar",
@@ -197,6 +202,15 @@ DEFAULT_CONFIG: dict[str, Any] = {
         "timeline_days": 90,
         "connection_log_days": 30,
         "purge_on_startup": True,
+    },
+    "policies": {
+        "threat_response": {
+            "Critical": True,
+            "High": True,
+            "Medium": False,
+            "Low": False,
+        },
+        "ids_auto_block": False,
     },
 }
 

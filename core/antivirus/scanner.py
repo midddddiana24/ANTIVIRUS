@@ -36,6 +36,7 @@ from core.antivirus.heuristics import (
     _EXECUTABLE_SUFFIXES,
     score_to_severity,
 )
+from core.policy import ResponsePolicy
 from core.antivirus.quarantine import QuarantineError, QuarantineManager
 from core.config import Config
 from core.database import Database
@@ -141,6 +142,7 @@ class Scanner:
         self.timeline = timeline
         self.quarantine = quarantine
         self.heuristics = HeuristicEngine(config)
+        self._policy = ResponsePolicy(config)
         #: Hashes already *reported* in the current scan. Installers and dev tools leave
         #: many byte-identical copies around (the same vs_installer.exe in five temp
         #: folders); each is counted as scanned, but a detection is reported once and the
@@ -524,7 +526,7 @@ class Scanner:
             # A signature match is different: every byte-identical copy is live malware
             # on disk, so quarantine this one too — but without the narrative repeat.
             detection = self._classify(path, file_hash, signature, findings)
-            if bool(self.cfg.get("antivirus.auto_quarantine_on_signature_match", True)):
+            if self._policy.should_quarantine(detection.severity, kind="signature"):
                 self._auto_quarantine(detection, scan_id)
             result.detections.append(detection)
             logger.info(
@@ -540,7 +542,7 @@ class Scanner:
 
         if (
             signature is not None
-            and bool(self.cfg.get("antivirus.auto_quarantine_on_signature_match", True))
+            and self._policy.should_quarantine(detection.severity, kind="signature")
         ):
             self._auto_quarantine(detection, scan_id)
 

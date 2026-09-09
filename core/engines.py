@@ -59,6 +59,14 @@ class EngineBundle:
                         scanner=scanner, quarantine=quarantine,
                     ),
                 )
+                self._try(
+                    "scheduler",
+                    "core.antivirus.scheduler", "ScanScheduler",
+                    dict(
+                        config=self.cfg, db=self.db, timeline=self.timeline,
+                        scanner=scanner,
+                    ),
+                )
 
         self._try(
             "updater",

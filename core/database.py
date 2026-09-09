@@ -907,6 +907,22 @@ class Database:
             self._scalar(f"SELECT COUNT(*) FROM firewall_connection_log {where}", params) or 0
         )
 
+    def get_rule_match_counts(self) -> dict[str, int]:
+        """Connections logged per matched rule name (the Rules view "Hits" column).
+
+        Rows with no recorded rule (empty ``rule_matched``) are skipped — they say
+        nothing about any rule's effectiveness.
+        """
+        rows = self._query(
+            """
+            SELECT rule_matched AS name, COUNT(*) AS hits
+              FROM firewall_connection_log
+             WHERE rule_matched IS NOT NULL AND rule_matched != ''
+             GROUP BY rule_matched
+            """
+        )
+        return {str(row["name"]): int(row["hits"]) for row in rows}
+
     def purge_connection_log(self, older_than_days: int) -> int:
         """Delete connection log rows older than N days."""
         return self._execute(

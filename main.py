@@ -596,7 +596,7 @@ def main(argv: list[str] | None = None) -> int:
         # Auto-start the engines the configuration wants running. Each start is
         # guarded: a driver-less packet inspector or permission-less monitor must not
         # take the launch down, and the failure already reached the timeline.
-        for name in ("realtime_monitor", "connection_monitor", "packet_inspector"):
+        for name in ("realtime_monitor", "connection_monitor", "packet_inspector", "scheduler"):
             engine = engines.get(name)
             if engine is None:
                 continue

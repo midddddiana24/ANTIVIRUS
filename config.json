@@ -93,6 +93,11 @@
       "debounce_seconds": 1.5,
       "ignore_patterns": ["*.tmp", "*.part", "*.crdownload", "~$*", "*.quar"]
     },
+    "scheduled_scans": {
+      "enabled": false,
+      "scan_type": "quick",
+      "time": "02:00"
+    },
     "quarantine": {
       "path": ".quarantine",
       "extension": ".quar",
@@ -181,5 +186,14 @@
     "timeline_days": 90,
     "connection_log_days": 30,
     "purge_on_startup": true
+  },
+  "policies": {
+    "threat_response": {
+      "Critical": true,
+      "High": true,
+      "Medium": false,
+      "Low": false
+    },
+    "ids_auto_block": false
   }
 }
