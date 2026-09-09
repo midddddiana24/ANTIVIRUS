@@ -183,6 +183,13 @@ class Scanner:
                     break
                 if root.is_file():
                     self._scan_file(root, result, scan_id, origin=scan_type)
+                    # Single-file targets skip the walk (and its progress cadence),
+                    # so drive one progress update here — otherwise a custom scan
+                    # of one malicious file showed 0/0 live and jumped at finish.
+                    if on_progress is not None:
+                        on_progress(
+                            result.files_scanned, result.live_threat_count, str(root)
+                        )
                 else:
                     self._walk(root, result, scan_id, scan_type, on_progress, should_cancel)
             if self._cancelled(should_cancel):

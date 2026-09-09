@@ -48,8 +48,14 @@ def timeline(db: Database) -> TimelineLogger:
 
 @pytest.fixture()
 def config(tmp_path: Path) -> Config:
-    """A config rooted in the temp dir, with noisy engines switched off."""
-    cfg = Config.load(tmp_path / "config.json", PROJECT_ROOT)
+    """A config rooted in the temp dir, with noisy engines switched off.
+
+    ``app_root`` is the temp dir (not PROJECT_ROOT): the quarantine vault resolves
+    under it, so pytest quarantines land in throwaway space. An earlier version
+    rooted at PROJECT_ROOT and every test run quarantined DEMO payloads into the
+    user's REAL project vault — 100+ orphan ``.quar`` files no DB row referenced.
+    """
+    cfg = Config.load(tmp_path / "config.json", tmp_path)
     cfg.set("antivirus.realtime_monitor.enabled", False)
     cfg.set("firewall.connection_monitor.enabled", False)
     cfg.set("updater.check_on_startup", False)
@@ -325,6 +331,37 @@ def test_every_counted_threat_has_a_detection_log_line(scanner, db, tmp_path, ca
         f"{result.threats_found} threats counted but only "
         f"{len(detection_lines)} Detection log line(s)"
     )
+
+
+def test_quarantine_vault_stays_inside_tmp_dir(scanner, config, db, tmp_path):
+    """Regression: the test config rooted the vault at the project dir, so every
+    pytest run quarantined DEMO payloads into the user's REAL vault (100+ orphan
+    ``.quar`` files no DB row referenced — and the next GUI scan re-detected them).
+    """
+    from pathlib import Path as _P
+
+    vault = _P(str(config.quarantine_path)).resolve()
+    assert str(vault).startswith(str(tmp_path.resolve())), (
+        f"test vault leaked outside tmp_path: {vault}"
+    )
+    assert vault != (PROJECT_ROOT / ".quarantine").resolve()
+
+
+def test_single_file_scan_reports_progress(scanner, tmp_path):
+    """A custom scan of one malicious file must fire on_progress — the walk's
+    cadence never runs for single-file targets, so live stats stayed 0/0 and the
+    verdict only appeared at finish."""
+    target = tmp_path / "evil.bin"
+    target.write_bytes(DEMO_PAYLOAD)
+
+    calls: list[tuple[int, int, str]] = []
+    result = scanner.run(
+        "custom", target, on_progress=lambda f, t, c: calls.append((f, t, c))
+    )
+
+    assert result.threats_found == 1
+    assert calls, "no progress callback fired for a single-file scan"
+    assert calls[-1][0] == 1 and calls[-1][1] == 1
 
 
 # ======================================================================

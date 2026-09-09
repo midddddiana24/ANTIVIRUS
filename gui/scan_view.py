@@ -163,16 +163,22 @@ class ScanView(BaseView):
         stats.grid_columnconfigure(0, weight=1)
         stats.grid_columnconfigure(1, weight=1)
         stats.grid_columnconfigure(2, weight=1)
-        stats.grid_columnconfigure(3, weight=1)
 
         self._stat_files = StatLine(stats, "Files scanned", "0")
         self._stat_files.grid(row=0, column=0, sticky="ew")
-        self._stat_threats = StatLine(stats, "Threats found", "0", value_color=PALETTE["success"])
-        self._stat_threats.grid(row=0, column=1, sticky="ew")
         self._stat_rate = StatLine(stats, "Speed", "—")
-        self._stat_rate.grid(row=0, column=2, sticky="ew")
+        self._stat_rate.grid(row=0, column=1, sticky="ew")
         self._stat_state = StatLine(stats, "State", "Idle")
-        self._stat_state.grid(row=0, column=3, sticky="ew")
+        self._stat_state.grid(row=0, column=2, sticky="ew")
+
+        # The verdict lives on its own full-width row, deliberately NOT beside the
+        # file counter: "11,234" climbing next to a small "Threats: 0" read as the
+        # threat count climbing. One glance now answers "am I clean?".
+        self._verdict_banner = ctk.CTkLabel(
+            body, text="No scan running", font=font(13, "bold"),
+            text_color=PALETTE["text_muted"], anchor="w", justify="left",
+        )
+        self._verdict_banner.grid(row=2, column=0, sticky="ew", pady=(PAD_SM, 0))
 
         self._current_file = ctk.CTkLabel(
             body, text="", font=mono_font(11), text_color=PALETTE["text_muted"],
@@ -284,6 +290,7 @@ class ScanView(BaseView):
         self._scan_started_at = time.monotonic()
         self._set_running(True)
         self._stat_state.set_value("Running", PALETTE["warning"])
+        self._set_verdict(0, running=True)
         self._stat_rate.set_value("…")
         self._current_file.configure(text="Preparing…")
         self._render_results()
@@ -293,9 +300,7 @@ class ScanView(BaseView):
         def on_progress(files: int, threats: int, current: str) -> None:
             def apply() -> None:
                 self._stat_files.set_value(f"{files:,}")
-                self._stat_threats.set_value(
-                    f"{threats:,}", PALETTE["danger"] if threats else PALETTE["success"]
-                )
+                self._set_verdict(threats, running=True)
                 elapsed = time.monotonic() - self._scan_started_at
                 if elapsed > 2 and files > 50:
                     rate = files / elapsed
@@ -327,9 +332,7 @@ class ScanView(BaseView):
         self._progress_files = result.files_scanned
         self._progress_threats = result.threats_found
         self._stat_files.set_value(f"{result.files_scanned:,}")
-        self._stat_threats.set_value(
-            f"{result.threats_found:,}", PALETTE["danger"] if result.threats_found else PALETTE["success"]
-        )
+        self._set_verdict(result.threats_found)
         self._progress_bar.set(1.0)
         if result.status == "CANCELLED":
             self._stat_state.set_value("Cancelled", PALETTE["warning"])
@@ -360,6 +363,20 @@ class ScanView(BaseView):
         self._stat_state.set_value("Cancelling…", PALETTE["warning"])
         self.app.set_status_message("Cancelling scan — finishing the current file")
 
+    def _set_verdict(self, threats: int, running: bool = False) -> None:
+        """Update the full-width verdict banner — the one place that answers
+        "am I clean?", kept far from the climbing file counter."""
+        if threats:
+            text = f"{threats:,} THREAT{'S' if threats != 1 else ''} FOUND — review Detections below"
+            color = PALETTE["danger"]
+        elif running:
+            text = "Scanning… 0 threats so far"
+            color = PALETTE["warning"]
+        else:
+            text = "Clean — 0 threats"
+            color = PALETTE["success"]
+        self._verdict_banner.configure(text=text, text_color=color)
+
     def _set_running(self, running: bool) -> None:
         self._start_button.configure(state="disabled" if running else "normal")
         self._cancel_button.configure(state="normal" if running else "disabled")
@@ -379,9 +396,7 @@ class ScanView(BaseView):
         files = int(last.get("files_scanned") or 0)
         threats = int(last.get("threats_found") or 0)
         self._stat_files.set_value(f"{files:,}")
-        self._stat_threats.set_value(
-            f"{threats:,}", PALETTE["danger"] if threats else PALETTE["success"]
-        )
+        self._set_verdict(threats)
         self._stat_state.set_value(f"Last: {last.get('scan_type', '?')} scan", PALETTE["text_muted"])
         self._current_file.configure(
             text=f"Last scan {str(last.get('end_time') or last.get('start_time') or '')[:16]}"

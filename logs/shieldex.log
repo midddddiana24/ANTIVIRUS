@@ -1693,3 +1693,12 @@ ImportError: cannot import name 'NotificationEngine' from 'core.notifications' (
 2026-09-09 19:37:47 | INFO     | gui.app                      | Engine registered: connection_monitor (ConnectionMonitor)
 2026-09-09 19:37:47 | INFO     | gui.app                      | Engine registered: packet_inspector (PacketInspector)
 2026-09-09 19:37:47 | INFO     | gui.app                      | Engine registered: notifications (Notifier)
+2026-09-09 19:52:34 | INFO     | shieldex                     | ==============================================================================
+2026-09-09 19:52:34 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-09 19:52:35 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-09 19:52:35 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-09 19:52:35 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-09 19:52:35 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Limited mode: no administrator privileges, firewall enforcement unavailable
+2026-09-09 19:52:35 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-09 19:52:35 | INFO     | shieldex                     | --no-gui specified; initialisation complete, exiting
+2026-09-09 19:52:35 | INFO     | shieldex                     | ShieldEX shutdown complete
