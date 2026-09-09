@@ -17,7 +17,7 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-__all__ = ["sha256_file", "hash_file", "shannon_entropy", "sample_head"]
+__all__ = ["sha256_file", "hash_file", "hash_with_entropy", "shannon_entropy", "sample_head"]
 
 
 def sha256_file(path: Path, chunk_size: int = 65_536) -> str | None:

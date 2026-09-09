@@ -29,8 +29,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable
 
-from core.antivirus.hashing import sha256_file
-from core.antivirus.heuristics import Finding, HeuristicEngine, score_to_severity
+from core.antivirus.hashing import hash_with_entropy, sha256_file
+from core.antivirus.heuristics import (
+    Finding,
+    HeuristicEngine,
+    _EXECUTABLE_SUFFIXES,
+    score_to_severity,
+)
 from core.antivirus.quarantine import QuarantineError, QuarantineManager
 from core.config import Config
 from core.database import Database
@@ -293,15 +298,43 @@ class Scanner:
 
         workers = max(1, int(self.cfg.get("antivirus.scan_threads", 0)) or _default_threads())
         chunk_size = int(self.cfg.get("antivirus.hash_chunk_size", 65_536))
+        sample_bytes = int(self.cfg.get("antivirus.heuristics.entropy.sample_bytes", 262_144))
+        entropy_floor = (
+            float(self.cfg.get("antivirus.heuristics.entropy.min_file_size_kb", 16)) * 1024
+        )
+        entropy_on = bool(self.cfg.get("antivirus.heuristics.entropy.enabled", True))
         pending: list[tuple[Path, os.stat_result]] = []
 
         def hash_batch(
             paths: list[tuple[Path, os.stat_result]],
-        ) -> list[str | None]:
-            """Hash every file in ``paths`` on the pool (None per unreadable file)."""
+        ) -> list[tuple[str | None, dict[str, Any] | None]]:
+            """Hash every file in ``paths`` (fused hash+entropy), on the pool.
+
+            Returns ``(sha256, precomputed)`` pairs — precomputed entropy spares the
+            entropy heuristic its second read of the same file. Entropy is only
+            computed when the file can actually need it (executable-like suffix,
+            big enough): a Counter over 256 KiB for 13,000 plain files is what the
+            fusion is trying to avoid, not create.
+            """
+            def _one(item: tuple[Path, os.stat_result]) -> tuple[str | None, dict[str, Any] | None]:
+                path, item_stat = item
+                if (
+                    entropy_on
+                    and item_stat.st_size >= entropy_floor
+                    and path.suffix.lower() in _EXECUTABLE_SUFFIXES
+                ):
+                    fused = hash_with_entropy(path, chunk_size, sample_bytes)
+                    if fused is None:
+                        return None, None
+                    return fused["sha256"], {
+                        "entropy": fused["entropy"],
+                        "sampled_bytes": fused["sampled_bytes"],
+                    }
+                return sha256_file(path, chunk_size), None
+
             if pool is None or len(paths) == 1:
-                return [sha256_file(path, chunk_size) for path, _stat in paths]
-            return list(pool.map(lambda item: sha256_file(item[0], chunk_size), paths))
+                return [_one(item) for item in paths]
+            return list(pool.map(_one, paths))
 
         from contextlib import ExitStack
 
@@ -327,13 +360,15 @@ class Scanner:
         max_bytes: int,
         max_depth: int,
         pending: list[tuple[Path, os.stat_result]],
-        hash_batch: Callable[[list[tuple[Path, os.stat_result]]], list[str | None]],
+        hash_batch: Callable[
+            [list[tuple[Path, os.stat_result]]],
+            list[tuple[str | None, dict[str, Any] | None]],
+        ],
     ) -> None:
         """The os.walk loop; ``pending`` is flushed in batches through ``hash_batch``."""
+        followlinks = bool(self.cfg.get("antivirus.follow_symlinks", False))
         root_depth = len(root.parts)
-        for dirpath, dirnames, filenames in os.walk(
-            root, followlinks=bool(self.cfg.get("antivirus.follow_symlinks", False))
-        ):
+        for dirpath, dirnames, filenames in os.walk(root, followlinks=followlinks):
             if self._cancelled(should_cancel):
                 return
             current = Path(dirpath)
@@ -347,7 +382,7 @@ class Scanner:
                 candidate = current / name
                 if self.cfg.is_excluded(candidate):
                     continue
-                if not bool(self.cfg.get("antivirus.follow_symlinks", False)):
+                if not followlinks:
                     try:
                         if candidate.is_symlink():
                             continue
@@ -389,7 +424,7 @@ class Scanner:
     def _process_batch(
         self,
         batch: list[tuple[Path, os.stat_result]],
-        hashes: list[str | None],
+        hashes: list[tuple[str | None, dict[str, Any] | None]],
         result: ScanResult,
         scan_id: int | None,
         scan_type: str,
@@ -397,11 +432,14 @@ class Scanner:
         should_cancel: CancelCallback | None,
     ) -> None:
         """Verdict a hashed batch in discovery order: match → classify → quarantine."""
-        for (path, stat), file_hash in zip(batch, hashes):
+        for (path, stat), (file_hash, precomputed) in zip(batch, hashes):
             if self._cancelled(should_cancel):
                 return
             threats_before = len(result.detections)
-            self._finish_file(path, result, scan_id, origin=scan_type, stat=stat, file_hash=file_hash)
+            self._finish_file(
+                path, result, scan_id, origin=scan_type, stat=stat,
+                file_hash=file_hash, precomputed=precomputed,
+            )
 
             if on_progress is not None and (
                 result.files_scanned % 25 == 0 or len(result.detections) != threats_before
@@ -445,6 +483,7 @@ class Scanner:
         origin: str,
         stat: os.stat_result | None,
         file_hash: str | None,
+        precomputed: dict[str, Any] | None = None,
     ) -> None:
         """Match → classify one *already-hashed* file, recording real detections."""
         result.files_scanned += 1
@@ -457,7 +496,7 @@ class Scanner:
         signature = self.db.lookup_hash(file_hash)
         findings: list[Finding] = []
         if signature is None:
-            findings = self.heuristics.examine(path, stat)
+            findings = self.heuristics.examine(path, stat, precomputed)
 
         if signature is None and not findings:
             return  # clean file: no timeline entry by design
@@ -481,6 +520,10 @@ class Scanner:
             if bool(self.cfg.get("antivirus.auto_quarantine_on_signature_match", True)):
                 self._auto_quarantine(detection, scan_id)
             result.detections.append(detection)
+            logger.info(
+                "Detection: %s (%s, %s) — byte-identical copy already reported",
+                path, detection.threat_name, detection.severity,
+            )
             return
         self._reported_hashes[file_hash] = [str(path)]
 

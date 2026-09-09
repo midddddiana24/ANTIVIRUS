@@ -108,6 +108,7 @@ class HeuristicEngine:
         self._protected_cache: list[Path] | None = None
         self._system_cache: list[Path] | None = None
         self._startup_cache: list[Path] | None = None
+        self._double_ext_cache: set[str] | None = None
 
     def _cached_paths(self, key: str, cache_attr: str) -> list[Path]:
         """Resolve (once) and cache a configured path list."""
@@ -116,6 +117,17 @@ class HeuristicEngine:
             cached = self.cfg.resolve_paths(key, existing_only=True)
             setattr(self, cache_attr, cached)
         return cached
+
+    def _double_ext_suffixes(self) -> set[str]:
+        """Cached outer-extension set for the extension gate in :meth:`examine`."""
+        if self._double_ext_cache is None:
+            self._double_ext_cache = {
+                ext.lower()
+                for ext in self.cfg.get(
+                    "antivirus.heuristics.double_extension.outer_extensions", []
+                )
+            }
+        return self._double_ext_cache
 
     # ------------------------------------------------------------------ public API
     def examine(
@@ -148,12 +160,21 @@ class HeuristicEngine:
             return findings  # vanished or unreadable; the scanner already logged it
 
         looks_executable = _is_executable_like(path)
-        disguised_document = _ext(path) in {
-            ext.lower()
-            for ext in self.cfg.get("antivirus.heuristics.double_extension.outer_extensions", [])
-        }
-        if not looks_executable and not disguised_document and precomputed is None:
-            return findings  # nothing here can fire
+        disguised_document = _ext(path) in self._double_ext_suffixes()
+        if _ext(path) and not looks_executable and not disguised_document:
+            # Plain document/media/data file: five of six rules cannot fire by
+            # construction (they all require executable/script/disguised suffixes
+            # or an empty one). Only _large_file_in_startup could — any suffix,
+            # but it must be huge — so check its cheap preconditions without
+            # paying for Path.resolve() and the other five rules.
+            if not bool(self.cfg.get("antivirus.heuristics.large_file_in_startup.enabled", True)):
+                return findings
+            threshold_mb = float(
+                self.cfg.get("antivirus.heuristics.large_file_in_startup.threshold_mb", 50)
+            )
+            if stat.st_size < threshold_mb * 1024 * 1024:
+                return findings
+            # Huge plain file: fall through to the full (resolved) rule set.
 
         # Resolved once here because several rules need it and Path.resolve() is a
         # realpath syscall — resolving per rule cost three syscalls per scanned file.
@@ -279,7 +300,10 @@ class HeuristicEngine:
             )
         ]
 
-    def _large_file_in_startup(self, path: Path, stat: os.stat_result, resolved: Path) -> list[Finding]:
+    def _large_file_in_startup(
+        self, path: Path, stat: os.stat_result, resolved: Path,
+        precomputed: dict[str, Any] | None,
+    ) -> list[Finding]:
         """A big blob sitting in a startup folder is usually a dropper."""
         if not bool(self.cfg.get("antivirus.heuristics.large_file_in_startup.enabled", True)):
             return []
@@ -297,7 +321,10 @@ class HeuristicEngine:
             )
         ]
 
-    def _recently_modified_in_protected_dir(self, path: Path, stat: os.stat_result, resolved: Path) -> list[Finding]:
+    def _recently_modified_in_protected_dir(
+        self, path: Path, stat: os.stat_result, resolved: Path,
+        precomputed: dict[str, Any] | None,
+    ) -> list[Finding]:
         """Something changed inside a protected directory recently.
 
         Restricted to executable/script-suffixed files: %APPDATA% and %STARTUP% are
@@ -325,7 +352,10 @@ class HeuristicEngine:
             )
         ]
 
-    def _high_entropy(self, path: Path, stat: os.stat_result, resolved: Path) -> list[Finding]:
+    def _high_entropy(
+        self, path: Path, stat: os.stat_result, resolved: Path,
+        precomputed: dict[str, Any] | None,
+    ) -> list[Finding]:
         """Packed/encrypted payload hiding inside an otherwise ordinary executable.
 
         Only applies to executable/script-suffixed files (see :data:`_EXECUTABLE_SUFFIXES`):
@@ -341,20 +371,28 @@ class HeuristicEngine:
         min_kb = float(self.cfg.get("antivirus.heuristics.entropy.min_file_size_kb", 16))
         if stat.st_size < min_kb * 1024:
             return []
-        from core.antivirus.hashing import file_entropy_stats
+        # Prefer the scanner's fused hash+entropy read: the head sample was already
+        # digested during hashing, so re-reading the file here would double the I/O
+        # for every executable-like file in the scan.
+        if precomputed is not None and "entropy" in precomputed:
+            entropy_value = float(precomputed["entropy"])
+            stats = {"entropy": entropy_value, "sampled_bytes": precomputed.get("sampled_bytes", 0)}
+        else:
+            from core.antivirus.hashing import file_entropy_stats
 
-        stats = file_entropy_stats(
-            path, int(self.cfg.get("antivirus.heuristics.entropy.sample_bytes", 262_144))
-        )
-        if stats is None:
-            return []
+            stats = file_entropy_stats(
+                path, int(self.cfg.get("antivirus.heuristics.entropy.sample_bytes", 262_144))
+            )
+            if stats is None:
+                return []
+            entropy_value = float(stats["entropy"])
         threshold = float(self.cfg.get("antivirus.heuristics.entropy.threshold", 7.2))
-        if stats["entropy"] < threshold:
+        if entropy_value < threshold:
             return []
         return [
             Finding(
                 rule="high_entropy",
-                detail=f"High entropy {stats['entropy']:.2f} bits/byte — packed or encrypted content",
+                detail=f"High entropy {entropy_value:.2f} bits/byte — packed or encrypted content",
                 score=self._rule_score("entropy", 10),
                 extra=stats,
             )

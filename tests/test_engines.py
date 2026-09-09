@@ -300,6 +300,33 @@ def test_scan_quarantines_every_identical_signature_copy(scanner, db, tmp_path):
         assert not (tmp_path / f"{name}.bin").exists()
 
 
+def test_every_counted_threat_has_a_detection_log_line(scanner, db, tmp_path, caplog):
+    """Regression: duplicate signature hits bumped the GUI counter with no log line.
+
+    The first copy of a file gets the full narrative + a ``Detection:`` console
+    line; byte-identical copies after it were appended to ``detections`` silently —
+    the UI counted threats the CMD log never showed.
+    """
+    import logging
+
+    for name in ("one", "two", "three"):
+        (tmp_path / f"{name}.bin").write_bytes(DEMO_PAYLOAD)
+
+    with caplog.at_level(logging.INFO, logger="core.antivirus.scanner"):
+        result = scanner.run("custom", tmp_path)
+
+    assert result.threats_found == 3
+    detection_lines = [
+        record.getMessage()
+        for record in caplog.records
+        if record.getMessage().startswith("Detection:")
+    ]
+    assert len(detection_lines) == 3, (
+        f"{result.threats_found} threats counted but only "
+        f"{len(detection_lines)} Detection log line(s)"
+    )
+
+
 # ======================================================================
 # Quarantine: restore and delete round trip
 # ======================================================================
