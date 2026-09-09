@@ -118,11 +118,25 @@ class HeuristicEngine:
         return cached
 
     # ------------------------------------------------------------------ public API
-    def examine(self, path: Path, stat: os.stat_result | None = None) -> list[Finding]:
+    def examine(
+        self,
+        path: Path,
+        stat: os.stat_result | None = None,
+        precomputed: dict[str, Any] | None = None,
+    ) -> list[Finding]:
         """Run every enabled heuristic against ``path``. Never raises.
 
         Returns the individual findings — the *verdict* is the caller's, derived from
         :meth:`total_score` (or simply by summing the findings' scores).
+
+        ``precomputed`` may carry ``entropy``/``sampled_bytes`` from the scanner's
+        fused hash+entropy read, sparing the entropy rule its second file read.
+
+        The extension gate first: every rule except ``double_extension`` needs either
+        an executable/script suffix or a document-disguise pattern, so a plain
+        ``.txt``/``.png``/``.json`` cannot fire anything. Skipping those outright is
+        what keeps a 13k-file quick scan out of the heuristics engine entirely for
+        ~95% of files.
         """
         findings: list[Finding] = []
         if not bool(self.cfg.get("antivirus.heuristics.enabled", True)):
@@ -132,6 +146,14 @@ class HeuristicEngine:
             stat = stat or path.stat()
         except (OSError, ValueError):
             return findings  # vanished or unreadable; the scanner already logged it
+
+        looks_executable = _is_executable_like(path)
+        disguised_document = _ext(path) in {
+            ext.lower()
+            for ext in self.cfg.get("antivirus.heuristics.double_extension.outer_extensions", [])
+        }
+        if not looks_executable and not disguised_document and precomputed is None:
+            return findings  # nothing here can fire
 
         # Resolved once here because several rules need it and Path.resolve() is a
         # realpath syscall — resolving per rule cost three syscalls per scanned file.
@@ -149,7 +171,7 @@ class HeuristicEngine:
             self._high_entropy,
         ):
             try:
-                findings.extend(rule(path, stat, resolved) or [])
+                findings.extend(rule(path, stat, resolved, precomputed) or [])
             except Exception as exc:  # a broken rule must never abort a scan
                 logger.error("Heuristic rule %s failed on %s: %s", rule.__name__, path, exc)
 
@@ -169,7 +191,10 @@ class HeuristicEngine:
             return default
         return max(0, min(100, score))
 
-    def _double_extension(self, path: Path, stat: os.stat_result, resolved: Path) -> list[Finding]:
+    def _double_extension(
+        self, path: Path, stat: os.stat_result, resolved: Path,
+        precomputed: dict[str, Any] | None,
+    ) -> list[Finding]:
         """``invoice.pdf.exe`` — a document extension hiding an executable one."""
         if not bool(self.cfg.get("antivirus.heuristics.double_extension.enabled", True)):
             return []
@@ -198,7 +223,10 @@ class HeuristicEngine:
             )
         ]
 
-    def _script_in_user_dirs(self, path: Path, stat: os.stat_result, resolved: Path) -> list[Finding]:
+    def _script_in_user_dirs(
+        self, path: Path, stat: os.stat_result, resolved: Path,
+        precomputed: dict[str, Any] | None,
+    ) -> list[Finding]:
         """Script files loose in user-writable locations.
 
         Worth 5 points on its own — the classic persistence *lead*, but half of %TEMP%'s
@@ -225,7 +253,10 @@ class HeuristicEngine:
             )
         ]
 
-    def _no_extension_in_system_dir(self, path: Path, stat: os.stat_result, resolved: Path) -> list[Finding]:
+    def _no_extension_in_system_dir(
+        self, path: Path, stat: os.stat_result, resolved: Path,
+        precomputed: dict[str, Any] | None,
+    ) -> list[Finding]:
         """Extension-less executables hiding in System32-style directories."""
         if not bool(self.cfg.get("antivirus.heuristics.no_extension_in_system_dir.enabled", True)):
             return []
