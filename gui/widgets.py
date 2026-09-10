@@ -11,10 +11,20 @@ from typing import Any, Callable
 import customtkinter as ctk
 
 from gui.theme import (
+    BUTTON_H_PRIMARY,
+    BUTTON_H_SECONDARY,
     CORNER,
     PAD,
     PAD_SM,
     PALETTE,
+    RADIUS_CARD,
+    RADIUS_PILL,
+    SP_MD,
+    SP_SM,
+    TYPE_BODY,
+    TYPE_CAPTION,
+    TYPE_MICRO,
+    TYPE_TITLE,
     font,
     mono_font,
     severity_color,
@@ -68,7 +78,7 @@ class Card(ctk.CTkFrame):
         super().__init__(
             master,
             fg_color=PALETTE["surface"],
-            corner_radius=CORNER,
+            corner_radius=RADIUS_CARD,
             border_width=1,
             border_color=PALETTE["border"],
             **kwargs,
@@ -79,23 +89,24 @@ class Card(ctk.CTkFrame):
         if title:
             self.title_label = ctk.CTkLabel(
                 self,
-                text=title.upper(),
-                font=font(11, "bold"),
-                text_color=PALETTE["text_muted"],
+                text=title,
+                font=font(TYPE_TITLE, "bold"),
+                text_color=PALETTE["text"],
                 anchor="w",
             )
-            self.title_label.grid(row=row, column=0, sticky="ew", padx=PAD, pady=(PAD, 0))
+            self.title_label.grid(row=row, column=0, sticky="ew", padx=SP_MD, pady=(SP_MD, 0))
             row += 1
 
         if subtitle:
             self.subtitle_label = ctk.CTkLabel(
-                self, text=subtitle, font=font(12), text_color=PALETTE["text_muted"], anchor="w"
+                self, text=subtitle, font=font(TYPE_CAPTION),
+                text_color=PALETTE["text_muted"], anchor="w",
             )
-            self.subtitle_label.grid(row=row, column=0, sticky="ew", padx=PAD, pady=(2, 0))
+            self.subtitle_label.grid(row=row, column=0, sticky="ew", padx=SP_MD, pady=(2, 0))
             row += 1
 
         self.body = ctk.CTkFrame(self, fg_color="transparent")
-        self.body.grid(row=row, column=0, sticky="nsew", padx=PAD, pady=PAD)
+        self.body.grid(row=row, column=0, sticky="nsew", padx=SP_MD, pady=SP_MD)
         self.body.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(row, weight=1)
 
@@ -109,8 +120,8 @@ class Chip(ctk.CTkLabel):
             text=f" {text} ",
             fg_color=color,
             text_color="#ffffff",
-            corner_radius=8,
-            font=font(11, "bold"),
+            corner_radius=RADIUS_PILL,
+            font=font(TYPE_MICRO, "bold"),
             **kwargs,
         )
 
@@ -241,7 +252,7 @@ class SectionHeading(ctk.CTkLabel):
         super().__init__(
             master,
             text=text,
-            font=font(22, "bold"),
+            font=font(24, "bold"),
             text_color=PALETTE["text"],
             anchor="w",
             **kwargs,
@@ -281,3 +292,113 @@ class Banner(ctk.CTkFrame):
                 hover_color="#e6ebf5",
             )
             self.action_button.grid(row=0, column=1, sticky="e", padx=PAD, pady=PAD_SM)
+
+
+class Metric(ctk.CTkFrame):
+    """Hero number with a caption underneath — dashboard stats, scan summaries.
+
+    A big 22px bold value over an 11px muted uppercase caption. The value colour can
+    be updated with :meth:`set_value` to reflect state (green clean, red threats).
+    """
+
+    def __init__(
+        self,
+        master: Any,
+        caption: str,
+        value: str = "—",
+        value_color: str | None = None,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(master, fg_color="transparent", **kwargs)
+        self.value_label = ctk.CTkLabel(
+            self,
+            text=value,
+            font=font(22, "bold"),
+            text_color=value_color or PALETTE["text"],
+            anchor="w",
+        )
+        self.value_label.grid(row=0, column=0, sticky="w")
+        ctk.CTkLabel(
+            self,
+            text=caption.upper(),
+            font=font(TYPE_MICRO, "bold"),
+            text_color=PALETTE["text_muted"],
+            anchor="w",
+        ).grid(row=1, column=0, sticky="w", pady=(2, 0))
+
+    def set_value(self, value: str, color: str | None = None) -> None:
+        """Update the hero number (and optionally its colour)."""
+        self.value_label.configure(text=value, text_color=color or PALETTE["text"])
+
+
+class PrimaryButton(ctk.CTkButton):
+    """The one main action per view — accent fill, 32px tall."""
+
+    def __init__(self, master: Any, text: str, **kwargs: Any) -> None:
+        kwargs.setdefault("height", BUTTON_H_PRIMARY)
+        kwargs.setdefault("font", font(TYPE_BODY, "bold"))
+        kwargs.setdefault("fg_color", PALETTE["accent"])
+        kwargs.setdefault("hover_color", PALETTE["accent_hover"])
+        kwargs.setdefault("corner_radius", RADIUS_PILL)
+        super().__init__(master, text=text, **kwargs)
+
+
+class GhostButton(ctk.CTkButton):
+    """Secondary actions — surface fill with border-suited contrast, 30px tall."""
+
+    def __init__(self, master: Any, text: str, **kwargs: Any) -> None:
+        kwargs.setdefault("height", BUTTON_H_SECONDARY)
+        kwargs.setdefault("font", font(TYPE_BODY, "bold"))
+        kwargs.setdefault("fg_color", PALETTE["surface_alt"])
+        kwargs.setdefault("text_color", PALETTE["text"])
+        kwargs.setdefault("hover_color", PALETTE["surface_hover"])
+        kwargs.setdefault("corner_radius", RADIUS_PILL)
+        super().__init__(master, text=text, **kwargs)
+
+
+class StatusDot(ctk.CTkFrame):
+    """A small coloured dot beside a label — engine states, protection status."""
+
+    def __init__(self, master: Any, text: str, color: str, **kwargs: Any) -> None:
+        super().__init__(master, fg_color="transparent", **kwargs)
+        self.dot = ctk.CTkLabel(
+            self, text="●", font=font(10), text_color=color, anchor="w", width=14,
+        )
+        self.dot.grid(row=0, column=0, sticky="w")
+        self.label = ctk.CTkLabel(
+            self, text=text, font=font(TYPE_BODY), text_color=PALETTE["text"], anchor="w",
+        )
+        self.label.grid(row=0, column=1, sticky="w")
+
+    def set_state(self, text: str, color: str) -> None:
+        """Update both the dot colour and the label in one call."""
+        self.dot.configure(text_color=color)
+        self.label.configure(text=text)
+
+
+class Meter(ctk.CTkProgressBar):
+    """Themed progress bar — 10px track on surface_alt with an accent fill."""
+
+    def __init__(self, master: Any, **kwargs: Any) -> None:
+        kwargs.setdefault("height", 10)
+        kwargs.setdefault("fg_color", PALETTE["surface_alt"])
+        kwargs.setdefault("progress_color", PALETTE["accent"])
+        kwargs.setdefault("corner_radius", 5)
+        super().__init__(master, **kwargs)
+
+
+class TableHeader(ctk.CTkFrame):
+    """One-row column header for the timeline/firewall tables.
+
+    Takes ``(text, width)`` pairs like the hand-rolled headers do today; a width of
+    0 means "stretch". Centralises the 11px muted label style in one place.
+    """
+
+    def __init__(self, master: Any, columns: tuple[tuple[str, int], ...], **kwargs: Any) -> None:
+        super().__init__(master, fg_color="transparent", **kwargs)
+        for column, (text, width) in enumerate(columns):
+            self.grid_columnconfigure(column, weight=1 if width == 0 else 0)
+            ctk.CTkLabel(
+                self, text=text, font=font(TYPE_MICRO, "bold"),
+                text_color=PALETTE["text_muted"], anchor="w", width=width,
+            ).grid(row=0, column=column, sticky="w", padx=(SP_SM, SP_SM))

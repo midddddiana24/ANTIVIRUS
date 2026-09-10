@@ -21,7 +21,7 @@ import customtkinter as ctk
 from core.timeline import Severity
 from gui.base_view import BaseView, module_available
 from gui.theme import PAD, PAD_LG, PAD_SM, PALETTE, font, mono_font, severity_color
-from gui.widgets import Card, Chip, EmptyState, HoverRow, SeverityChip, SourceBadge, StatLine
+from gui.widgets import Card, Chip, EmptyState, HoverRow, Metric, SeverityChip, SourceBadge, StatLine
 
 logger = logging.getLogger(__name__)
 
@@ -127,6 +127,22 @@ class DashboardView(BaseView):
 
         self._profile_chip = Chip(left, "PROFILE: UNKNOWN", PALETTE["neutral"])
         self._profile_chip.grid(row=2, column=0, sticky="w", pady=(PAD, 0))
+
+        # ---- hero metrics ------------------------------------------------------
+        # The three numbers a user actually glances at: lifetime threats, files
+        # currently held in quarantine, IDS alerts today. Own row so the toggles
+        # keep their column.
+        metrics = ctk.CTkFrame(body, fg_color="transparent")
+        metrics.grid(row=1, column=0, columnspan=2, sticky="ew", pady=(PAD, 0))
+        for column in range(3):
+            metrics.grid_columnconfigure(column, weight=1)
+
+        self._metric_threats = Metric(metrics, "Threats found")
+        self._metric_threats.grid(row=0, column=0, sticky="w")
+        self._metric_quarantine = Metric(metrics, "In quarantine")
+        self._metric_quarantine.grid(row=0, column=1, sticky="w")
+        self._metric_ids = Metric(metrics, "IDS alerts today")
+        self._metric_ids.grid(row=0, column=2, sticky="w")
 
         # ---- toggles -----------------------------------------------------------
         right = ctk.CTkFrame(body, fg_color="transparent")
@@ -470,9 +486,15 @@ class DashboardView(BaseView):
         self._av_lines["threats"].set_value(
             f"{lifetime:,}", PALETTE["danger"] if lifetime else PALETTE["text"]
         )
+        self._metric_threats.set_value(
+            f"{lifetime:,}", PALETTE["danger"] if lifetime else PALETTE["success"]
+        )
         quarantined = int(antivirus["quarantined"])
         self._av_lines["quarantine"].set_value(
             f"{quarantined:,}", PALETTE["warning"] if quarantined else PALETTE["text"]
+        )
+        self._metric_quarantine.set_value(
+            f"{quarantined:,}", PALETTE["warning"] if quarantined else PALETTE["success"]
         )
         self._av_lines["signatures"].set_value(
             f"{antivirus['signature_version']} · {antivirus['signature_count']:,} hashes"
@@ -503,6 +525,9 @@ class DashboardView(BaseView):
         ids_today = int(firewall["ids_alerts_today"])
         self._fw_lines["ids_today"].set_value(
             f"{ids_today:,}", severity_color(Severity.HIGH) if ids_today else PALETTE["text"]
+        )
+        self._metric_ids.set_value(
+            f"{ids_today:,}", severity_color(Severity.HIGH) if ids_today else PALETTE["success"]
         )
         self._fw_lines["profile"].set_value(str(firewall["current_profile"]))
         self._fw_lines["blocked_ips"].set_value(f"{firewall['blocked_ips']:,}")

@@ -110,7 +110,8 @@ class RulesView(BaseView):
         header.grid(row=0, column=0, sticky="ew", pady=(0, PAD_SM))
         for column, (text, width) in enumerate((
             ("NAME", 210), ("DIR", 90), ("ACTION", 90), ("PROTOCOL", 90),
-            ("PORT(S)", 100), ("REMOTE IP", 160), ("APP", 0), ("PROFILE", 90), ("ON", 60),
+            ("PORT(S)", 100), ("REMOTE IP", 160), ("APP", 0), ("PROFILE", 90),
+            ("HITS", 70), ("ON", 60),
         )):
             header.grid_columnconfigure(column, weight=1 if width == 0 else 0)
             ctk.CTkLabel(
@@ -155,6 +156,7 @@ class RulesView(BaseView):
         self._summary["mode"].set_value(mode, color)
 
         self._count_label.configure(text=f"{len(rules)} rule(s) shown")
+        self._hit_counts = self.db.get_rule_match_counts()
         self._render(rules)
 
     def _render(self, rules: list[dict[str, Any]]) -> None:
@@ -190,9 +192,11 @@ class RulesView(BaseView):
         cell(str(rule.get("remote_ip") or "any"), 5, 150, mono=True)
         cell(str(rule.get("app_path") or "any app"), 6, 0)
         cell(str(rule.get("profile") or "Any"), 7, 80)
+        hits = self._hit_counts.get(str(rule.get("name") or ""), 0) if hasattr(self, "_hit_counts") else 0
+        cell(f"{hits:,}", 8, 60, mono=True)
         enabled = bool(rule.get("enabled"))
         Chip(row, "On" if enabled else "Off", PALETTE["success"] if enabled else PALETTE["neutral"]).grid(
-            row=0, column=8, padx=PAD_SM, pady=PAD_SM
+            row=0, column=9, padx=PAD_SM, pady=PAD_SM
         )
 
         # Bind before the panel so panel buttons keep their own commands.
@@ -209,7 +213,7 @@ class RulesView(BaseView):
         panel = exclude_from_row_bindings(
             ctk.CTkFrame(row, fg_color=PALETTE["surface"], corner_radius=6)
         )
-        panel.grid(row=1, column=0, columnspan=9, sticky="ew", padx=PAD_SM, pady=(0, PAD_SM))
+        panel.grid(row=1, column=0, columnspan=10, sticky="ew", padx=PAD_SM, pady=(0, PAD_SM))
 
         if str(rule.get("description") or "").strip():
             ctk.CTkLabel(

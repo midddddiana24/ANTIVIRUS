@@ -34,7 +34,23 @@ from core.config import Config
 from core.database import Database
 from core.timeline import EventType, Severity, TimelineLogger
 from gui.base_view import BaseView, module_available
-from gui.theme import PAD, PAD_LG, PAD_SM, PALETTE, apply_appearance, font
+from gui.theme import (
+    NAV_ROW_HEIGHT,
+    PAD,
+    PAD_LG,
+    PAD_SM,
+    PALETTE,
+    SIDEBAR_WIDTH,
+    SP_LG,
+    SP_MD,
+    SP_SM,
+    STATUS_BAR_HEIGHT,
+    TYPE_BODY,
+    TYPE_CAPTION,
+    TYPE_MICRO,
+    apply_appearance,
+    font,
+)
 from gui.widgets import Banner, Chip
 
 logger = logging.getLogger(__name__)
@@ -200,7 +216,7 @@ class ShieldEXApp(ctk.CTk):
         self.grid_rowconfigure(self._body_row, weight=1)
         self.grid_rowconfigure(self._body_row + 1, weight=0)
 
-        self.sidebar = ctk.CTkFrame(self, width=232, corner_radius=0, fg_color=PALETTE["sidebar"])
+        self.sidebar = ctk.CTkFrame(self, width=SIDEBAR_WIDTH, corner_radius=0, fg_color=PALETTE["sidebar"])
         self.sidebar.grid(row=row, column=0, sticky="nsw")
         self.sidebar.grid_propagate(False)
         self.sidebar.grid_columnconfigure(0, weight=1)
@@ -212,22 +228,35 @@ class ShieldEXApp(ctk.CTk):
 
     def _build_sidebar(self) -> None:
         brand = ctk.CTkFrame(self.sidebar, fg_color="transparent")
-        brand.grid(row=0, column=0, sticky="ew", padx=PAD, pady=(PAD_LG, PAD_LG))
-        brand.grid_columnconfigure(0, weight=1)
+        brand.grid(row=0, column=0, sticky="ew", padx=SP_LG, pady=(SP_LG, SP_MD))
+        brand.grid_columnconfigure(1, weight=1)
+        # Brand mark: accent tile with the product initial, beside the wordmark.
+        # A drawn tile rather than an image asset — no file to lose in packaging.
+        mark = ctk.CTkLabel(
+            brand,
+            text="S",
+            font=font(16, "bold"),
+            text_color="#ffffff",
+            fg_color=PALETTE["accent"],
+            corner_radius=8,
+            width=36,
+            height=36,
+        )
+        mark.grid(row=0, column=0, rowspan=2, sticky="w", padx=(0, SP_SM))
         ctk.CTkLabel(
             brand,
             text="SHIELDEX",
-            font=font(20, "bold"),
-            text_color=PALETTE["accent_hover"],
+            font=font(17, "bold"),
+            text_color=PALETTE["text"],
             anchor="w",
-        ).grid(row=0, column=0, sticky="w")
+        ).grid(row=0, column=1, sticky="w")
         ctk.CTkLabel(
             brand,
             text="Antivirus + Firewall",
-            font=font(11),
+            font=font(TYPE_MICRO),
             text_color=PALETTE["text_muted"],
             anchor="w",
-        ).grid(row=1, column=0, sticky="w")
+        ).grid(row=1, column=1, sticky="w")
 
         row = 1
         for section in SECTION_ORDER:
@@ -237,10 +266,10 @@ class ShieldEXApp(ctk.CTk):
             ctk.CTkLabel(
                 self.sidebar,
                 text=section.upper(),
-                font=font(10, "bold"),
+                font=font(TYPE_MICRO, "bold"),
                 text_color=PALETTE["text_muted"],
                 anchor="w",
-            ).grid(row=row, column=0, sticky="ew", padx=PAD + 4, pady=(PAD, 2))
+            ).grid(row=row, column=0, sticky="ew", padx=SP_LG, pady=(SP_MD, SP_SM))
             row += 1
 
             for spec in specs:
@@ -249,62 +278,68 @@ class ShieldEXApp(ctk.CTk):
                     self.sidebar,
                     text=spec.label if available else f"{spec.label}  ·  soon",
                     anchor="w",
-                    height=34,
+                    height=NAV_ROW_HEIGHT,
                     corner_radius=8,
-                    font=font(13),
+                    font=font(TYPE_BODY),
                     fg_color="transparent",
                     hover_color=PALETTE["surface_hover"],
                     text_color=PALETTE["text"] if available else PALETTE["text_muted"],
                     command=(lambda key=spec.key: self.navigate(key)) if available else None,
                     state="normal" if available else "disabled",
                 )
-                button.grid(row=row, column=0, sticky="ew", padx=PAD_SM, pady=1)
+                button.grid(row=row, column=0, sticky="ew", padx=SP_SM, pady=1)
                 self._nav_buttons[spec.key] = button
                 row += 1
 
         self.sidebar.grid_rowconfigure(row, weight=1)  # push the footer down
         self._sidebar_footer = ctk.CTkFrame(self.sidebar, fg_color="transparent")
-        self._sidebar_footer.grid(row=row + 1, column=0, sticky="ew", padx=PAD, pady=PAD)
+        self._sidebar_footer.grid(row=row + 1, column=0, sticky="ew", padx=SP_MD, pady=SP_MD)
         self._sidebar_footer.grid_columnconfigure(0, weight=1)
         self._live_label = ctk.CTkLabel(
             self._sidebar_footer,
             text="Timeline events today: 0",
-            font=font(11),
+            font=font(TYPE_MICRO),
             text_color=PALETTE["text_muted"],
             anchor="w",
         )
         self._live_label.grid(row=0, column=0, sticky="ew")
 
     def _build_status_bar(self) -> None:
-        bar = ctk.CTkFrame(self, height=30, corner_radius=0, fg_color=PALETTE["sidebar"])
+        bar = ctk.CTkFrame(self, height=STATUS_BAR_HEIGHT, corner_radius=0, fg_color=PALETTE["sidebar"])
         bar.grid(row=self._body_row + 1, column=0, columnspan=2, sticky="ew")
-        bar.grid_columnconfigure(3, weight=1)
+        bar.grid_columnconfigure(4, weight=1)
 
-        enforcing = bool(self.cfg.get("firewall.enforce_rules", False))
         self._fw_mode_chip = Chip(
             bar,
-            "FIREWALL: ENFORCING" if enforcing else "FIREWALL: DRY-RUN",
-            PALETTE["success"] if enforcing else PALETTE["warning"],
+            "FIREWALL: ENFORCING" if self._enforcing_config() else "FIREWALL: DRY-RUN",
+            PALETTE["success"] if self._enforcing_config() else PALETTE["warning"],
         )
-        self._fw_mode_chip.grid(row=0, column=0, padx=(PAD, PAD_SM), pady=PAD_SM)
+        self._fw_mode_chip.grid(row=0, column=0, padx=(SP_MD, SP_SM), pady=SP_SM)
 
         self._privilege_chip = Chip(
             bar,
             "ADMIN" if self.elevated else "LIMITED",
             PALETTE["success"] if self.elevated else PALETTE["danger"],
         )
-        self._privilege_chip.grid(row=0, column=1, padx=PAD_SM, pady=PAD_SM)
+        self._privilege_chip.grid(row=0, column=1, padx=(0, SP_SM), pady=SP_SM)
+
+        divider = ctk.CTkFrame(bar, width=1, fg_color=PALETTE["border"])
+        divider.grid(row=0, column=2, sticky="ns", padx=SP_SM, pady=8)
 
         self._signature_label = ctk.CTkLabel(
-            bar, text="", font=font(11), text_color=PALETTE["text_muted"]
+            bar, text="", font=font(TYPE_MICRO), text_color=PALETTE["text_muted"]
         )
-        self._signature_label.grid(row=0, column=2, padx=PAD, pady=PAD_SM)
+        self._signature_label.grid(row=0, column=3, padx=(0, SP_MD), pady=SP_SM)
 
         self._status_message = ctk.CTkLabel(
-            bar, text="", font=font(11), text_color=PALETTE["text_muted"], anchor="e"
+            bar, text="", font=font(TYPE_MICRO), text_color=PALETTE["text_muted"], anchor="e"
         )
-        self._status_message.grid(row=0, column=3, sticky="e", padx=PAD, pady=PAD_SM)
+        self._status_message.grid(row=0, column=4, sticky="e", padx=SP_MD, pady=SP_SM)
         self._update_status_bar()
+
+    def _enforcing_config(self) -> bool:
+        """Whether the firewall is configured to enforce (dry-run otherwise)."""
+        return bool(self.cfg.get("firewall.enforce_rules", False))
 
     def _update_status_bar(self) -> None:
         """Refresh the signature and event counters.
@@ -412,14 +447,20 @@ class ShieldEXApp(ctk.CTk):
             return None
 
     def _highlight_nav(self, key: str) -> None:
+        """Mark the active nav entry with an accent-tinted pill.
+
+        A translucent-tint pill with accent text rather than a solid fill: solid
+        accent blocks read as buttons (inviting a click on the page you are already
+        on), while the pill reads as "you are here".
+        """
         for nav_key, button in self._nav_buttons.items():
             if button.cget("state") == "disabled":
                 continue
             selected = nav_key == key
             button.configure(
-                fg_color=PALETTE["accent"] if selected else "transparent",
-                text_color="#ffffff" if selected else PALETTE["text"],
-                font=font(13, "bold" if selected else "normal"),
+                fg_color=PALETTE["accent_soft"] if selected else "transparent",
+                text_color=PALETTE["accent_text"] if selected else PALETTE["text"],
+                font=font(TYPE_BODY, "bold" if selected else "normal"),
             )
 
     @property

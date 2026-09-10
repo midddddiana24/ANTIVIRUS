@@ -1,8 +1,14 @@
-"""Visual language for the ShieldEX interface.
+"""Visual language for the ShieldEX interface — Console v2.
+
+Layout runs on a 4px base grid: XS=4, SM=8, MD=16, LG=24, XL=32. View padding is LG
+(24px) on the sides, cards breathe with MD (16px) internal padding, rows sit 8px
+(SM) apart. The legacy ``PAD``/``PAD_SM``/``PAD_LG`` names remain as aliases so
+existing views keep working untouched.
 
 Colours are expressed as customtkinter ``(light, dark)`` tuples where a single hex value
 would look wrong in the other appearance mode; accents and severity colours are single
-values because they are chosen to read correctly on both.
+values because they are chosen to read correctly on both. The dark ramp is stepped so
+window → sidebar → surface → hover are each visibly distinct layers.
 
 Fonts are created by functions rather than module constants: ``CTkFont`` needs a live Tk
 root, which does not exist at import time.
@@ -40,19 +46,24 @@ FONT_FAMILY, MONO_FAMILY = _pick_families()
 
 #: Structural surfaces — (light mode, dark mode).
 PALETTE: dict[str, Any] = {
-    "window": ("#eef1f6", "#0f1420"),
-    "sidebar": ("#e2e7ef", "#141a26"),
-    "surface": ("#ffffff", "#171d2b"),
-    "surface_alt": ("#f4f6fa", "#1e2636"),
-    "surface_hover": ("#e8ecf3", "#243044"),
-    "border": ("#d3dae5", "#2a3446"),
-    "text": ("#1b2231", "#e6ebf5"),
-    "text_muted": ("#5d6779", "#8f9bb3"),
+    "window": ("#e9edf4", "#0b0f19"),
+    "sidebar": ("#dde3ee", "#111725"),
+    "surface": ("#ffffff", "#151c2d"),
+    "surface_alt": ("#f1f4f9", "#1c2438"),
+    "surface_hover": ("#e3e9f4", "#242e46"),
+    "border": ("#cfd7e4", "#2b3549"),
+    "text": ("#1b2231", "#e8edf6"),
+    "text_muted": ("#5d6779", "#93a0b8"),
     "accent": "#2f6fb0",
     "accent_hover": "#3b86d1",
+    "accent_soft": ("#d7e7f7", "#1d3350"),
+    "accent_text": ("#1f5b96", "#7db6e8"),
     "success": "#2f9e44",
+    "success_soft": ("#d9f0df", "#123a22"),
     "warning": "#c98a15",
+    "warning_soft": ("#f9ecd4", "#43320c"),
     "danger": "#d94a44",
+    "danger_soft": ("#f9dede", "#471917"),
     "critical": "#a4161a",
     "neutral": "#6b7a90",
 }
@@ -84,6 +95,35 @@ PAD = 12
 PAD_SM = 6
 PAD_LG = 20
 CORNER = 10
+
+#: 4px-base spacing scale. New code should use these; the PAD_* aliases above map
+#: onto the scale so the eleven existing views keep their current look until they
+#: are individually migrated.
+SP_XS = 4
+SP_SM = 8
+SP_MD = 16
+SP_LG = 24
+SP_XL = 32
+
+#: Corner radii: cards/inputs 12, pills/chips 8, rows 8.
+RADIUS_CARD = 12
+RADIUS_PILL = 8
+RADIUS_ROW = 8
+
+#: Shell metrics.
+SIDEBAR_WIDTH = 248
+NAV_ROW_HEIGHT = 40
+STATUS_BAR_HEIGHT = 34
+BUTTON_H_PRIMARY = 32
+BUTTON_H_SECONDARY = 30
+
+#: Type scale (sizes; weights chosen at call sites).
+TYPE_DISPLAY = 24  # view titles
+TYPE_TITLE = 15  # card titles, sentence case
+TYPE_BODY = 13  # default UI text
+TYPE_CAPTION = 12  # subtitles, secondary text
+TYPE_MICRO = 11  # section labels, chips, table headers
+TYPE_MONO = 12  # hashes, paths, log lines
 
 
 def apply_appearance(theme: str = "dark", accent: str | None = None) -> None:

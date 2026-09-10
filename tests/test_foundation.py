@@ -918,6 +918,9 @@ def test_shipped_config_matches_defaults_shape() -> None:
         "gui/firewall/templates_view.py",
         "core/engines.py",
         "core/notifications.py",
+        "core/policy.py",
+        "core/antivirus/scheduler.py",
+        "core/antivirus/selftest.py",
         "main.py",
     ],
 )
@@ -1293,7 +1296,7 @@ def test_build_engines_registers_the_full_stack(tmp_path, db, timeline) -> None:
     """The registry must contain every engine the views and the shell look up."""
     engines, _config = _make_engines(tmp_path, db, timeline)
     expected = {
-        "quarantine", "scanner", "realtime_monitor", "updater",
+        "quarantine", "scanner", "realtime_monitor", "scheduler", "updater",
         "blocklist", "firewall", "ids", "connection_monitor", "notifications",
     }
     assert expected <= set(engines.names())

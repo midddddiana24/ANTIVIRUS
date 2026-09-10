@@ -25,7 +25,7 @@ from typing import TYPE_CHECKING, Any
 
 import customtkinter as ctk
 
-from gui.theme import PAD, PAD_LG, PALETTE, font
+from gui.theme import SP_LG, SP_MD, SP_SM, PALETTE, font
 from gui.widgets import SectionHeading
 
 if TYPE_CHECKING:  # pragma: no cover - typing only, avoids a circular import at runtime
@@ -65,7 +65,7 @@ class BaseView(ctk.CTkFrame):
 
         # ---- heading + per-view action bar -------------------------------------
         header = ctk.CTkFrame(self, fg_color="transparent")
-        header.grid(row=0, column=0, sticky="ew", padx=PAD_LG, pady=(PAD_LG, PAD))
+        header.grid(row=0, column=0, sticky="ew", padx=SP_LG, pady=(SP_LG, SP_MD))
         header.grid_columnconfigure(0, weight=1)
 
         title_box = ctk.CTkFrame(header, fg_color="transparent")
@@ -82,11 +82,11 @@ class BaseView(ctk.CTkFrame):
 
         #: Right-aligned frame for view-specific buttons.
         self.actions = ctk.CTkFrame(header, fg_color="transparent")
-        self.actions.grid(row=0, column=1, sticky="e")
+        self.actions.grid(row=0, column=1, sticky="e", padx=(SP_MD, 0))
 
         #: Frame subclasses fill with their own widgets.
         self.content = ctk.CTkFrame(self, fg_color="transparent")
-        self.content.grid(row=1, column=0, sticky="nsew", padx=PAD_LG, pady=(0, PAD_LG))
+        self.content.grid(row=1, column=0, sticky="nsew", padx=SP_LG, pady=(0, SP_LG))
         self.content.grid_columnconfigure(0, weight=1)
         self.content.grid_rowconfigure(0, weight=1)
 

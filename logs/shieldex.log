@@ -1763,3 +1763,79 @@ ImportError: cannot import name 'NotificationEngine' from 'core.notifications' (
 2026-09-09 19:56:16 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
 2026-09-09 19:56:16 | INFO     | shieldex                     | --no-gui specified; initialisation complete, exiting
 2026-09-09 19:56:16 | INFO     | shieldex                     | ShieldEX shutdown complete
+2026-09-09 20:35:30 | INFO     | shieldex                     | ==============================================================================
+2026-09-09 20:35:30 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-09 20:35:30 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-09 20:35:30 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-09 20:35:30 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-09 20:35:30 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Limited mode: no administrator privileges, firewall enforcement unavailable
+2026-09-09 20:35:30 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-09 20:35:30 | INFO     | shieldex                     | --no-gui specified; initialisation complete, exiting
+2026-09-09 20:35:30 | INFO     | shieldex                     | ShieldEX shutdown complete
+2026-09-09 20:45:39 | INFO     | shieldex                     | ==============================================================================
+2026-09-09 20:45:39 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-09 20:45:41 | INFO     | shieldex                     | Elevated instance launched; this instance will exit
+2026-09-09 20:45:42 | INFO     | shieldex                     | ==============================================================================
+2026-09-09 20:45:42 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-09 20:45:42 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-09 20:45:42 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-09 20:45:42 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-09 20:45:42 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Elevated: firewall enforcement available
+2026-09-09 20:45:42 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-09 20:45:45 | INFO     | gui.app                      | GUI ready (elevated=True)
+2026-09-09 20:45:45 | INFO     | gui.app                      | Engine registered: quarantine (QuarantineManager)
+2026-09-09 20:45:45 | INFO     | gui.app                      | Engine registered: scanner (Scanner)
+2026-09-09 20:45:45 | INFO     | gui.app                      | Engine registered: realtime_monitor (RealTimeMonitor)
+2026-09-09 20:45:45 | INFO     | gui.app                      | Engine registered: scheduler (ScanScheduler)
+2026-09-09 20:45:45 | INFO     | gui.app                      | Engine registered: updater (SignatureUpdater)
+2026-09-09 20:45:45 | INFO     | gui.app                      | Engine registered: blocklist (IPBlocklist)
+2026-09-09 20:45:45 | INFO     | gui.app                      | Engine registered: firewall (RuleEngine)
+2026-09-09 20:45:45 | INFO     | gui.app                      | Engine registered: ids (IDSDetector)
+2026-09-09 20:45:45 | INFO     | gui.app                      | Engine registered: connection_monitor (ConnectionMonitor)
+2026-09-09 20:45:45 | INFO     | gui.app                      | Engine registered: packet_inspector (PacketInspector)
+2026-09-09 20:45:45 | INFO     | gui.app                      | Engine registered: notifications (Notifier)
+2026-09-09 20:45:45 | INFO     | core.antivirus.scheduler     | Scheduled scans disabled by configuration
+2026-09-10 18:39:54 | INFO     | shieldex                     | ==============================================================================
+2026-09-10 18:39:54 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-10 18:39:57 | INFO     | shieldex                     | Elevated instance launched; this instance will exit
+2026-09-10 18:39:58 | INFO     | shieldex                     | ==============================================================================
+2026-09-10 18:39:58 | INFO     | shieldex                     | ShieldEX 0.1.0 starting — Windows 11, Python 3.14.3
+2026-09-10 18:39:58 | INFO     | core.database                | Database ready at C:\Users\rober\Desktop\ANTIVIRUS\shieldex.db
+2026-09-10 18:39:58 | INFO     | core.database                | Merged 0 new signature(s) from 6 candidate(s)
+2026-09-10 18:39:58 | INFO     | core.timeline                | [SYSTEM] APP_STARTED — ShieldEX 0.1.0 started on Windows 11
+2026-09-10 18:39:58 | INFO     | core.timeline                | [SYSTEM] PRIVILEGE_STATE — Elevated: firewall enforcement available
+2026-09-10 18:39:58 | INFO     | shieldex                     | Firewall is in DRY-RUN mode: rules are stored and the exact OS command is logged, but nothing is applied. Set firewall.enforce_rules=true to enforce.
+2026-09-10 18:40:00 | INFO     | gui.app                      | GUI ready (elevated=True)
+2026-09-10 18:40:00 | INFO     | gui.app                      | Engine registered: quarantine (QuarantineManager)
+2026-09-10 18:40:00 | INFO     | gui.app                      | Engine registered: scanner (Scanner)
+2026-09-10 18:40:00 | INFO     | gui.app                      | Engine registered: realtime_monitor (RealTimeMonitor)
+2026-09-10 18:40:00 | INFO     | gui.app                      | Engine registered: scheduler (ScanScheduler)
+2026-09-10 18:40:00 | INFO     | gui.app                      | Engine registered: updater (SignatureUpdater)
+2026-09-10 18:40:00 | INFO     | gui.app                      | Engine registered: blocklist (IPBlocklist)
+2026-09-10 18:40:00 | INFO     | gui.app                      | Engine registered: firewall (RuleEngine)
+2026-09-10 18:40:00 | INFO     | gui.app                      | Engine registered: ids (IDSDetector)
+2026-09-10 18:40:00 | INFO     | gui.app                      | Engine registered: connection_monitor (ConnectionMonitor)
+2026-09-10 18:40:00 | INFO     | gui.app                      | Engine registered: packet_inspector (PacketInspector)
+2026-09-10 18:40:00 | INFO     | gui.app                      | Engine registered: notifications (Notifier)
+2026-09-10 18:40:00 | INFO     | core.antivirus.scheduler     | Scheduled scans disabled by configuration
+2026-09-10 18:40:16 | INFO     | gui.app                      | Shutting down GUI
+2026-09-10 18:40:16 | INFO     | core.timeline                | [ANTIVIRUS] MONITOR_STOPPED — Real-time protection stopped
+2026-09-10 18:40:16 | INFO     | gui.app                      | Engine stopped: realtime_monitor
+2026-09-10 18:40:16 | INFO     | gui.app                      | Engine stopped: scheduler
+2026-09-10 18:40:16 | INFO     | gui.app                      | Engine stopped: updater
+2026-09-10 18:40:16 | INFO     | gui.app                      | Engine stopped: firewall
+2026-09-10 18:40:16 | INFO     | gui.app                      | Engine stopped: ids
+2026-09-10 18:40:16 | INFO     | gui.app                      | Engine stopped: connection_monitor
+2026-09-10 18:40:16 | INFO     | gui.app                      | Engine stopped: packet_inspector
+2026-09-10 18:40:16 | INFO     | gui.app                      | Engine stopped: notifications
+2026-09-10 18:40:17 | INFO     | core.timeline                | [SYSTEM] APP_STOPPED — ShieldEX closed normally
+2026-09-10 18:40:17 | INFO     | core.engines                 | Engine stopped: notifications
+2026-09-10 18:40:17 | INFO     | core.engines                 | Engine stopped: packet_inspector
+2026-09-10 18:40:17 | INFO     | core.engines                 | Engine stopped: connection_monitor
+2026-09-10 18:40:17 | INFO     | core.engines                 | Engine stopped: ids
+2026-09-10 18:40:17 | INFO     | core.engines                 | Engine stopped: firewall
+2026-09-10 18:40:17 | INFO     | core.engines                 | Engine stopped: updater
+2026-09-10 18:40:17 | INFO     | core.engines                 | Engine stopped: scheduler
+2026-09-10 18:40:17 | INFO     | core.timeline                | [ANTIVIRUS] MONITOR_STOPPED — Real-time protection stopped
+2026-09-10 18:40:17 | INFO     | core.engines                 | Engine stopped: realtime_monitor
+2026-09-10 18:40:17 | INFO     | shieldex                     | ShieldEX shutdown complete

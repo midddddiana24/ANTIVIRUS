@@ -571,3 +571,159 @@ def test_is_newer_version_across_schemes():
     assert is_newer_version("20260915", "2026.09.01") is False  # different schemes
     assert is_newer_version("1.2.0", "none") is True
     assert is_newer_version("", "0.1") is False
+
+
+# ======================================================================
+# Response policy
+# ======================================================================
+def test_policy_defaults_quarantine_critical_and_high_only(config):
+    """The shipped table quarantines known-bad severities, never Medium and below."""
+    from core.policy import ResponsePolicy
+
+    policy = ResponsePolicy(config)
+    assert policy.should_quarantine("Critical", kind="signature") is True
+    assert policy.should_quarantine("High", kind="signature") is True
+    assert policy.should_quarantine("Medium", kind="signature") is False
+    assert policy.should_quarantine("Low", kind="signature") is False
+
+
+def test_policy_never_auto_quarantines_heuristics(config):
+    """Heuristic detections are leads, not verdicts — no severity may quarantine them."""
+    from core.policy import ResponsePolicy
+
+    policy = ResponsePolicy(config)
+    for level in ("Critical", "High", "Medium", "Low"):
+        assert policy.should_quarantine(level, kind="heuristic") is False
+
+
+def test_policy_edit_round_trip(config):
+    """set_quarantine persists through config and describe() reflects it."""
+    from core.policy import ResponsePolicy
+
+    policy = ResponsePolicy(config)
+    assert policy.set_quarantine("Medium", True) is True
+    assert policy.should_quarantine("Medium", kind="signature") is True
+    assert policy.set_quarantine("Bogus", True) is False
+    assert dict(policy.describe())["Medium"] is True
+
+
+def test_policy_honours_legacy_bool(config):
+    """The old single boolean still governs when the table is absent (upgrades)."""
+    from core.policy import ResponsePolicy
+
+    config.set("policies.threat_response", None)
+    config.set("antivirus.auto_quarantine_on_signature_match", False)
+    assert ResponsePolicy(config).should_quarantine("High", kind="signature") is False
+    config.set("antivirus.auto_quarantine_on_signature_match", True)
+    assert ResponsePolicy(config).should_quarantine("High", kind="signature") is True
+
+
+def test_scanner_obeys_policy_over_default(scanner, config, db, tmp_path):
+    """The policy table governs quarantine: Critical flipped off leaves the file."""
+    from core.policy import ResponsePolicy
+
+    target = tmp_path / "dropper.bin"
+    target.write_bytes(DEMO_PAYLOAD)  # Critical signature match
+    assert ResponsePolicy(config).set_quarantine("Critical", False) is True
+
+    result = scanner.run("custom", target)
+
+    assert result.threats_found == 1  # still detected and reported…
+    assert result.detections[0].quarantined is False  # …but left on disk per policy
+    assert target.exists()
+    assert db.quarantine_count("QUARANTINED") == 0
+
+
+# ======================================================================
+# Scheduled scans
+# ======================================================================
+class _StubScanner:
+    """Minimal scanner stand-in: records run() calls without touching disk."""
+
+    def __init__(self) -> None:
+        self.calls: list[str] = []
+
+    def run(self, scan_type: str):
+        from core.antivirus.scanner import ScanResult
+
+        self.calls.append(scan_type)
+        return ScanResult(scan_id=-1, scan_type=scan_type, target="stub", status="COMPLETED")
+
+
+def test_scheduler_runs_configured_scan_type(config, db, timeline):
+    """run_now() executes exactly the configured scan type and records it."""
+    from core.antivirus.scheduler import ScanScheduler
+
+    stub = _StubScanner()
+    scheduler = ScanScheduler(config, db, timeline, stub)
+
+    assert scheduler.run_now() is True
+    assert stub.calls == ["quick"]  # the default configured type
+
+    config.set("antivirus.scheduled_scans.scan_type", "full")
+    assert scheduler.run_now() is True
+    assert stub.calls == ["quick", "full"]
+    assert db.get_setting("scheduled_scan_last_run", "") == "COMPLETED"
+
+
+def test_scheduler_rejects_bad_time_and_unknown_type(config, db, timeline):
+    """Invalid schedule values degrade to safe defaults instead of crashing."""
+    from core.antivirus.scheduler import ScanScheduler
+
+    assert ScanScheduler._valid_time("02:00") is True
+    assert ScanScheduler._valid_time("25:00") is False
+    assert ScanScheduler._valid_time("nope") is False
+
+    config.set("antivirus.scheduled_scans.scan_type", "whatever")
+    assert ScanScheduler(config, db, timeline, _StubScanner())._scan_type() == "quick"
+
+
+def test_scheduler_start_requires_opt_in(config, db, timeline):
+    """Disabled by default: start() refuses until the user enables scheduling."""
+    from core.antivirus.scheduler import ScanScheduler
+
+    assert ScanScheduler(config, db, timeline, _StubScanner()).start() is False
+    config.set("antivirus.scheduled_scans.enabled", True)
+    scheduler = ScanScheduler(config, db, timeline, _StubScanner())
+    assert scheduler.start() is True
+    assert scheduler.running is True
+    scheduler.stop()
+    assert scheduler.running is False
+
+
+# ======================================================================
+# Protection self-test
+# ======================================================================
+def test_self_test_passes_end_to_end(scanner, db, tmp_path):
+    """Payload in → signature detection → quarantine out, with nothing left behind."""
+    from core.antivirus.selftest import SELFTEST_PAYLOAD, SELFTEST_THREAT, run_self_test
+
+    assert SELFTEST_THREAT == "ShieldEX.Demo.Dropper01"
+    assert len(SELFTEST_PAYLOAD) > 0
+    passed, message = run_self_test(scanner)
+    assert passed is True, message
+    assert "quarantined" in message
+    assert db.quarantine_count("QUARANTINED") >= 1
+
+
+# ======================================================================
+# Firewall rule hit counts
+# ======================================================================
+def test_rule_match_counts_aggregate(db):
+    """Connections group by the rule name the engine recorded for them."""
+    db.log_connection(
+        process="a.exe", pid=1, protocol="TCP", local_ip="1.1.1.1", local_port=1,
+        remote_ip="2.2.2.2", remote_port=23, direction="outbound", action="block",
+        rule_matched="block telnet",
+    )
+    db.log_connection(
+        process="b.exe", pid=2, protocol="TCP", local_ip="1.1.1.1", local_port=2,
+        remote_ip="3.3.3.3", remote_port=23, direction="outbound", action="block",
+        rule_matched="block telnet",
+    )
+    db.log_connection(
+        process="c.exe", pid=3, protocol="TCP", local_ip="1.1.1.1", local_port=3,
+        remote_ip="4.4.4.4", remote_port=80, direction="outbound", action="allow",
+        rule_matched=None,  # unmatched rows must not appear under any rule
+    )
+    assert db.get_rule_match_counts() == {"block telnet": 2}

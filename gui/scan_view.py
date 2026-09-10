@@ -27,7 +27,7 @@ from core.antivirus.scanner import Detection, Scanner
 from core.timeline import Severity
 from gui.base_view import BaseView
 from gui.theme import PAD, PAD_LG, PAD_SM, PALETTE, font, mono_font, severity_color
-from gui.widgets import Card, Chip, EmptyState, HoverRow, SeverityChip, StatLine
+from gui.widgets import Card, EmptyState, GhostButton, HoverRow, Meter, Metric, PrimaryButton, SeverityChip
 
 logger = logging.getLogger(__name__)
 
@@ -65,18 +65,18 @@ class ScanView(BaseView):
 
     # ================================================================== header
     def _build_actions(self) -> None:
-        self._start_button = ctk.CTkButton(
-            self.actions, text="Start Scan", width=120, height=30, font=font(12, "bold"),
-            fg_color=PALETTE["accent"], hover_color=PALETTE["accent_hover"],
-            command=self._start,
+        self._start_button = PrimaryButton(
+            self.actions, text="Start Scan", width=120, command=self._start,
         )
         self._start_button.grid(row=0, column=0, padx=(0, PAD_SM))
-        self._cancel_button = ctk.CTkButton(
-            self.actions, text="Cancel", width=90, height=30, font=font(12, "bold"),
-            fg_color=PALETTE["surface_alt"], text_color=PALETTE["text"],
-            hover_color=PALETTE["surface_hover"], command=self._cancel, state="disabled",
+        self._cancel_button = GhostButton(
+            self.actions, text="Cancel", width=90, command=self._cancel, state="disabled",
         )
-        self._cancel_button.grid(row=0, column=1)
+        self._cancel_button.grid(row=0, column=1, padx=(0, PAD_SM))
+        self._selftest_button = GhostButton(
+            self.actions, text="Self-test", width=90, command=self._self_test,
+        )
+        self._selftest_button.grid(row=0, column=2)
 
     # ================================================================== config
     def _build_config_card(self) -> None:
@@ -154,7 +154,7 @@ class ScanView(BaseView):
         body = card.body
         body.grid_columnconfigure(0, weight=1)
 
-        self._progress_bar = ctk.CTkProgressBar(body, height=10)
+        self._progress_bar = Meter(body)
         self._progress_bar.grid(row=0, column=0, sticky="ew", pady=(0, PAD_SM))
         self._progress_bar.set(0)
 
@@ -164,12 +164,12 @@ class ScanView(BaseView):
         stats.grid_columnconfigure(1, weight=1)
         stats.grid_columnconfigure(2, weight=1)
 
-        self._stat_files = StatLine(stats, "Files scanned", "0")
-        self._stat_files.grid(row=0, column=0, sticky="ew")
-        self._stat_rate = StatLine(stats, "Speed", "—")
-        self._stat_rate.grid(row=0, column=1, sticky="ew")
-        self._stat_state = StatLine(stats, "State", "Idle")
-        self._stat_state.grid(row=0, column=2, sticky="ew")
+        self._stat_files = Metric(stats, "Files scanned", "0")
+        self._stat_files.grid(row=0, column=0, sticky="w")
+        self._stat_rate = Metric(stats, "Speed", "—")
+        self._stat_rate.grid(row=0, column=1, sticky="w")
+        self._stat_state = Metric(stats, "State", "Idle")
+        self._stat_state.grid(row=0, column=2, sticky="w")
 
         # The verdict lives on its own full-width row, deliberately NOT beside the
         # file counter: "11,234" climbing next to a small "Threats: 0" read as the
@@ -184,7 +184,7 @@ class ScanView(BaseView):
             body, text="", font=mono_font(11), text_color=PALETTE["text_muted"],
             anchor="w", justify="left",
         )
-        self._current_file.grid(row=2, column=0, sticky="ew", pady=(PAD_SM, 0))
+        self._current_file.grid(row=3, column=0, sticky="ew", pady=(PAD_SM, 0))
 
     # ================================================================== results
     def _build_results_card(self) -> None:
@@ -362,6 +362,36 @@ class ScanView(BaseView):
         self._cancel_event.set()
         self._stat_state.set_value("Cancelling…", PALETTE["warning"])
         self.app.set_status_message("Cancelling scan — finishing the current file")
+
+    def _self_test(self) -> None:
+        """Run the EICAR protection self-test on a worker thread.
+
+        The self-test writes the harmless EICAR string and scans it through the real
+        pipeline — proving detection, classification and quarantine all work after
+        any settings change. Runs off the UI thread because it hashes and quarantines.
+        """
+        if self._scan_thread is not None and self._scan_thread.is_alive():
+            self.app.set_status_message("Finish or cancel the running scan first")
+            return
+        from core.antivirus.selftest import run_self_test
+
+        scanner = self._scanner()
+        self.app.set_status_message("Running protection self-test…")
+
+        def worker() -> None:
+            passed, message = run_self_test(scanner, self.timeline)
+            self.app.post_to_ui(lambda: self._finish_self_test(passed, message))
+
+        threading.Thread(target=worker, name="shieldex-selftest", daemon=True).start()
+
+    def _finish_self_test(self, passed: bool, message: str) -> None:
+        """UI-thread completion handler for the self-test."""
+        if passed:
+            self.app.show_info("Protection self-test", message)
+        else:
+            self.app.show_error("Protection self-test", message)
+        self.app.set_status_message(message)
+        self.refresh()
 
     def _set_verdict(self, threats: int, running: bool = False) -> None:
         """Update the full-width verdict banner — the one place that answers

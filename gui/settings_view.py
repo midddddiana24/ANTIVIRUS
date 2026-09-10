@@ -36,10 +36,11 @@ class SettingsView(BaseView):
 
     def build(self) -> None:
         self.content.grid_columnconfigure(0, weight=1)
-        self.content.grid_rowconfigure(3, weight=1)
+        self.content.grid_rowconfigure(4, weight=1)
 
         self._build_protection()
         self._build_signatures()
+        self._build_policy()
         self._build_environment()
 
     # ==================================================================
@@ -273,11 +274,174 @@ class SettingsView(BaseView):
         self._update_button.grid(row=5, column=0, sticky="ew", pady=(PAD_SM, 0))
 
     # ==================================================================
+    # Response policy & scheduled scans
+    # ==================================================================
+    def _build_policy(self) -> None:
+        from core.policy import ResponsePolicy
+
+        card = Card(
+            self.content, title="Response policy & scheduled scans",
+            subtitle="What happens automatically per severity, and when scans run themselves",
+        )
+        card.grid(row=2, column=0, sticky="ew", pady=(0, PAD_SM))
+        body = card.body
+        body.grid_columnconfigure(1, weight=1)
+
+        self._policy = ResponsePolicy(self.cfg)
+        self._policy_switches: dict[str, ctk.CTkSwitch] = {}
+        for index, (level, quarantine) in enumerate(self._policy.describe()):
+            switch = ctk.CTkSwitch(
+                body, text=f"{level}: auto-quarantine signature matches",
+                font=font(12),
+                command=lambda lv=level: self._toggle_policy(lv),
+                progress_color=PALETTE["success"],
+            )
+            switch.grid(row=index, column=0, columnspan=2, sticky="w", pady=2)
+            self._policy_switches[level] = switch
+
+        row = 4
+        ctk.CTkLabel(
+            body, text="Scheduled scan", font=font(12, "bold"),
+            text_color=PALETTE["text"], anchor="w",
+        ).grid(row=row, column=0, columnspan=2, sticky="w", pady=(PAD_SM, 2))
+        row += 1
+
+        self._sched_switch = ctk.CTkSwitch(
+            body, text="Run a scan automatically every day", font=font(12),
+            command=self._toggle_scheduler, progress_color=PALETTE["success"],
+        )
+        self._sched_switch.grid(row=row, column=0, columnspan=2, sticky="w", pady=2)
+        row += 1
+
+        sched_row = ctk.CTkFrame(body, fg_color="transparent")
+        sched_row.grid(row=row, column=0, columnspan=2, sticky="ew")
+        ctk.CTkLabel(
+            sched_row, text="Type:", font=font(12), text_color=PALETTE["text_muted"]
+        ).grid(row=0, column=0, padx=(0, PAD_SM))
+        self._sched_type = ctk.CTkOptionMenu(
+            sched_row, values=["quick", "full"], width=110, height=28, font=font(12),
+            fg_color=PALETTE["surface_alt"], button_color=PALETTE["accent"],
+            button_hover_color=PALETTE["accent_hover"], text_color=PALETTE["text"],
+            command=self._change_sched_type,
+        )
+        self._sched_type.grid(row=0, column=1, padx=(0, PAD))
+        ctk.CTkLabel(
+            sched_row, text="Time (HH:MM):", font=font(12), text_color=PALETTE["text_muted"]
+        ).grid(row=0, column=2, padx=(0, PAD_SM))
+        self._sched_time = ctk.CTkEntry(sched_row, width=80, height=28, font=font(12))
+        self._sched_time.grid(row=0, column=3, padx=(0, PAD_SM))
+        self._sched_time.bind("<Return>", lambda _e: self._change_sched_time())
+        ctk.CTkButton(
+            sched_row, text="Apply time", width=90, height=28, font=font(12, "bold"),
+            fg_color=PALETTE["surface_alt"], text_color=PALETTE["text"],
+            hover_color=PALETTE["surface_hover"], command=self._change_sched_time,
+        ).grid(row=0, column=4, padx=(0, PAD_SM))
+        ctk.CTkButton(
+            sched_row, text="Run now", width=90, height=28, font=font(12, "bold"),
+            fg_color=PALETTE["accent"], hover_color=PALETTE["accent_hover"],
+            command=self._run_scheduled_now,
+        ).grid(row=0, column=5)
+        row += 1
+
+        self._sched_info = ctk.CTkLabel(
+            body, text="", font=font(11), text_color=PALETTE["text_muted"],
+            anchor="w", justify="left",
+        )
+        self._sched_info.grid(row=row, column=0, columnspan=2, sticky="w", pady=(2, 0))
+
+    def _toggle_policy(self, level: str) -> None:
+        enabled = bool(self._policy_switches[level].get())
+        if not self._policy.set_quarantine(level, enabled):
+            self._sync_switch_state(self._policy_switches[level], not enabled)
+            return
+        self._persist_config()
+        self.app.set_status_message(
+            f"Policy: {level} signature matches "
+            f"{'will' if enabled else 'will not'} be auto-quarantined"
+        )
+        self.refresh()
+
+    def _sync_switch_state(self, switch: ctk.CTkSwitch, on: bool) -> None:
+        if on:
+            switch.select()
+        else:
+            switch.deselect()
+
+    def _toggle_scheduler(self) -> None:
+        enabled = bool(self._sched_switch.get())
+        self.cfg.set("antivirus.scheduled_scans.enabled", enabled)
+        self._persist_config()
+        engine = self.app.get_engine("scheduler")
+        if engine is not None:
+            try:
+                if enabled:
+                    engine.start()
+                else:
+                    engine.stop()
+            except Exception as exc:
+                logger.error("Scheduler toggle failed: %s", exc, exc_info=True)
+                self.app.show_error("Scheduled scans", f"Could not toggle the scheduler:\n\n{exc}")
+                self._sync_switch_state(self._sched_switch, not enabled)
+                return
+        self.app.set_status_message(
+            f"Scheduled scans {'enabled' if enabled else 'disabled'}"
+            + (" — takes effect on next launch" if engine is None else "")
+        )
+        self.refresh()
+
+    def _change_sched_type(self, value: str) -> None:
+        if value not in ("quick", "full"):
+            return
+        self.cfg.set("antivirus.scheduled_scans.scan_type", value)
+        self._persist_config()
+        self._restart_scheduler_if_running("scan type updated — next run uses it")
+
+    def _change_sched_time(self) -> None:
+        from core.antivirus.scheduler import ScanScheduler
+
+        value = self._sched_time.get().strip()
+        if not ScanScheduler._valid_time(value):
+            self.app.show_error("Scheduled scans", f"'{value}' is not a valid HH:MM time.")
+            self.refresh()
+            return
+        self.cfg.set("antivirus.scheduled_scans.time", value)
+        self._persist_config()
+        self._restart_scheduler_if_running(f"next run at {value}")
+
+    def _restart_scheduler_if_running(self, note: str) -> None:
+        engine = self.app.get_engine("scheduler")
+        if engine is not None and engine.running:
+            try:
+                engine.stop()
+                engine.start()
+            except Exception as exc:
+                logger.error("Scheduler restart failed: %s", exc, exc_info=True)
+        self.app.set_status_message(f"Scheduled scans: {note}")
+        self.refresh()
+
+    def _run_scheduled_now(self) -> None:
+        engine = self.app.get_engine("scheduler")
+        if engine is None:
+            self.app.show_error("Scheduled scans", "The scheduler engine is not loaded.")
+            return
+        import threading
+
+        self.app.set_status_message("Running scheduled scan in the background…")
+
+        def worker() -> None:
+            try:
+                engine.run_now()
+            except Exception as exc:
+                logger.error("Manual scheduled scan failed: %s", exc, exc_info=True)
+
+        threading.Thread(target=worker, name="ShieldEX-SchedOnce", daemon=True).start()
+
+    # ==================================================================
     # Environment
     # ==================================================================
     def _build_environment(self) -> None:
         card = Card(self.content, title="Environment")
-        card.grid(row=2, column=0, sticky="nsew")
+        card.grid(row=3, column=0, sticky="nsew")
         card.grid_rowconfigure(1, weight=1)
         body = card.body
 
@@ -326,6 +490,25 @@ class SettingsView(BaseView):
 
         enforcing_cfg = bool(self.cfg.get("firewall.enforce_rules", False))
         self._sync_switch("enforcement", enforcing_cfg and self.app.elevated)
+
+        # Response policy rows reflect the effective table (config or defaults).
+        for level, quarantine in self._policy.describe():
+            self._sync_switch_state(self._policy_switches[level], quarantine)
+
+        # Scheduler controls reflect config + engine state.
+        sched_on = bool(self.cfg.get("antivirus.scheduled_scans.enabled", False))
+        self._sync_switch_state(self._sched_switch, sched_on)
+        self._sched_type.set(str(self.cfg.get("antivirus.scheduled_scans.scan_type", "quick")))
+        current_time = str(self.cfg.get("antivirus.scheduled_scans.time", "02:00"))
+        if self._sched_time.get().strip() != current_time:
+            self._sched_time.delete(0, "end")
+            self._sched_time.insert(0, current_time)
+        engine = self.app.get_engine("scheduler")
+        info = engine.next_run_info() if engine is not None else "scheduler engine not loaded"
+        last = self.db.get_setting("scheduled_scan_last_run", "") or ""
+        self._sched_info.configure(
+            text=f"Next: {info}" + (f"  ·  last run: {last}" if last else "")
+        )
 
         engines_online = {
             "realtime monitor": realtime_running,
